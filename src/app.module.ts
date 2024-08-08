@@ -1,10 +1,34 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
+import { TeamsModule } from './teams/teams.module';
+import { IdeasModule } from './ideas/ideas.module';
+import { UsersIdeasDibsModule } from './users-ideas-dibs/users-ideas-dibs.module';
+import { UsersIdeasApplysModule } from './users-ideas-applys/users-ideas-applys.module';
+import { UsersTeamsModule } from './users-teams/users-teams.module';
+import { ProjectMembersModule } from './project-members/project-members.module';
+import { LoggerMiddleware } from './common/middlewares/logger/logger.middleware';
+import * as dotenv from 'dotenv';
+import { DatabaseModule } from './database/database.module';
 
+dotenv.config();
 @Module({
-  imports: [],
+  imports: [
+    DatabaseModule,
+    UsersModule,
+    TeamsModule,
+    IdeasModule,
+    UsersIdeasDibsModule,
+    UsersIdeasApplysModule,
+    UsersTeamsModule,
+    ProjectMembersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

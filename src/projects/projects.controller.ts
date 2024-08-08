@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { Project } from './entities/project.entity';
+import { Project } from '../database/entities/project.entity';
 
 @Controller('projects')
 export class ProjectsController {
