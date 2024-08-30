@@ -21,6 +21,7 @@ export enum ErrorCode {
   BAD_REQUEST_JSON = '잘못된 JSON 형식입니다.',
   SEARCH_SHORT_LENGTH_ERROR = '검색어는 2글자 이상이어야 합니다.',
   INVALID_ROLE = '유효하지 않은 권한입니다.',
+  INVALID_FILE = '유효하지 않은 파일입니다.',
 
   // Access Denied Error
   ACCESS_DENIED = '접근 권한이 없습니다.',
@@ -73,6 +74,8 @@ export function getHttpStatus(errorCode: ErrorCode): HttpStatus {
     case ErrorCode.SEARCH_SHORT_LENGTH_ERROR:
       return HttpStatus.BAD_REQUEST;
     case ErrorCode.INVALID_ROLE:
+      return HttpStatus.BAD_REQUEST;
+    case ErrorCode.INVALID_FILE:
       return HttpStatus.BAD_REQUEST;
     case ErrorCode.ACCESS_DENIED:
       return HttpStatus.FORBIDDEN;

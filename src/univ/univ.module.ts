@@ -5,9 +5,16 @@ import { DatabaseModule } from '../database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Univ } from '../database/entities/univ.entity';
 import { UnivRepository } from '../database/repositories/univ.repository';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forFeature([Univ])],
+  imports: [
+    MulterModule.register({
+      dest: './files',
+    }),
+    DatabaseModule,
+    TypeOrmModule.forFeature([Univ]),
+  ],
   providers: [UnivService, UnivRepository],
   controllers: [UnivController],
 })
