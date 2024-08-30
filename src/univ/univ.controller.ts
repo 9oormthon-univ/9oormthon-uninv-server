@@ -1,4 +1,17 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, UseFilters, UseInterceptors } from '@nestjs/common';
+import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
+import { UnivService } from './univ.service';
+import { ResponseDto } from '../common/dto/response.dto';
 
-@Controller('univ')
-export class UnivController {}
+@Controller('/api/v1/univs')
+@UseInterceptors(ResponseInterceptor)
+@UseFilters(HttpExceptionFilter)
+export class UnivController {
+  constructor(private readonly univService: UnivService) {}
+
+  @Get()
+  async getAllUnivs(): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.univService.getAllUnivs());
+  }
+}

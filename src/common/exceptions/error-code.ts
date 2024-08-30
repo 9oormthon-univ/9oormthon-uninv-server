@@ -9,7 +9,7 @@ export enum ErrorCode {
   NOT_FOUND_LOGIN_USER = '로그인한 사용자를 찾을 수 없습니다.',
   NOT_FOUND_AUTHORIZATION_HEADER = 'Authorization 헤더를 찾을 수 없습니다.',
   NOT_FOUND_USER = '사용자를 찾을 수 없습니다.',
-  NOT_FOUND_CATS = '고양이를 찾을 수 없습니다.',
+  NOT_FOUND_UNIV = '유니브를 찾을 수 없습니다.',
 
   // Invalid Argument Error
   MISSING_REQUEST_PARAMETER = '필수 요청 파라미터가 누락되었습니다.',
@@ -54,7 +54,7 @@ export function getHttpStatus(errorCode: ErrorCode): HttpStatus {
       return HttpStatus.NOT_FOUND;
     case ErrorCode.NOT_FOUND_USER:
       return HttpStatus.NOT_FOUND;
-    case ErrorCode.NOT_FOUND_CATS:
+    case ErrorCode.NOT_FOUND_UNIV:
       return HttpStatus.NOT_FOUND;
     case ErrorCode.MISSING_REQUEST_PARAMETER:
       return HttpStatus.BAD_REQUEST;
