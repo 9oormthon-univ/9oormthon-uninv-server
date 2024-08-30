@@ -9,6 +9,7 @@ import { UsersIdeasApply } from './entities/users-ideas-apply.entity';
 import { UsersIdeasDib } from './entities/users-ideas-dib.entity';
 import { UsersTeam } from './entities/users-team.entity';
 import * as dotenv from 'dotenv';
+import { Univ } from './entities/univ.entity';
 
 dotenv.config();
 @Module({
@@ -29,6 +30,7 @@ dotenv.config();
         ProjectMember,
         UsersIdeasApply,
         UsersIdeasDib,
+        Univ,
       ],
       synchronize: true,
     }),
@@ -41,6 +43,7 @@ dotenv.config();
       ProjectMember,
       UsersIdeasApply,
       UsersIdeasDib,
+      Univ,
     ]),
   ],
   exports: [TypeOrmModule],
