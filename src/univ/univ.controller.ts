@@ -1,7 +1,7 @@
 import {
   Body,
-  Controller,
-  Get,
+  Controller, Delete,
+  Get, Param,
   Post,
   Query,
   UploadedFile,
@@ -47,5 +47,10 @@ export class UnivController {
   ): Promise<ResponseDto<any>> {
     await this.univService.createUniv(createUnivDto, file);
     return ResponseDto.created(null);
+  }
+  @Delete('/:id')
+  async deleteUniv(@Param('id') id: number): Promise<ResponseDto<any>> {
+    await this.univService.deleteUniv(id);
+    return ResponseDto.ok(null);
   }
 }

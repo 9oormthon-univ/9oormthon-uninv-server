@@ -8,6 +8,7 @@ import { UnivDto } from './dto/univ.dto';
 import { CreateUnivDto } from './dto/create-univ.dto';
 import * as AWS from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
+import { Transaction } from 'typeorm';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -55,6 +56,13 @@ export class UnivService {
     });
 
     await this.univRepository.save(univ);
+  }
+  public async deleteUniv(id: number): Promise<void> {
+    const univ = await this.univRepository.findOne({ where: { id } });
+    if (!univ) {
+      throw new CommonException(ErrorCode.NOT_FOUND_UNIV);
+    }
+    await this.univRepository.remove(univ);
   }
 
   private async uploadUnivImageFileToS3(
