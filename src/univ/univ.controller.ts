@@ -1,4 +1,4 @@
-import { Controller, Get, UseFilters, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Query, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 import { UnivService } from './univ.service';
@@ -11,7 +11,10 @@ export class UnivController {
   constructor(private readonly univService: UnivService) {}
 
   @Get()
-  async getAllUnivs(): Promise<ResponseDto<any>> {
+  async getAllUnivs(@Query('name') name?: string): Promise<ResponseDto<any>> {
+    if (name) {
+      return ResponseDto.ok(await this.univService.getAllUnivsByName(name));
+    }
     return ResponseDto.ok(await this.univService.getAllUnivs());
   }
 }

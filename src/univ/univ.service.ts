@@ -18,4 +18,12 @@ export class UnivService {
     }
     return univs.map((univ) => UnivDto.fromEntity(univ));
   }
+
+  async getAllUnivsByName(name: string): Promise<UnivDto[]> {
+    const univs: Univ[] = await this.univRepository.findByName(name);
+    if (univs === undefined || univs.length === 0) {
+      throw new CommonException(ErrorCode.NOT_FOUND_UNIV);
+    }
+    return univs.map((univ) => UnivDto.fromEntity(univ));
+  }
 }
