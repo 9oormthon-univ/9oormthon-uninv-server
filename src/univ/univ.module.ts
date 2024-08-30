@@ -7,8 +7,8 @@ import { Univ } from '../database/entities/univ.entity';
 import { UnivRepository } from '../database/repositories/univ.repository';
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forFeature([Univ, UnivRepository])],
-  providers: [UnivService],
+  imports: [DatabaseModule, TypeOrmModule.forFeature([Univ])],
+  providers: [UnivService, UnivRepository],
   controllers: [UnivController],
 })
 export class UnivModule {}
