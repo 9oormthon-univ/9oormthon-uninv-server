@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DataSource, Like, Repository } from 'typeorm';
 import { Univ } from '../entities/univ.entity';
 
 @Injectable()
 export class UnivRepository extends Repository<Univ> {
-  async findAll(): Promise<Univ[]> {
-    return await this.find();
+  constructor(private dataSource: DataSource) {
+    super(Univ, dataSource.createEntityManager());
   }
-
-  async findById(id: number): Promise<Univ> {
-    return await this.findOne({
+  async findByName(name: string): Promise<Univ[]> {
+    return await this.find({
       where: {
-        id: id,
+        name: Like(`%${name}%`),
       },
     });
   }
