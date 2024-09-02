@@ -31,8 +31,8 @@ dotenv.config();
     UnivModule,
     RecruitsModule,
   ],
-  controllers: [AppController, RecruitsController],
-  providers: [AppService, RecruitsService, Recruit],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

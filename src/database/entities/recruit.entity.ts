@@ -6,7 +6,7 @@ export class Recruit {
   id: number;
 
   @Column({ name: 'type' })
-  type: string;
+  type: number; // 0: 유니브 대표 모집, 1: 미르미 모집, 2: etc.
 
   @Column({ name: 'title' }) // ex) 유니브 대표 모집, 미르미 모집, etc.
   title: string;
