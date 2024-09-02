@@ -12,6 +12,10 @@ import { LoggerMiddleware } from './common/middlewares/logger/logger.middleware'
 import * as dotenv from 'dotenv';
 import { DatabaseModule } from './database/database.module';
 import { UnivModule } from './univ/univ.module';
+import { RecruitsService } from './recruits/recruits.service';
+import { RecruitsController } from './recruits/recruits.controller';
+import { RecruitsModule } from './recruits/recruits.module';
+import { Recruit } from './database/entities/recruit.entity';
 
 dotenv.config();
 @Module({
@@ -25,9 +29,10 @@ dotenv.config();
     UsersTeamsModule,
     ProjectMembersModule,
     UnivModule,
+    RecruitsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, RecruitsController],
+  providers: [AppService, RecruitsService, Recruit],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
