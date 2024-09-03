@@ -5,7 +5,6 @@ import { ErrorCode } from '../common/exceptions/error-code';
 import { RecruitDto } from './dto/recruit.dto';
 import { RecruitRepository } from '../database/repositories/recruit.repository';
 import { CreateRecruitDto } from './dto/create-recruit.dto';
-import { Recruit } from '../database/entities/recruit.entity';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -27,5 +26,13 @@ export class RecruitsService {
       endAt: createRecruitDto.endAt,
     });
     await this.recruitRepository.save(recruit);
+  }
+
+  async deleteRecruit(id: number): Promise<void> {
+    const recruit = await this.recruitRepository.findOne({ where: { id } });
+    if (recruit === undefined) {
+      throw new CommonException(ErrorCode.NOT_FOUND_RECRUIT);
+    }
+    await this.recruitRepository.remove(recruit);
   }
 }

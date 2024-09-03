@@ -1,7 +1,7 @@
 import {
   Body,
-  Controller,
-  Get,
+  Controller, Delete,
+  Get, Param,
   Post,
   UseFilters,
   UseInterceptors,
@@ -32,5 +32,11 @@ export class RecruitsController {
     return ResponseDto.created(
       await this.recruitsService.createRecruit(createRecruitDto),
     );
+  }
+
+  @Delete('/:id')
+  async deleteRecruit(@Param('id') id: number): Promise<ResponseDto<any>> {
+    await this.recruitsService.deleteRecruit(id);
+    return ResponseDto.ok(null);
   }
 }
