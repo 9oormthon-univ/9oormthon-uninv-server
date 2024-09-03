@@ -1,6 +1,7 @@
 import { Recruit } from '../../database/entities/recruit.entity';
 
 export class RecruitDto {
+  readonly id: number;
   readonly type: number;
   readonly content: string;
   readonly dDay: string;
@@ -36,6 +37,7 @@ export class RecruitDto {
     }
 
     return {
+      id: recruit.id,
       type: recruit.type,
       content: content,
       dDay: dDay === 0 ? 'D-Day' : 'D-' + dDay.toString(),
