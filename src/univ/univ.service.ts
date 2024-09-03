@@ -8,7 +8,6 @@ import { UnivDto } from './dto/univ.dto';
 import { CreateUnivDto } from './dto/create-univ.dto';
 import * as AWS from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
-import { Transaction } from 'typeorm';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)

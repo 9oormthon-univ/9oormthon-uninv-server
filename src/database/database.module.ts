@@ -10,6 +10,7 @@ import { UsersIdeasDib } from './entities/users-ideas-dib.entity';
 import { UsersTeam } from './entities/users-team.entity';
 import * as dotenv from 'dotenv';
 import { Univ } from './entities/univ.entity';
+import { Recruit } from './entities/recruit.entity';
 
 dotenv.config();
 @Module({
@@ -21,6 +22,7 @@ dotenv.config();
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
+      timezone: 'Z',
       entities: [
         User,
         UsersTeam,
@@ -31,6 +33,7 @@ dotenv.config();
         UsersIdeasApply,
         UsersIdeasDib,
         Univ,
+        Recruit,
       ],
       synchronize: true,
     }),
@@ -44,6 +47,7 @@ dotenv.config();
       UsersIdeasApply,
       UsersIdeasDib,
       Univ,
+      Recruit,
     ]),
   ],
   exports: [TypeOrmModule],

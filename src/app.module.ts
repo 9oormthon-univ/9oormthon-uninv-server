@@ -12,6 +12,7 @@ import { LoggerMiddleware } from './common/middlewares/logger/logger.middleware'
 import * as dotenv from 'dotenv';
 import { DatabaseModule } from './database/database.module';
 import { UnivModule } from './univ/univ.module';
+import { RecruitsModule } from './recruits/recruits.module';
 
 dotenv.config();
 @Module({
@@ -25,6 +26,7 @@ dotenv.config();
     UsersTeamsModule,
     ProjectMembersModule,
     UnivModule,
+    RecruitsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
