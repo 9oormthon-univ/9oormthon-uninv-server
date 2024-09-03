@@ -35,4 +35,23 @@ export class RecruitsService {
     }
     await this.recruitRepository.remove(recruit);
   }
+
+  async updateRecruit(
+    id: number,
+    createRecruitDto: CreateRecruitDto,
+  ): Promise<void> {
+    const recruit = await this.recruitRepository.findOne({ where: { id } });
+    if (recruit === undefined) {
+      throw new CommonException(ErrorCode.NOT_FOUND_RECRUIT);
+    }
+    if (createRecruitDto.type !== undefined)
+      recruit.type = createRecruitDto.type;
+    if (createRecruitDto.title !== undefined)
+      recruit.title = createRecruitDto.title;
+    if (createRecruitDto.startAt !== undefined)
+      recruit.startAt = createRecruitDto.startAt;
+    if (createRecruitDto.endAt !== undefined)
+      recruit.endAt = createRecruitDto.endAt;
+    await this.recruitRepository.save(recruit);
+  }
 }
