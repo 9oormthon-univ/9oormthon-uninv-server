@@ -17,5 +17,6 @@ import { MulterModule } from '@nestjs/platform-express';
   ],
   providers: [UnivService, UnivRepository],
   controllers: [UnivController],
+  exports: [UnivRepository],
 })
 export class UnivModule {}

@@ -13,6 +13,7 @@ import * as dotenv from 'dotenv';
 import { DatabaseModule } from './database/database.module';
 import { UnivModule } from './univ/univ.module';
 import { RecruitsModule } from './recruits/recruits.module';
+import { AuthModule } from './auth/auth.module';
 
 dotenv.config();
 @Module({
@@ -27,6 +28,7 @@ dotenv.config();
     ProjectMembersModule,
     UnivModule,
     RecruitsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
