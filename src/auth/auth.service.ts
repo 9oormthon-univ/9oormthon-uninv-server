@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { UserRepository } from '../database/repositories/user.repository';
 import { AuthSignUpDto } from './dto/auth-sign-up.dto';
 import { JwtTokenDto } from './dto/jwt-token.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
+import { CommonException } from '../common/exceptions/common.exception';
+import { ErrorCode } from '../common/exceptions/error-code';
 
 @Injectable()
+@UseFilters(HttpExceptionFilter)
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
@@ -26,7 +31,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new CommonException(ErrorCode.NOT_FOUND_USER);
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -35,7 +40,7 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new Error('Password is invalid');
+      throw new CommonException(ErrorCode.FAILURE_LOGIN);
     }
 
     const tokens = this.generateTokens(user.id);
@@ -53,6 +58,29 @@ export class AuthService {
       user.isLogin = false;
       await this.userRepository.save(user);
     }
+  }
+
+  async changePassword(
+    userId: number,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<void> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new CommonException(ErrorCode.NOT_FOUND_USER);
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      changePasswordDto.currentPassword,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new CommonException(ErrorCode.FAILURE_CHANGE_PASSWORD);
+    }
+
+    const hashedPassword = await bcrypt.hash(changePasswordDto.newPassword, 10);
+    user.password = hashedPassword;
+    await this.userRepository.save(user);
   }
 
   async reissue(userId: number, refreshToken: string): Promise<JwtTokenDto> {

@@ -6,6 +6,7 @@ import {
   Res,
   UseGuards,
   ValidationPipe,
+  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto/auth-sign-up.dto';
@@ -18,6 +19,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { ResponseDto } from '../common/dto/response.dto';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 
 @Controller('api/v1')
 export class AuthController {
@@ -27,9 +31,11 @@ export class AuthController {
   ) {}
 
   @Post('auth/sign-up')
-  async signUp(@Body(new ValidationPipe({transform:true})) authSignUpDto: AuthSignUpDto): Promise<any> {
+  async signUp(
+    @Body(new ValidationPipe({ transform: true })) authSignUpDto: AuthSignUpDto,
+  ): Promise<ResponseDto<any>> {
     await this.authService.signUp(authSignUpDto);
-    return { success: true, data: null };
+    return ResponseDto.created(null);
   }
 
   @Post('auth/login')
@@ -46,7 +52,6 @@ export class AuthController {
       jwtTokenDto.refreshToken,
       60 * 60 * 24 * 14,
     );
-
     res.redirect('http://localhost:3000');
   }
   @Post('auth/logout')
@@ -57,6 +62,18 @@ export class AuthController {
 
     CookieUtil.deleteCookie(req, res, 'refresh_token');
     return res.json({ success: true, message: 'Logged out successfully' });
+  }
+
+  @Patch('auth/password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @Req() req: Request,
+    @Body(new ValidationPipe({ transform: true }))
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<ResponseDto<any>> {
+    const userId = req.user.id;
+    await this.authService.changePassword(userId, changePasswordDto);
+    return ResponseDto.ok(null);
   }
 
   @Post('auth/reissue')
