@@ -1,13 +1,11 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Patch,
-  Post,
+  Put,
   Req,
-  UseFilters, UseGuards,
+  UseFilters,
+  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,6 +14,7 @@ import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 import { ResponseDto } from '../common/dto/response.dto';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { UpdateUsersDto } from './dto/update-users.dto';
 
 @Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
@@ -27,5 +26,17 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async getUserInfo(@Req() req): Promise<ResponseDto<any>> {
     return ResponseDto.ok(await this.usersService.getUserInfo(req));
+  }
+
+  @Put()
+  @UseGuards(JwtAuthGuard)
+  async updateUserInfo(
+    @Req() req,
+    @Body(new ValidationPipe({ transform: true }))
+    updateUsersDto: UpdateUsersDto,
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(
+      await this.usersService.updateUserInfo(req, updateUsersDto),
+    );
   }
 }

@@ -1,6 +1,6 @@
-import { UsersSemesters } from '../../database/entities/users-semesters';
 import { User } from '../../database/entities/user.entity';
 import { Univ } from '../../database/entities/univ.entity';
+import { UsersSemestersDto } from './users-semesters.dto';
 
 export class UsersDto {
   readonly id: number;
@@ -9,7 +9,7 @@ export class UsersDto {
   readonly githubLink: string;
   readonly instagramLink: string;
   readonly blogLink: string;
-  readonly semester: UsersSemesters[];
+  readonly semester: UsersSemestersDto[];
 
   static fromEntity(user: User) {
     return {
@@ -35,7 +35,7 @@ export class UsersDto {
 
   static fromEntityWithSemester(
     user: User,
-    semester: UsersSemesters[],
+    semestersDtos: UsersSemestersDto[],
   ): UsersDto {
     return {
       id: user.id,
@@ -44,13 +44,13 @@ export class UsersDto {
       instagramLink: user.instagramLink,
       blogLink: user.blogLink,
       univName: null,
-      semester: semester,
+      semester: semestersDtos,
     };
   }
   static fromEntityWithUnivSemester(
     user: User,
     univ: Univ,
-    semester: UsersSemesters[],
+    semestersDtos: UsersSemestersDto[],
   ): UsersDto {
     return {
       id: user.id,
@@ -59,7 +59,7 @@ export class UsersDto {
       githubLink: user.githubLink,
       instagramLink: user.instagramLink,
       blogLink: user.blogLink,
-      semester: semester,
+      semester: semestersDtos,
     };
   }
 }

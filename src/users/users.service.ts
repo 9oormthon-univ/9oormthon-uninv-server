@@ -2,13 +2,17 @@ import { Injectable, Req } from '@nestjs/common';
 import { UserRepository } from '../database/repositories/user.repository';
 import { UsersSemestersRepository } from '../database/repositories/users-semesters.repository';
 import { UsersDto } from './dto/users.dto';
+import { UnivRepository } from '../database/repositories/univ.repository';
+import { UsersSemestersDto } from './dto/users-semesters.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly usersSemesterRepository: UsersSemestersRepository,
+    private readonly univRepository: UnivRepository,
   ) {}
+
   async getUserInfo(@Req() req) {
     let univ;
     const user = await this.userRepository.findOne({
@@ -22,19 +26,80 @@ export class UsersService {
     } else {
       univ = null;
     }
-    const semester = await this.usersSemesterRepository.find({
+    const semesters = await this.usersSemesterRepository.find({
       where: {
         user: user,
       },
     });
-    if (univ !== null && semester !== null) {
-      return UsersDto.fromEntityWithUnivSemester(user, univ, semester);
+    if (univ !== null && semesters !== null) {
+      const semestersDtos = semesters.map((semester) => {
+        return UsersSemestersDto.fromEntity(semester);
+      });
+      return UsersDto.fromEntityWithUnivSemester(user, univ, semestersDtos);
     } else if (univ !== null) {
       return UsersDto.fromEntityWithUniv(user, univ);
-    } else if (semester !== null) {
-      return UsersDto.fromEntityWithSemester(user, semester);
+    } else if (semesters !== null) {
+      const semestersDtos = semesters.map((semester) => {
+        return UsersSemestersDto.fromEntity(semester);
+      });
+      return UsersDto.fromEntityWithSemester(user, semestersDtos);
     } else {
       return UsersDto.fromEntity(user);
+    }
+  }
+
+  async updateUserInfo(@Req() req, updateUsersDto) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: req.user.id,
+      },
+      relations: ['univ'],
+    });
+    // name 필드 처리 (보내지 않으면 null)
+    user.name = updateUsersDto.name !== undefined ? updateUsersDto.name : null;
+
+    // githubLink 필드 처리 (보내지 않으면 null)
+    user.githubLink =
+      updateUsersDto.githubLink !== undefined
+        ? updateUsersDto.githubLink
+        : null;
+
+    // instagramLink 필드 처리 (보내지 않으면 null)
+    user.instagramLink =
+      updateUsersDto.instagramLink !== undefined
+        ? updateUsersDto.instagramLink
+        : null;
+
+    // blogLink 필드 처리 (보내지 않으면 null)
+    user.blogLink =
+      updateUsersDto.blogLink !== undefined ? updateUsersDto.blogLink : null;
+
+    // univ 필드 처리 (보내지 않으면 null)
+    if (updateUsersDto.univName !== undefined) {
+      if (updateUsersDto.univName !== null) {
+        user.univ = await this.univRepository.findOne({
+          where: {
+            name: updateUsersDto.univName,
+          },
+        });
+      } else {
+        user.univ = null;
+      }
+    } else {
+      user.univ = null;
+    }
+
+    await this.userRepository.save(user);
+    await this.usersSemesterRepository.delete({
+      user: user,
+    });
+    if (updateUsersDto.semesters === undefined) return;
+    for (const semester of updateUsersDto.semesters) {
+      await this.usersSemesterRepository.save({
+        user: user,
+        semester: semester.semester,
+        role: semester.role,
+      });
     }
   }
 }
