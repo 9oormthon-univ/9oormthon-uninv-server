@@ -21,7 +21,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ResponseDto } from '../common/dto/response.dto';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 
 @Controller('api/v1')
 export class AuthController {
@@ -52,7 +51,7 @@ export class AuthController {
       jwtTokenDto.refreshToken,
       60 * 60 * 24 * 14,
     );
-    res.redirect('http://localhost:3000');
+    res.redirect('https://9oormthon.university');
   }
   @Post('auth/logout')
   @UseGuards(JwtAuthGuard)
