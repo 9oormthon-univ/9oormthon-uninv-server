@@ -1,11 +1,13 @@
-import { Injectable, Req } from '@nestjs/common';
+import { Injectable, Req, UseFilters } from '@nestjs/common';
 import { UserRepository } from '../database/repositories/user.repository';
 import { UsersSemestersRepository } from '../database/repositories/users-semesters.repository';
 import { UsersDto } from './dto/users.dto';
 import { UnivRepository } from '../database/repositories/univ.repository';
 import { UsersSemestersDto } from './dto/users-semesters.dto';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 
 @Injectable()
+@UseFilters(HttpExceptionFilter)
 export class UsersService {
   constructor(
     private readonly userRepository: UserRepository,
@@ -13,11 +15,11 @@ export class UsersService {
     private readonly univRepository: UnivRepository,
   ) {}
 
-  async getUserInfo(@Req() req) {
+  async getUserInfo(userId: number) {
     let univ;
     const user = await this.userRepository.findOne({
       where: {
-        id: req.user.id,
+        id: userId,
       },
       relations: ['univ'],
     });
@@ -48,10 +50,10 @@ export class UsersService {
     }
   }
 
-  async updateUserInfo(@Req() req, updateUsersDto) {
+  async updateUserInfo(userId: number, updateUsersDto) {
     const user = await this.userRepository.findOne({
       where: {
-        id: req.user.id,
+        id: userId,
       },
       relations: ['univ'],
     });

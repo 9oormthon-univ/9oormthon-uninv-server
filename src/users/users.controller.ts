@@ -25,7 +25,8 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async getUserInfo(@Req() req): Promise<ResponseDto<any>> {
-    return ResponseDto.ok(await this.usersService.getUserInfo(req));
+    const userId = req.user.id;
+    return ResponseDto.ok(await this.usersService.getUserInfo(userId));
   }
 
   @Put()
@@ -35,8 +36,9 @@ export class UsersController {
     @Body(new ValidationPipe({ transform: true }))
     updateUsersDto: UpdateUsersDto,
   ): Promise<ResponseDto<any>> {
+    const userId = req.user.id;
     return ResponseDto.ok(
-      await this.usersService.updateUserInfo(req, updateUsersDto),
+      await this.usersService.updateUserInfo(userId, updateUsersDto),
     );
   }
 }
