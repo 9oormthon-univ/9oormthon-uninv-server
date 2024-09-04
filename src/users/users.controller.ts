@@ -1,4 +1,31 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseFilters, UseGuards,
+  UseInterceptors,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
+import { ResponseDto } from '../common/dto/response.dto';
+import { UsersService } from './users.service';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
-@Controller('users')
-export class UsersController {}
+@Controller('/api/v1/users')
+@UseInterceptors(ResponseInterceptor)
+@UseFilters(HttpExceptionFilter)
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getUserInfo(@Req() req): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.usersService.getUserInfo(req));
+  }
+}
