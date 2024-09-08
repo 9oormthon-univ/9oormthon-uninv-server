@@ -12,26 +12,26 @@ export class Project {
   @PrimaryGeneratedColumn({ name: 'project_id' })
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ name: 'award', nullable: true })
   award: string;
 
-  @Column()
+  @Column({ name: 'title' })
   title: string;
 
-  @Column()
+  @Column({ name: 'content' })
   content: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'back_end_link', nullable: true })
   backendLink: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'front_end_link', nullable: true })
   frontendLink: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'release_link', nullable: true })
   releaseLink: string;
 
-  @Column({ nullable: true })
-  image_url: string;
+  @Column({ name: 'image_url', nullable: true })
+  imageUrl: string;
 
   @ManyToOne(() => Team, { nullable: true })
   @JoinColumn({ name: 'team_id' })

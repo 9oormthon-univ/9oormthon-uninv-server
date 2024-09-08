@@ -5,13 +5,13 @@ import { Project } from './entities/project.entity';
 import { ProjectMember } from './entities/project-member.entity';
 import { Team } from './entities/team.entity';
 import { User } from './entities/user.entity';
-import { UsersIdeasApply } from './entities/users-ideas-apply.entity';
-import { UsersIdeasDib } from './entities/users-ideas-dib.entity';
-import { UsersTeam } from './entities/users-team.entity';
+import { UserIdeaApply } from './entities/user-idea-apply.entity';
+import { UserIdeaDib } from './entities/user-idea-dib.entity';
+import { UserTeam } from './entities/user-team.entity';
 import * as dotenv from 'dotenv';
 import { Univ } from './entities/univ.entity';
 import { Recruit } from './entities/recruit.entity';
-import { UsersSemesters } from './entities/users-semesters';
+import { UserSemester } from './entities/user-semester';
 
 dotenv.config();
 @Module({
@@ -26,31 +26,31 @@ dotenv.config();
       timezone: 'Z',
       entities: [
         User,
-        UsersTeam,
+        UserTeam,
         Idea,
         Team,
         Project,
         ProjectMember,
-        UsersIdeasApply,
-        UsersIdeasDib,
+        UserIdeaApply,
+        UserIdeaDib,
         Univ,
         Recruit,
-        UsersSemesters,
+        UserSemester,
       ],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
       Project,
       User,
-      UsersTeam,
+      UserTeam,
       Idea,
       Team,
       ProjectMember,
-      UsersIdeasApply,
-      UsersIdeasDib,
+      UserIdeaApply,
+      UserIdeaDib,
       Univ,
       Recruit,
-      UsersSemesters,
+      UserSemester,
     ]),
   ],
   exports: [TypeOrmModule],

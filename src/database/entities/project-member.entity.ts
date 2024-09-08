@@ -10,7 +10,7 @@ import { User } from './user.entity';
 
 @Entity()
 export class ProjectMember {
-  @PrimaryGeneratedColumn({ name: 'project_members_id' })
+  @PrimaryGeneratedColumn({ name: 'project_member_id' })
   id: number;
 
   @ManyToOne(() => Project)
