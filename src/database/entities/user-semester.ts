@@ -8,19 +8,19 @@ import {
 import { User } from './user.entity';
 
 @Entity()
-export class Idea {
-  @PrimaryGeneratedColumn({ name: 'idea_id' })
+export class UserSemester {
+  @PrimaryGeneratedColumn({ name: 'user_semester_id' })
   id: number;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'provider_id' })
-  provider: User;
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
-  @Column({ name: 'name' })
-  name: string;
+  @Column({ name: 'semester', nullable: false })
+  semester: string;
 
-  @Column({ name: 'content' })
-  content: string;
+  @Column({ name: 'role', nullable: false })
+  role: string;
 
   @Column({
     name: 'created_at',

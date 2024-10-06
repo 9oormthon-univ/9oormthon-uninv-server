@@ -6,21 +6,20 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Idea } from './idea.entity';
 
 @Entity()
-export class Idea {
-  @PrimaryGeneratedColumn({ name: 'idea_id' })
+export class UserIdeaApply {
+  @PrimaryGeneratedColumn({ name: 'user_idea_apply_id' })
   id: number;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'provider_id' })
-  provider: User;
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
-  @Column({ name: 'name' })
-  name: string;
-
-  @Column({ name: 'content' })
-  content: string;
+  @ManyToOne(() => Idea)
+  @JoinColumn({ name: 'idea_id' })
+  idea: Idea;
 
   @Column({
     name: 'created_at',

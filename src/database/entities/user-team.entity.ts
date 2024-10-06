@@ -6,21 +6,23 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Team } from './team.entity';
 
 @Entity()
-export class Idea {
-  @PrimaryGeneratedColumn({ name: 'idea_id' })
+export class UserTeam {
+  @PrimaryGeneratedColumn({ name: 'user_team_id' })
   id: number;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'provider_id' })
-  provider: User;
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
-  @Column({ name: 'name' })
-  name: string;
+  @ManyToOne(() => Team)
+  @JoinColumn({ name: 'team_id' })
+  team: Team;
 
-  @Column({ name: 'content' })
-  content: string;
+  @Column({ name: 'user_role' })
+  userRole: string;
 
   @Column({
     name: 'created_at',
