@@ -1,0 +1,64 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: 9oormthon-univ cicd
+  
+    steps:
+    # 1. Check out the repository
+    - name: Check out the repository
+      uses: actions/checkout@v3
+
+    # 2. add application-dev.yml from S3
+    - name: add .env
+      run: |
+        touch ./.env
+        echo "${{ secrets.ENV }}" | base64 --decode > ./.env
+
+    # 3. Build the project
+    - name: Build with npm
+      run: npm run build
+
+
+    # 4. Log in to Docker Hub (ensure Docker credentials are set in repository secrets)
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # 5. Build Docker image
+    - name: Build Docker image
+      run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+
+    # 7. Push Docker image to Docker Hub
+    - name: Push Docker image
+      run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}
+
+    # 8. Deploy Docker container (SSH to EC2)
+
+    - name: Setup SSH Key
+      run: |
+        echo "${{ secrets.EC2_KEY_PAIR }}" > key.pem
+        chmod 600 key.pem
+
+    - name: Deploy Docker container
+      run: |
+        echo "${{ secrets.EC2_KEY_PAIR }}" > key.pem
+        chmod 600 key.pem
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
+          sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
+          sudo docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || true
+          sudo docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || true
+          sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network app-network -p 8080:8080 ${{ secrets.DOCKER_IMAGE_NAME }}
+        EOF
+
+    # 9. Clean up the KeyPair file
+    - name: Clean up KeyPair
+      run: rm key.pem
