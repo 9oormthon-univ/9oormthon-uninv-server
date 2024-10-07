@@ -51,7 +51,7 @@ jobs:
           sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
           sudo docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || true
           sudo docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || true
-          sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network app-network -p 8080:8080 ${{ secrets.DOCKER_IMAGE_NAME }}
+          sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network app-network -p 3000:3000 ${{ secrets.DOCKER_IMAGE_NAME }}
         EOF
 
     # 7. Clean up the KeyPair file
