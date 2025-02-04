@@ -4,10 +4,10 @@ FROM node:18-alpine AS builder
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies first
+# Copy package.json and package-lock.json (or yarn.lock) to install dependencies
 COPY package*.json ./
 
-# Install all dependencies (both production and development)
+# Install the dependencies
 RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application source code
@@ -22,10 +22,12 @@ FROM node:18-alpine AS runner
 # Set the working directory inside the container
 WORKDIR /app
 
-# ✅ 빌드한 node_modules을 그대로 사용
-COPY --from=builder /app/node_modules ./node_modules
+# Install only production dependencies
+COPY package*.json ./
+RUN npm install --legacy-peer-deps --only=production
+
+# Copy the build from the builder stage
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./
 
 # Copy any environment variables or config files
 COPY --from=builder /app/.env ./
