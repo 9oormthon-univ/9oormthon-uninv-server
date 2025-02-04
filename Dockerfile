@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install the dependencies
-RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
 
 # Copy the rest of the application source code
 COPY . .
@@ -22,15 +22,14 @@ FROM node:18-alpine AS runner
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install only production dependencies
-COPY package*.json ./
-RUN npm install --legacy-peer-deps --only=production
+# Copy node_modules from builder stage (prevent re-installation issues)
+COPY --from=builder /app/node_modules ./node_modules
 
-# Copy the build from the builder stage
+# Copy the build output
 COPY --from=builder /app/dist ./dist
 
-# Copy any environment variables or config files
-COPY --from=builder /app/.env ./
+# Copy .env file separately to ensure it exists
+COPY .env ./
 
 # Expose the port NestJS is running on
 EXPOSE 3000
