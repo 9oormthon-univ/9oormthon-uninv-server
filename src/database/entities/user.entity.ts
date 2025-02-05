@@ -7,16 +7,50 @@ import {
 } from 'typeorm';
 import { Univ } from './univ.entity';
 
-@Entity()
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn({ name: 'user_id' })
+  /* ----------------------------- */
+  /* ------- Default Column ------ */
+  /* ----------------------------- */
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'serial_id' })
+  /* ----------------------------- */
+  /* ------- Unique Column ------- */
+  /* ----------------------------- */
+  @Column({ name: 'serial_id', nullable: false })
   serialId: string;
 
-  @Column({ name: 'password' })
+  @Column({ name: 'password', nullable: false })
   password: string;
+
+  /* ----------------------------- */
+  /* ---- Information Column ----- */
+  /* ----------------------------- */
+  @Column({ name: 'img_url', nullable: false })
+  imgUrl: string;
+
+  @Column({ name: 'name', nullable: false })
+  name: string;
+
+  @Column({ name: 'phone_number', nullable: false })
+  phoneNumber: string;
+
+  @Column({
+    name: 'introduction',
+    type: 'text',
+    nullable: false,
+  })
+  introduction: string;
+
+  @Column('simple-array', { name: 'generations', nullable: false })
+  generations: string[];
+
+  @Column('simple-array', { name: 'stacks', nullable: true })
+  stacks: string[];
+
+  @Column('simple-array', { name: 'links', nullable: true })
+  links: string[];
 
   @Column({ name: 'is_login', type: 'boolean', default: false })
   isLogin: boolean;
@@ -24,33 +58,20 @@ export class User {
   @Column({ name: 'refresh_token', nullable: true })
   refreshToken: string | null;
 
-  @Column({ name: 'name', nullable: true })
-  name: string;
-
-  @ManyToOne(() => Univ, { nullable: true })
+  /* ----------------------------- */
+  /* ----- One To One Column ----- */
+  /* ----------------------------- */
+  @ManyToOne(() => Univ, { nullable: false })
   @JoinColumn({ name: 'univ_id' })
   univ: Univ;
 
-  @Column({ name: 'github_link', nullable: true })
-  githubLink: string;
-
-  @Column({ name: 'instagram_link', nullable: true })
-  instagramLink: string;
-
-  @Column({ name: 'blog_link', nullable: true })
-  blogLink: string;
-
+  /* ----------------------------- */
+  /* ---- TimeStamp Column ------- */
+  /* ----------------------------- */
   @Column({
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
-
-  @Column({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
 }
