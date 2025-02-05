@@ -7,12 +7,17 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Idea } from './idea.entity';
-
-@Entity()
-export class UserIdeaDib {
-  @PrimaryGeneratedColumn({ name: 'user_idea_dib_id' })
+@Entity('bookmarks')
+export class Bookmark {
+  /* ----------------------------- */
+  /* ------- Default Column ------ */
+  /* ----------------------------- */
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
+  /* ----------------------------- */
+  /* ---- Many To One Column ----- */
+  /* ----------------------------- */
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
@@ -21,6 +26,9 @@ export class UserIdeaDib {
   @JoinColumn({ name: 'idea_id' })
   idea: Idea;
 
+  /* ----------------------------- */
+  /* ---- TimeStamp Column ------- */
+  /* ----------------------------- */
   @Column({
     name: 'created_at',
     type: 'timestamp',

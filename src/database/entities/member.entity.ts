@@ -5,34 +5,33 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Idea } from './idea.entity';
+import { User } from './user.entity';
+import { Team } from './team.entity';
 
-@Entity('teams')
-export class Team {
+@Entity('members')
+export class Member {
   /* ----------------------------- */
   /* ------- Default Column ------ */
   /* ----------------------------- */
-  @PrimaryGeneratedColumn({ name: ' id' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   /* ----------------------------- */
   /* ---- Information Column ----- */
   /* ----------------------------- */
-  @Column({ name: 'name', nullable: true })
-  name: string;
-
-  @Column({ name: 'generation', nullable: false })
-  generation: number;
-
-  @Column({ name: 'number', nullable: true })
-  number: number;
+  @Column({ name: 'role', nullable: false })
+  role: string;
 
   /* ----------------------------- */
-  /* ----- One To One Column ----- */
+  /* ---- Many To One Column ----- */
   /* ----------------------------- */
-  @ManyToOne(() => Idea)
-  @JoinColumn({ name: 'idea_id' })
-  idea: Idea;
+  @ManyToOne(() => User, { nullable: false })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToOne(() => Team, { nullable: false })
+  @JoinColumn({ name: 'team_id' })
+  team: Team;
 
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */

@@ -5,17 +5,18 @@ import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '../database/database.module';
 import { UserRepository } from '../database/repositories/user.repository';
-import { UserSemesterRepository } from '../database/repositories/user-semester.repository';
 import { UnivRepository } from '../database/repositories/univ.repository';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forFeature([User])],
-  providers: [
-    UserService,
-    UserRepository,
-    UserSemesterRepository,
-    UnivRepository,
+  imports: [
+    MulterModule.register({
+      dest: './files',
+    }),
+    DatabaseModule,
+    TypeOrmModule.forFeature([User]),
   ],
+  providers: [UserService, UserRepository, UnivRepository],
   controllers: [UserController],
   exports: [UserRepository],
 })

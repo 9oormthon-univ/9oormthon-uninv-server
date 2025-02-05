@@ -22,7 +22,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ResponseDto } from '../common/dto/response.dto';
 
-@Controller('api/v1')
+@Controller('/api/v1')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

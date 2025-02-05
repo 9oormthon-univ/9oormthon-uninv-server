@@ -5,9 +5,13 @@ import { ProjectController } from './project.controller';
 import { Project } from '../database/entities/project.entity';
 import { DatabaseModule } from '../database/database.module';
 import { ProjectRepository } from '../database/repositories/project.repository';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: './files',
+    }),
     DatabaseModule,
     TypeOrmModule.forFeature([Project, ProjectRepository]),
   ],
