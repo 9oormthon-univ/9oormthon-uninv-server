@@ -1,3 +1,6 @@
+# http
+/http/http-client.private.env.json
+
 # dist
 /dist
 /files
