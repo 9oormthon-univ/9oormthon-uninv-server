@@ -6,10 +6,13 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
+import { DataSource } from 'typeorm';
+import { UnivModule } from '../univ/univ.module';
 
 @Module({
   imports: [
     UserModule,
+    UnivModule,
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -19,4 +22,6 @@ import { UserModule } from '../user/user.module';
   providers: [AuthService, JwtStrategy, JwtAuthGuard],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule {
+  constructor(private dataSource: DataSource) {}
+}

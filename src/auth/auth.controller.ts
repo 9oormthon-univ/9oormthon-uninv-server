@@ -7,6 +7,8 @@ import {
   UseGuards,
   ValidationPipe,
   Patch,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto/auth-sign-up.dto';
@@ -21,6 +23,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ResponseDto } from '../common/dto/response.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('/api/v1')
 export class AuthController {
@@ -30,10 +33,11 @@ export class AuthController {
   ) {}
 
   @Post('auth/sign-up')
+  @UseInterceptors(FileInterceptor('file'))
   async signUp(
-    @Body(new ValidationPipe({ transform: true })) authSignUpDto: AuthSignUpDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<ResponseDto<any>> {
-    await this.authService.signUp(authSignUpDto);
+    await this.authService.signUp(file);
     return ResponseDto.created(null);
   }
 
