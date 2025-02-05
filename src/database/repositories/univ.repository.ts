@@ -7,11 +7,16 @@ export class UnivRepository extends Repository<Univ> {
   constructor(private dataSource: DataSource) {
     super(Univ, dataSource.createEntityManager());
   }
+
   async findByName(name: string): Promise<Univ[]> {
     return await this.find({
       where: {
         name: Like(`%${name}%`),
       },
     });
+  }
+
+  async createUniv(univ: Univ): Promise<Univ> {
+    return await this.save(univ);
   }
 }

@@ -48,11 +48,10 @@ export class UnivService {
 
     const uploadResult = await this.uploadUnivImageFileToS3(file);
 
-    const univ = this.univRepository.create({
-      name: createUnivDto.name,
-      instagramUrl: createUnivDto.instagramUrl,
-      imageUrl: uploadResult.Location,
-    });
+    const univ = new Univ();
+    univ.name = createUnivDto.name;
+    univ.instagramUrl = createUnivDto.instagramUrl;
+    univ.imgUrl = uploadResult.Location;
 
     await this.univRepository.save(univ);
   }

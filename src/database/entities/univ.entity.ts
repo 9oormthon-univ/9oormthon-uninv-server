@@ -1,19 +1,28 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('univs')
 export class Univ {
-  @PrimaryGeneratedColumn({ name: 'univ_id' })
+  /* ----------------------------- */
+  /* ------- Default Column ------ */
+  /* ----------------------------- */
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name' })
+  /* ----------------------------- */
+  /* ---- Information Column ----- */
+  /* ----------------------------- */
+  @Column({ name: 'name', nullable: false })
   name: string;
 
-  @Column({ name: 'instagram_url' })
+  @Column({ name: 'instagram_url', nullable: true })
   instagramUrl: string;
 
-  @Column({ name: 'image_url' })
-  imageUrl: string;
+  @Column({ name: 'img_url', nullable: false })
+  imgUrl: string;
 
+  /* ----------------------------- */
+  /* ---- TimeStamp Column ------- */
+  /* ----------------------------- */
   @Column({
     name: 'created_at',
     type: 'timestamp',

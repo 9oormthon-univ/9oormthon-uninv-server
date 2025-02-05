@@ -10,7 +10,7 @@ export class UnivDto {
     return {
       name: univ.name,
       instagramUrl: univ.instagramUrl,
-      imageUrl: univ.imageUrl,
+      imageUrl: univ.imgUrl,
       createdAt: univ.createdAt,
     };
   }
