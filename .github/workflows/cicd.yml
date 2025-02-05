@@ -1,59 +1,85 @@
-name: CI/CD Pipeline
+name: Web Application Develop Server CI/CD
 
 on:
-  push:
-    branches:
-      - dev
+  pull_request:
+    branches: [ "dev" ]
+    types:
+      - opened
+      - synchronize
+      - closed
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-  
+  CI:
+    runs-on: ubuntu-20.04
+
     steps:
-    # 1. Check out the repository
-    - name: Check out the repository
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    # 2. add .env
-    - name: add .env
-      run: |
-        touch ./.env
-        echo "${{ secrets.ENV }}" | base64 --decode > ./.env
+      # Node.js 환경 설정 및 캐시 활용
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
 
+      # .env 파일 추가
+      - name: Add .env
+        run: |
+          echo "${{ secrets.ENV }}" | base64 --decode > ./.env
 
-    # 3. Log in to Docker Hub (ensure Docker credentials are set in repository secrets)
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      # 의존성 설치
+      - name: Install Dependencies
+        run: |
+          npm install
 
-    # 4. Build Docker image
-    - name: Build Docker image
-      run: docker build --no-cache -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+      # 프로젝트 빌드
+      - name: Build NestJS Application
+        run: |
+          npm run build
 
-    # 5. Push Docker image to Docker Hub
-    - name: Push Docker image
-      run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}
+      # Docker Image Build and Push (PR이 merge된 경우 실행)
+      - name: Login to Docker Hub
+        if: github.event.pull_request.merged == true
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    # 6. Deploy Docker container (SSH to EC2)
+      - name: Set up Docker Buildx
+        if: github.event.pull_request.merged == true
+        uses: docker/setup-buildx-action@v2
 
-    - name: Setup SSH Key
-      run: |
-        echo "${{ secrets.EC2_KEY_PAIR }}" > key.pem
-        chmod 600 key.pem
+      - name: Build and push
+        if: github.event.pull_request.merged == true
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }}
 
-    - name: Deploy Docker container
-      run: |
-        echo "${{ secrets.EC2_KEY_PAIR }}" > key.pem
-        chmod 600 key.pem
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
-          sudo docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
-          sudo docker stop ${{ secrets.DOCKER_CONTAINER_NAME }} || true
-          sudo docker rm ${{ secrets.DOCKER_CONTAINER_NAME }} || true
-          sudo docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} --network app-network -p 3000:3000 ${{ secrets.DOCKER_IMAGE_NAME }}
-        EOF
+  # Pull Request가 Closed되면서 Merge된 경우 배포 진행
+  CD:
+    if: github.event.pull_request.merged == true
+    needs: [CI]
 
-    # 7. Clean up the KeyPair file
-    - name: Clean up KeyPair
-      run: rm key.pem
+    runs-on: ubuntu-20.04
+
+    steps:
+      # SSH를 활용한 배포
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEV_SSH_HOST }}
+          username: ${{ secrets.DEV_SSH_USERNAME }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          port: ${{ secrets.DEV_SSH_PORT }}
+          script: |
+            docker stop nest-backend || true
+            docker rm nest-backend || true
+            docker image rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }} || true
+            docker run -d -p 3000:3000 --name nest-backend --network ${{ secrets.DOCKER_NETWORKNAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }}
+            
+            # 사용되지 않는 이미지 정리
+            docker image prune -f
