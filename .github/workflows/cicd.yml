@@ -76,10 +76,10 @@ jobs:
           key: ${{ secrets.DEV_SSH_KEY }}
           port: ${{ secrets.DEV_SSH_PORT }}
           script: |
-            docker stop nest-backend || true
-            docker rm nest-backend || true
+            docker stop api-server || true
+            docker rm api-server || true
             docker image rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }} || true
-            docker run -d -p 3000:3000 --name nest-backend --network ${{ secrets.DOCKER_NETWORKNAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }}
+            docker run -d -p 3000:3000 --name api-server --network ${{ secrets.DOCKER_NETWORKNAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }}
             
             # 사용되지 않는 이미지 정리
             docker image prune -f
