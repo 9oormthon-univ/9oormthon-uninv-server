@@ -1,25 +1,38 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Team } from './team.entity';
 
-@Entity()
+@Entity('projects')
 export class Project {
+  /* ----------------------------- */
+  /* ------- Default Column ------ */
+  /* ----------------------------- */
   @PrimaryGeneratedColumn({ name: 'project_id' })
   id: number;
 
+  /* ----------------------------- */
+  /* ---- Information Column ----- */
+  /* ----------------------------- */
+  @Column({ name: 'generation', nullable: false })
+  generation: number;
+
+  @Column({ name: 'name', nullable: false })
+  name: string;
+
+  @Column({
+    name: 'content',
+    type: 'text',
+    nullable: false,
+  })
+  content: string;
+
   @Column({ name: 'award', nullable: true })
   award: string;
-
-  @Column({ name: 'title' })
-  title: string;
-
-  @Column({ name: 'content' })
-  content: string;
 
   @Column({ name: 'back_end_link', nullable: true })
   backendLink: string;
@@ -30,13 +43,19 @@ export class Project {
   @Column({ name: 'release_link', nullable: true })
   releaseLink: string;
 
-  @Column({ name: 'image_url', nullable: true })
-  imageUrl: string;
+  @Column({ name: 'img_url', nullable: true })
+  imgUrl: string;
 
-  @ManyToOne(() => Team, { nullable: true })
+  /* ----------------------------- */
+  /* ----- One To One Column ----- */
+  /* ----------------------------- */
+  @OneToOne(() => Team, { nullable: true })
   @JoinColumn({ name: 'team_id' })
   team: Team;
 
+  /* ----------------------------- */
+  /* ---- TimeStamp Column ------- */
+  /* ----------------------------- */
   @Column({
     name: 'created_at',
     type: 'timestamp',
