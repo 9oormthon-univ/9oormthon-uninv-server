@@ -39,7 +39,7 @@ export class User {
   @Column({
     name: 'introduction',
     type: 'text',
-    nullable: false,
+    nullable: true,
   })
   introduction: string;
 
