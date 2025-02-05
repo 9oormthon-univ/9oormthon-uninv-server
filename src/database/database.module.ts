@@ -2,16 +2,16 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Idea } from './entities/idea.entity';
 import { Project } from './entities/project.entity';
-import { ProjectMember } from './entities/project-member.entity';
+import { LegacyProjectMember } from './entities/legacy-project-member.entity';
 import { Team } from './entities/team.entity';
 import { User } from './entities/user.entity';
-import { UserIdeaApply } from './entities/user-idea-apply.entity';
-import { UserIdeaDib } from './entities/user-idea-dib.entity';
-import { UserTeam } from './entities/user-team.entity';
+import { Apply } from './entities/apply.entity';
+import { Bookmark } from './entities/bookmark.entity';
+import { Member } from './entities/member.entity';
 import * as dotenv from 'dotenv';
 import { Univ } from './entities/univ.entity';
 import { Recruit } from './entities/recruit.entity';
-import { UserSemester } from './entities/user-semester';
+import { IdeaSubject } from './entities/idea-subject.entity';
 
 dotenv.config();
 @Module({
@@ -26,31 +26,31 @@ dotenv.config();
       timezone: 'Z',
       entities: [
         User,
-        UserTeam,
+        Member,
         Idea,
+        IdeaSubject,
         Team,
         Project,
-        ProjectMember,
-        UserIdeaApply,
-        UserIdeaDib,
+        LegacyProjectMember,
+        Apply,
+        Bookmark,
         Univ,
         Recruit,
-        UserSemester,
       ],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
       Project,
       User,
-      UserTeam,
+      Member,
       Idea,
+      IdeaSubject,
       Team,
-      ProjectMember,
-      UserIdeaApply,
-      UserIdeaDib,
+      LegacyProjectMember,
+      Apply,
+      Bookmark,
       Univ,
       Recruit,
-      UserSemester,
     ]),
   ],
   exports: [TypeOrmModule],

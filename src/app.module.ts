@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TeamModule } from './team/team.module';
 import { IdeaModule } from './idea/idea.module';
-import { UserIdeaDibModule } from './user-idea-dib/user-idea-dib.module';
-import { UserIdeaApplyModule } from './user-idea-apply/user-idea-apply.module';
-import { UserTeamModule } from './user-team/user-team.module';
-import { ProjectMemberModule } from './project-member/project-member.module';
+import { BookmarkModule } from './bookmark/bookmark.module';
+import { ApplyModule } from './apply/apply.module';
+import { MemberModule } from './member/member.module';
+import { LegacyProjectMemberModule } from './legacy-project-member/legacy-project-member.module';
 import { LoggerMiddleware } from './common/middlewares/logger/logger.middleware';
 import * as dotenv from 'dotenv';
 import { DatabaseModule } from './database/database.module';
@@ -22,10 +22,10 @@ dotenv.config();
     UserModule,
     TeamModule,
     IdeaModule,
-    UserIdeaDibModule,
-    UserIdeaApplyModule,
-    UserTeamModule,
-    ProjectMemberModule,
+    BookmarkModule,
+    ApplyModule,
+    MemberModule,
+    LegacyProjectMemberModule,
     UnivModule,
     RecruitModule,
     AuthModule,
