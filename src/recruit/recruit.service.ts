@@ -13,7 +13,7 @@ export class RecruitService {
   async getLatestRecruit(): Promise<RecruitDto> {
     const recruit = await this.recruitRepository.findLatestRecruit();
     if (recruit === undefined) {
-      throw new CommonException(ErrorCode.NOT_FOUND_RECRUIT);
+      throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
     }
     return RecruitDto.fromEntity(recruit);
   }
@@ -31,7 +31,7 @@ export class RecruitService {
   async deleteRecruit(id: number): Promise<void> {
     const recruit = await this.recruitRepository.findOne({ where: { id } });
     if (recruit === undefined) {
-      throw new CommonException(ErrorCode.NOT_FOUND_RECRUIT);
+      throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
     }
     await this.recruitRepository.remove(recruit);
   }
@@ -42,7 +42,7 @@ export class RecruitService {
   ): Promise<void> {
     const recruit = await this.recruitRepository.findOne({ where: { id } });
     if (recruit === undefined) {
-      throw new CommonException(ErrorCode.NOT_FOUND_RECRUIT);
+      throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
     }
     if (createRecruitDto.type !== undefined)
       recruit.type = createRecruitDto.type;
