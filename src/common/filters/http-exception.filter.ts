@@ -2,6 +2,7 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger } from '@n
 import { Response } from 'express';
 import { CommonException, ValidationException } from '../exceptions/common.exception';
 import { ResponseDto } from '../dto/response.dto';
+import { instanceToPlain } from 'class-transformer';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -22,6 +23,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       responseDto = ResponseDto.httpFail(exception);
     }
 
-    response.status(responseDto.httpStatus).json(responseDto);
+    response.status(responseDto.httpStatus).json(instanceToPlain(responseDto));
   }
 }
