@@ -1,46 +1,27 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger } from '@nestjs/common';
 import { Response } from 'express';
+import { CommonException, ValidationException } from '../exceptions/common.exception';
+import { ResponseDto } from '../dto/response.dto';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const status = exception.getStatus();
-    const errorResponse = exception.getResponse();
 
-    let error: {
-      error: string;
-      statusCode: number;
-      message: string | string[];
-    } = {
-      error: 'Internal Server Error',
-      statusCode: status,
-      message: 'An unexpected error occurred',
-    };
+    let responseDto: ResponseDto<null>;
 
-    if (typeof errorResponse === 'string') {
-      error = {
-        error: errorResponse,
-        statusCode: status,
-        message: errorResponse,
-      };
-    } else if (typeof errorResponse === 'object') {
-      error = errorResponse as {
-        error: string;
-        statusCode: number;
-        message: string | string[];
-      };
+    if (exception instanceof CommonException) {     // 1. 개발자가 직접 정의한 예외
+      Logger.error("ExceptionFilter catch CommonException : " + exception.message);
+      responseDto = ResponseDto.commonFail(exception);
+    } else if (exception instanceof ValidationException) { // 2. 유효성 검사 예외
+      Logger.error("ExceptionFilter catch ValidationException : " + exception.message);
+      responseDto = ResponseDto.validationFail(exception);
+    } else { // 3. 나머지 예외
+      Logger.error("ExceptionFilter catch Exception : " + exception.message);
+      responseDto = ResponseDto.httpFail(exception);
     }
 
-    response.status(status).json({
-      success: false,
-      ...error,
-    });
+    response.status(responseDto.httpStatus).json(responseDto);
   }
 }
