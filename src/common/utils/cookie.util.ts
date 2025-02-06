@@ -11,7 +11,7 @@ export class CookieUtil {
   static addCookie(res: Response, name: string, value: string): void {
     res.cookie(name, value, {
       path: '/',
-      domain: '.9oormthon.university',
+      domain: process.env.CLIENT_URL,
       maxAge: 60 * 60 * 24 * 30 * 1000, // 30 일
       httpOnly: false,
       sameSite: 'lax',
@@ -27,7 +27,7 @@ export class CookieUtil {
   ): void {
     res.cookie(name, value, {
       path: '/',
-      domain: '.9oormthon.university',
+      domain: process.env.CLIENT_URL,
       maxAge: maxAge * 1000,
       httpOnly: false,
       sameSite: 'lax',
@@ -44,7 +44,7 @@ export class CookieUtil {
 
     res.cookie(name, '', {
       path: '/',
-      domain: '.9oormthon.university',
+      domain: process.env.CLIENT_URL,
       maxAge: 0,
       httpOnly: false,
       sameSite: 'lax',
