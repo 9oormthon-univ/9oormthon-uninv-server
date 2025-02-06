@@ -1,4 +1,25 @@
-### 1.3 회원가입
+### 1.1 로그인
+//@no-log
+POST {{host_url}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "serial_id": "{{auth.API_1_1.serial_id}}",
+  "password": "{{auth.API_1_1.password}}"
+}
+
+### 1.3 어드민 회원가입
+//@no-log
+POST {{host_url}}/api/v1/auth/sign-up-admin
+Content-Type: application/json
+
+{
+  "serial_id": "{{auth.API_1_3.serial_id}}",
+  "password": "{{auth.API_1_3.password}}",
+  "admin_auth_code": ""
+}
+
+### 1.4 회원가입 일괄처리
 //@no-log
 POST {{host_url}}/api/v1/auth/sign-up
 Content-Type: multipart/form-data; boundary=boundary

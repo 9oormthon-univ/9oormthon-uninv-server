@@ -1,11 +1,13 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { ExceptionDto } from './exception.dto';
+import { CommonException, ValidationException } from '../exceptions/common.exception';
+import { ErrorCode } from '../exceptions/error-code';
 
 export class ResponseDto<T> {
-  @ApiPropertyOptional({ description: 'HTTP 상태 코드', enum: HttpStatus })
+  @Exclude()
   httpStatus?: HttpStatus;
 
   @ApiProperty({ description: 'API 호출 성공 여부' })
@@ -20,7 +22,7 @@ export class ResponseDto<T> {
   @IsOptional()
   @ValidateNested()
   @Type(() => ExceptionDto)
-  error?: ExceptionDto;
+  error?: ExceptionDto = null;
 
   constructor(
     httpStatus: HttpStatus,
@@ -31,7 +33,7 @@ export class ResponseDto<T> {
     this.httpStatus = httpStatus;
     this.success = success;
     this.data = data;
-    this.error = error;
+    this.error = error === undefined ? null : error;
   }
 
   static ok<T>(data?: T): ResponseDto<T> {
@@ -42,15 +44,30 @@ export class ResponseDto<T> {
     return new ResponseDto(HttpStatus.CREATED, true, data);
   }
 
-  static fail(error: HttpException): ResponseDto<null> {
+  static commonFail(error: CommonException): ResponseDto<null> {
     return new ResponseDto(
       error.getStatus(),
       false,
       null,
-      new ExceptionDto(
-        error.getResponse()['error'],
-        error.getResponse()['message'],
-      ),
+      ExceptionDto.of(error.errorCode),
+    );
+  }
+
+  static validationFail(error: ValidationException): ResponseDto<null> {
+    return new ResponseDto(
+      error.getStatus(),
+      false,
+      null,
+      ExceptionDto.of(error.errorCode),
+    );
+  }
+
+  static httpFail(error: HttpException): ResponseDto<null> {
+    return new ResponseDto(
+      error.getStatus(),
+      false,
+      null,
+      ExceptionDto.of(ErrorCode.INTERNAL_SERVER_ERROR),
     );
   }
 }

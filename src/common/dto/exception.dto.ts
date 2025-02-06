@@ -1,25 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ErrorCode, getHttpStatus } from '../exceptions/error-code';
+import { ErrorCode } from '../exceptions/error-code';
 import { HttpStatus } from '@nestjs/common';
+
 export class ExceptionDto {
   @ApiProperty({
-    example: 'INVALID_PARAMETER_FORMAT',
+    example: 40404,
     description: '에러 코드',
   })
-  errorCode: HttpStatus;
+  code: number;
 
   @ApiProperty({
-    example: 'Invalid parameter format.',
+    example: '해당 리소스가 존재하지 않습니다.',
     description: '에러 메시지',
   })
-  errorMessage: string;
+  message: string;
 
-  constructor(errorCode: HttpStatus, errorMessage: string) {
-    this.errorCode = errorCode;
-    this.errorMessage = errorMessage;
+  constructor(errorCode: ErrorCode) {
+    this.code = errorCode.code;
+    this.message = errorCode.message;
   }
 
   static of(errorCode: ErrorCode): ExceptionDto {
-    return new ExceptionDto(getHttpStatus(errorCode), errorCode);
+    return new ExceptionDto(errorCode);
   }
+
 }

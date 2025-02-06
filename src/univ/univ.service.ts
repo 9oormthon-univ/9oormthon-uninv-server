@@ -25,7 +25,7 @@ export class UnivService {
   async getAllUnivs(): Promise<UnivDto[]> {
     const univs: Univ[] = await this.univRepository.find();
     if (univs === undefined || univs.length === 0) {
-      throw new CommonException(ErrorCode.NOT_FOUND_UNIV);
+      throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
     }
     return univs.map((univ) => UnivDto.fromEntity(univ));
   }
@@ -33,7 +33,7 @@ export class UnivService {
   async getAllUnivsByName(name: string): Promise<UnivDto[]> {
     const univs: Univ[] = await this.univRepository.findByName(name);
     if (univs === undefined || univs.length === 0) {
-      throw new CommonException(ErrorCode.NOT_FOUND_UNIV);
+      throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
     }
     return univs.map((univ) => UnivDto.fromEntity(univ));
   }
@@ -58,7 +58,7 @@ export class UnivService {
   public async deleteUniv(id: number): Promise<void> {
     const univ = await this.univRepository.findOne({ where: { id } });
     if (!univ) {
-      throw new CommonException(ErrorCode.NOT_FOUND_UNIV);
+      throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
     }
     await this.univRepository.remove(univ);
   }

@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Univ } from './univ.entity';
+import { Role } from '../enums/security-role.enum';
 
 @Entity('users')
 export class User {
@@ -27,7 +28,7 @@ export class User {
   /* ----------------------------- */
   /* ---- Information Column ----- */
   /* ----------------------------- */
-  @Column({ name: 'img_url', nullable: false })
+  @Column({ name: 'img_url', nullable: true })
   imgUrl: string;
 
   @Column({ name: 'name', nullable: false })
@@ -52,16 +53,20 @@ export class User {
   @Column('simple-array', { name: 'links', nullable: true })
   links: string[];
 
-  @Column({ name: 'is_login', type: 'boolean', default: false })
-  isLogin: boolean;
-
   @Column({ name: 'refresh_token', nullable: true })
   refreshToken: string | null;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+  })
+  role: Role;
 
   /* ----------------------------- */
   /* ----- One To One Column ----- */
   /* ----------------------------- */
-  @ManyToOne(() => Univ, { nullable: false })
+  @ManyToOne(() => Univ, { nullable: true })
   @JoinColumn({ name: 'univ_id' })
   univ: Univ;
 
