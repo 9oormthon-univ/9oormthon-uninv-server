@@ -30,11 +30,10 @@ export class AdminSignUpDto {
   password: string;
 
   @ApiProperty({
-    description: '어드민 인증 코드',
+    description: '관리자 인증 코드',
   })
-  @IsNotEmpty({ message: 'admin_auth_code는 null이 될 수 없습니다.' })
+  @IsNotEmpty({ message: '관리자 인증 코드를 입력해주세요.' })
   @IsString()
-  @Length(6, 20, { message: '어드민 인증 코드는 6~20자리로 입력해주세요.' })
   @Expose({ name: 'admin_auth_code' })
   adminAuthCode: string;
 }

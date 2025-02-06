@@ -7,7 +7,7 @@ export class LoginDto {
     description: '시리얼 ID',
     example: 'example@example.com',
   })
-  @IsNotEmpty({ message: '아이디를 입력해주세요' })
+  @IsNotEmpty({ message: '아이디를 입력해주세요.' })
   @IsString()
   @Expose({ name: 'serial_id' })
   serialId: string;
