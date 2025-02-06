@@ -7,12 +7,8 @@ export class LoginDto {
     description: '시리얼 ID',
     example: 'example@example.com',
   })
-  @IsNotEmpty({ message: 'serial_id는 null이 될 수 없습니다.' })
+  @IsNotEmpty({ message: '아이디를 입력해주세요' })
   @IsString()
-  @Length(6, 20, { message: '시리얼 ID는 6~20자리로 입력해주세요.' })
-  @Matches(/^[a-z0-9]{6,20}$/, {
-    message: '소문자 또는 숫자로 이루어진 6자 이상 20자 미만이어야 합니다.',
-  })
   @Expose({ name: 'serial_id' })
   serialId: string;
 
