@@ -1,6 +1,6 @@
 import { Injectable, UseFilters } from '@nestjs/common';
 import { UserRepository } from '../database/repositories/user.repository';
-import { AuthSignUpDto } from './dto/auth-sign-up.dto';
+import { AdminSignUpDto } from './dto/admin-sign-up.dto';
 import { JwtTokenDto } from './dto/jwt-token.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -13,6 +13,8 @@ import { BadRequestException } from '@nestjs/common/exceptions';
 import { User } from '../database/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { Univ } from '../database/entities/univ.entity';
+import { Role } from '../database/enums/security-role.enum';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -24,11 +26,88 @@ export class AuthService {
   ) {
   }
 
-  async signUp(file: Express.Multer.File): Promise<void> {
+  async login(loginDto: LoginDto): Promise<JwtTokenDto> {
+    return this.dataSource.transaction(async (manager) => {
+      const userRepo = manager.getRepository(User);
+      const user = await this.userRepository.findOne({
+        where: { serialId: loginDto.serialId },
+      });
+
+      if (!user) {
+        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        loginDto.password,
+        user.password,
+      );
+
+      if (!isPasswordValid) {
+        throw new CommonException(ErrorCode.FAILURE_LOGIN);
+      }
+
+      const tokens = this.generateTokens(user.id);
+      user.refreshToken = tokens.refreshToken;
+      await userRepo.save(user);
+
+      return tokens;
+    });
+  }
+
+  async logout(userId: number): Promise<void> {
+    return this.dataSource.transaction(async (manager) => {
+      const userRepo = manager.getRepository(User);
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+      if (user) {
+        user.refreshToken = null;
+        await userRepo.save(user);
+      }
+    });
+  }
+
+  async signUpAdmin(authSignUpDto: AdminSignUpDto): Promise<void> {
+    return this.dataSource.transaction(async (manager) => {
+      const userRepo = manager.getRepository(User);
+
+      // 어드민 코드가 일치하지 않을 경우 예외 발생
+      if (authSignUpDto.adminAuthCode !== process.env.ADMIN_AUTH_CODE) {
+        throw new CommonException(ErrorCode.ACCESS_DENIED);
+      }
+
+      // 이미 존재하는 아이디라면 예외 발생
+      const user = await this.userRepository.findOne({
+        where: { serialId: authSignUpDto.serialId },
+      });
+
+      if (user) {
+        throw new CommonException(ErrorCode.ALREADY_EXISTS_USER);
+      }
+
+      // 어드민 계정 생성
+      const newUser = new User();
+      newUser.serialId = authSignUpDto.serialId;
+      newUser.password = await bcrypt.hash(authSignUpDto.password, 10);
+      newUser.generations = [];
+      newUser.name = authSignUpDto.serialId;
+      newUser.phoneNumber = authSignUpDto.serialId;
+      newUser.imgUrl = process.env.ADMIN_DEFAULT_PROFILE_IMG_URL;
+      newUser.role = Role.ADMIN;
+
+      await userRepo.save(newUser);
+    });
+  }
+
+  async signUp(userId: number, file: Express.Multer.File): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
       const users: User[] = [];
       const univRepo = manager.getRepository(Univ);
       const userRepo = manager.getRepository(User);
+
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+
+      if (user.role !== Role.ADMIN) {
+        throw new CommonException(ErrorCode.ACCESS_DENIED);
+      }
 
       if (!file) {
         throw new CommonException(ErrorCode.MISSING_REQUEST_PARAMETER);
@@ -96,47 +175,6 @@ export class AuthService {
     });
   }
 
-  async login(authSignUpDto: AuthSignUpDto): Promise<JwtTokenDto> {
-    return this.dataSource.transaction(async (manager) => {
-      const userRepo = manager.getRepository(User);
-      const user = await this.userRepository.findOne({
-        where: { serialId: authSignUpDto.serialId },
-      });
-
-      if (!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_USER);
-      }
-
-      const isPasswordValid = await bcrypt.compare(
-        authSignUpDto.password,
-        user.password,
-      );
-
-      if (!isPasswordValid) {
-        throw new CommonException(ErrorCode.FAILURE_LOGIN);
-      }
-
-      const tokens = this.generateTokens(user.id);
-      user.refreshToken = tokens.refreshToken;
-      user.isLogin = true;
-      await userRepo.save(user);
-
-      return tokens;
-    });
-  }
-
-  async logout(userId: number): Promise<void> {
-    return this.dataSource.transaction(async (manager) => {
-      const userRepo = manager.getRepository(User);
-      const user = await this.userRepository.findOne({ where: { id: userId } });
-      if (user) {
-        user.refreshToken = null;
-        user.isLogin = false;
-        await userRepo.save(user);
-      }
-    });
-  }
-
   async changePassword(
     userId: number,
     changePasswordDto: ChangePasswordDto,
@@ -145,7 +183,7 @@ export class AuthService {
       const userRepo = manager.getRepository(User);
       const user = await this.userRepository.findOne({ where: { id: userId } });
       if (!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_USER);
+        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
       }
 
       const isPasswordValid = await bcrypt.compare(
@@ -162,22 +200,26 @@ export class AuthService {
     });
   }
 
-  async reissue(userId: number, refreshToken: string): Promise<JwtTokenDto> {
+  async reissue(refreshToken?: string): Promise<JwtTokenDto> {
     return this.dataSource.transaction(async (manager) => {
-      const userRepo = manager.getRepository(User);
-      const user = await this.userRepository.findOne({
-        where: { id: userId, refreshToken, isLogin: true },
-      });
+      try {
+        const { userId } = this.jwtService.verify(refreshToken, {
+          secret: process.env.JWT_SECRET,
+        });
 
-      if (!user) {
-        throw new Error('User not found or not logged in');
+        const userRepo = manager.getRepository(User);
+        const user = await this.userRepository.findOne({
+          where: { id: userId, refreshToken },
+        });
+
+        const tokens = this.generateTokens(user.id);
+        user.refreshToken = tokens.refreshToken;
+        await userRepo.save(user);
+
+        return tokens;
+      } catch (error) {
+        throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
       }
-
-      const tokens = this.generateTokens(user.id);
-      user.refreshToken = tokens.refreshToken;
-      await userRepo.save(user);
-
-      return tokens;
     });
   }
 

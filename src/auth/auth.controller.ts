@@ -1,53 +1,44 @@
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
+  HttpCode,
+  Patch,
+  Post,
   Req,
   Res,
-  UseGuards,
-  ValidationPipe,
-  Patch,
-  UseInterceptors,
   UploadedFile,
+  UseGuards,
+  UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthSignUpDto } from './dto/auth-sign-up.dto';
+import { AdminSignUpDto } from './dto/admin-sign-up.dto';
 import { JwtTokenDto } from './dto/jwt-token.dto';
 import { Request, Response } from 'express';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CookieUtil } from '../common/utils/cookie.util';
-import {
-  BadRequestException,
-  UnauthorizedException,
-} from '@nestjs/common/exceptions';
-import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ResponseDto } from '../common/dto/response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('/api/v1')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('auth/sign-up')
-  @UseInterceptors(FileInterceptor('file'))
-  async signUp(
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<ResponseDto<any>> {
-    await this.authService.signUp(file);
-    return ResponseDto.created(null);
-  }
-
-  @Post('auth/login')
+  /**
+   * 1.1 로그인
+   */
+  @Post('/auth/login')
+  @HttpCode(200)
   async login(
-    @Body(new ValidationPipe({ transform: true })) authSignUpDto: AuthSignUpDto,
+    @Body(new ValidationPipe({ transform: true }))
+    loginDto: LoginDto,
     @Res() res: Response,
   ): Promise<any> {
-    const jwtTokenDto: JwtTokenDto =
-      await this.authService.login(authSignUpDto);
+    const jwtTokenDto: JwtTokenDto = await this.authService.login(loginDto);
+
+    CookieUtil.addCookie(res, 'access_token', jwtTokenDto.accessToken);
 
     CookieUtil.addSecureCookie(
       res,
@@ -55,19 +46,55 @@ export class AuthController {
       jwtTokenDto.refreshToken,
       60 * 60 * 24 * 14,
     );
-    res.redirect('https://9oormthon.university');
+    return res.json({ success: true, data: null, error: null });
   }
-  @Post('auth/logout')
+
+  /**
+   * 1.2 로그아웃
+   */
+  @Post('/auth/logout')
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async logout(@Req() req: Request, @Res() res: Response): Promise<any> {
     const userId = req.user.id;
     await this.authService.logout(userId);
 
     CookieUtil.deleteCookie(req, res, 'refresh_token');
-    return res.json({ success: true, message: 'Logged out successfully' });
+    return res.json({ success: true, data: null, error: null });
   }
 
-  @Patch('auth/password')
+  /**
+   * 1.3 어드민 회원가입
+   */
+  @Post('/auth/sign-up-admin')
+  async signUpAdmin(
+    @Body(new ValidationPipe({ transform: true }))
+    requestDto: AdminSignUpDto,
+  ): Promise<ResponseDto<any>> {
+    await this.authService.signUpAdmin(requestDto);
+    return ResponseDto.created(null);
+  }
+
+  /**
+   * 1.4 회원가입 일괄처리
+   * @param req
+   * @param file
+   */
+  @Post('/auth/sign-up')
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(JwtAuthGuard)
+  async signUp(
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<ResponseDto<any>> {
+    await this.authService.signUp(req.user.id, file);
+    return ResponseDto.created(null);
+  }
+
+  /**
+   * 1.5 비밀번호 변경
+   */
+  @Patch('/auth/password')
   @UseGuards(JwtAuthGuard)
   async changePassword(
     @Req() req: Request,
@@ -79,33 +106,24 @@ export class AuthController {
     return ResponseDto.ok(null);
   }
 
-  @Post('auth/reissue')
+  /**
+   * 1.6 JWT 재발급
+   */
+  @Post('/auth/reissue')
+  @HttpCode(200)
   async reissue(@Req() req: Request, @Res() res: Response): Promise<any> {
     const refreshToken = CookieUtil.refineCookie(req, 'refresh_token');
 
-    if (!refreshToken) {
-      throw new BadRequestException('Missing refresh token');
-    }
-    try {
-      const { userId } = this.jwtService.verify(refreshToken, {
-        secret: process.env.JWT_SECRET,
-      });
+    const jwtTokenDto: JwtTokenDto =
+      await this.authService.reissue(refreshToken);
 
-      const jwtTokenDto: JwtTokenDto = await this.authService.reissue(
-        userId,
-        refreshToken,
-      );
+    CookieUtil.addSecureCookie(
+      res,
+      'refresh_token',
+      jwtTokenDto.refreshToken,
+      60 * 60 * 24 * 14,
+    );
 
-      CookieUtil.addSecureCookie(
-        res,
-        'refresh_token',
-        jwtTokenDto.refreshToken,
-        60 * 60 * 24 * 14,
-      );
-
-      return res.json({ success: true, data: jwtTokenDto });
-    } catch (error) {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
+    return res.json({ success: true, data: null, error: null });
   }
 }
