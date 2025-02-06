@@ -27,6 +27,18 @@ export class Team {
   @Column({ name: 'number', nullable: true })
   number: number;
 
+  @Column({ name: 'pm_capacity', nullable: false })
+  pmCapacity: number;
+
+  @Column({ name: 'pd_capacity', nullable: false })
+  pdCapacity: number;
+
+  @Column({ name: 'fe_capacity', nullable: false })
+  feCapacity: number;
+
+  @Column({ name: 'be_capacity', nullable: false })
+  beCapacity: number;
+
   /* ----------------------------- */
   /* ----- One To One Column ----- */
   /* ----------------------------- */
