@@ -16,10 +16,9 @@ export class ErrorCode {
 
   // Not Found Error
   static readonly NOT_FOUND_END_POINT = new ErrorCode(40400, HttpStatus.NOT_FOUND, "존재하지 않는 API 엔드포인트입니다.");
-  static readonly NOT_FOUND_LOGIN_USER = new ErrorCode(40401, HttpStatus.NOT_FOUND, "로그인한 사용자를 찾을 수 없습니다.");
-  static readonly NOT_FOUND_AUTHORIZATION_COOKIE = new ErrorCode(40402, HttpStatus.NOT_FOUND, "Authorization 쿠키를 찾을 수 없습니다.");
   static readonly NOT_FOUND_RESOURCE = new ErrorCode(40403, HttpStatus.NOT_FOUND, "해당 리소스를 찾을 수 없습니다.");
   static readonly NOT_FOUND_ENUM = new ErrorCode(40404, HttpStatus.NOT_FOUND, "해당 열거형을 찾을 수 없습니다.");
+  static readonly NOT_FOUND_UNIV = new ErrorCode(40405, HttpStatus.NOT_FOUND, "해당 대학을 찾을 수 없습니다.");
 
   // Invalid Argument Error
   static readonly MISSING_REQUEST_PARAMETER = new ErrorCode(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다.");
@@ -34,6 +33,7 @@ export class ErrorCode {
   static readonly INVALID_FILE = new ErrorCode(40009, HttpStatus.BAD_REQUEST, "유효하지 않은 파일입니다.");
   static readonly FAILURE_CHANGE_PASSWORD = new ErrorCode(40010, HttpStatus.BAD_REQUEST, "현재 비밀번호가 일치하지 않습니다.");
   static readonly VALIDATION_ERROR = new ErrorCode(40011, HttpStatus.BAD_REQUEST, "유효성 검사 오류입니다.");
+  static readonly INVALID_ADMIN_AUTH_CODE = new ErrorCode(40012, HttpStatus.BAD_REQUEST, "관리자 인증 코드가 일치하지 않습니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
@@ -49,9 +49,12 @@ export class ErrorCode {
   static readonly TOKEN_UNSUPPORTED_ERROR = new ErrorCode(40105, HttpStatus.UNAUTHORIZED, "지원하지 않는 토큰입니다.");
   static readonly TOKEN_GENERATION_ERROR = new ErrorCode(40106, HttpStatus.UNAUTHORIZED, "토큰 생성에 실패했습니다.");
   static readonly TOKEN_UNKNOWN_ERROR = new ErrorCode(40107, HttpStatus.UNAUTHORIZED, "알 수 없는 토큰입니다.");
+  static readonly NOT_FOUND_AUTHORIZATION_COOKIE = new ErrorCode(40108, HttpStatus.UNAUTHORIZED, "쿠키를 찾을 수 없습니다. 다시 로그인해주세요.");
+  static readonly NOT_FOUND_LOGIN_USER = new ErrorCode(40109, HttpStatus.UNAUTHORIZED, "로그인 정보를 찾을 수 없습니다. 다시 로그인해주세요.");
+
 
   // Conflict Error
-  static readonly ALREADY_EXISTS_USER = new ErrorCode(40900, HttpStatus.CONFLICT, "이미 존재하는 사용자입니다.");
+  static readonly ALREADY_EXISTS_USER = new ErrorCode(40900, HttpStatus.CONFLICT, "중복된 아이디의 사용자가 존재합니다.");
   static readonly ALREADY_EXISTS_UNIV = new ErrorCode(40901, HttpStatus.CONFLICT, "이미 존재하는 유니브입니다.");
 
   // Internal Server Error

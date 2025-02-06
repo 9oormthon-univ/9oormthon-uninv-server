@@ -56,9 +56,10 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async logout(@Req() req: Request, @Res() res: Response): Promise<any> {
-    const userId = req.user.id;
-    await this.authService.logout(userId);
+    const refreshToken = CookieUtil.refineCookie(req, 'refresh_token');
+    await this.authService.logout(refreshToken);
 
+    CookieUtil.deleteCookie(req, res, 'access_token');
     CookieUtil.deleteCookie(req, res, 'refresh_token');
     return res.json({ success: true, data: null, error: null });
   }
@@ -92,22 +93,7 @@ export class AuthController {
   }
 
   /**
-   * 1.5 비밀번호 변경
-   */
-  @Patch('/auth/password')
-  @UseGuards(JwtAuthGuard)
-  async changePassword(
-    @Req() req: Request,
-    @Body(new ValidationPipe({ transform: true }))
-    changePasswordDto: ChangePasswordDto,
-  ): Promise<ResponseDto<any>> {
-    const userId = req.user.id;
-    await this.authService.changePassword(userId, changePasswordDto);
-    return ResponseDto.ok(null);
-  }
-
-  /**
-   * 1.6 JWT 재발급
+   * 1.5 JWT 재발급
    */
   @Post('/auth/reissue')
   @HttpCode(200)
@@ -125,5 +111,20 @@ export class AuthController {
     );
 
     return res.json({ success: true, data: null, error: null });
+  }
+
+  /**
+   * 1.6 비밀번호 변경
+   */
+  @Patch('/auth/password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @Req() req: Request,
+    @Body(new ValidationPipe({ transform: true }))
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<ResponseDto<any>> {
+    const userId = req.user.id;
+    await this.authService.changePassword(userId, changePasswordDto);
+    return ResponseDto.ok(null);
   }
 }

@@ -1,6 +1,6 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger, UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express';
-import { CommonException, ValidationException } from '../exceptions/common.exception';
+import { CommonException, UnivNotFoundException, ValidationException } from '../exceptions/common.exception';
 import { ResponseDto } from '../dto/response.dto';
 import { instanceToPlain } from 'class-transformer';
 
@@ -18,7 +18,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof ValidationException) { // 2. 유효성 검사 예외
       Logger.error("ExceptionFilter catch ValidationException : " + exception.message);
       responseDto = ResponseDto.validationFail(exception);
-    } else { // 3. 나머지 예외
+    } else if (exception instanceof UnauthorizedException) { // 3. 인증 예외
+      Logger.error("ExceptionFilter catch UnauthorizedException : " + exception.message);
+      responseDto = ResponseDto.unAuthorizationFail(exception);
+    } else if (exception instanceof UnivNotFoundException) { // 4. 대학교 예외
+      Logger.error("ExceptionFilter catch UnivNotFoundException : " + exception.message);
+      responseDto = ResponseDto.univNotFoundFail(exception);
+    } else { // 5. 나머지 예외
       Logger.error("ExceptionFilter catch Exception : " + exception.message);
       responseDto = ResponseDto.httpFail(exception);
     }

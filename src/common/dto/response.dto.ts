@@ -1,9 +1,9 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, ValidateNested } from 'class-validator';
 import { Exclude, Type } from 'class-transformer';
 import { ExceptionDto } from './exception.dto';
-import { CommonException, ValidationException } from '../exceptions/common.exception';
+import { CommonException, UnivNotFoundException, ValidationException } from '../exceptions/common.exception';
 import { ErrorCode } from '../exceptions/error-code';
 
 export class ResponseDto<T> {
@@ -54,6 +54,24 @@ export class ResponseDto<T> {
   }
 
   static validationFail(error: ValidationException): ResponseDto<null> {
+    return new ResponseDto(
+      error.getStatus(),
+      false,
+      null,
+      ExceptionDto.of(error.errorCode),
+    );
+  }
+
+  static unAuthorizationFail(error: UnauthorizedException): ResponseDto<null> {
+    return new ResponseDto(
+      error.getStatus(),
+      false,
+      null,
+      ExceptionDto.of(ErrorCode.NOT_FOUND_AUTHORIZATION_COOKIE),
+    );
+  }
+
+  static univNotFoundFail(error: UnivNotFoundException): ResponseDto<null> {
     return new ResponseDto(
       error.getStatus(),
       false,
