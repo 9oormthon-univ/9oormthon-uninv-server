@@ -14,6 +14,7 @@ import { DataSource } from 'typeorm';
 import { Univ } from '../database/entities/univ.entity';
 import { Role } from '../database/enums/security-role.enum';
 import { LoginDto } from './dto/login.dto';
+import { AuthBriefsDto } from './dto/auth-briefs.dto';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -233,6 +234,28 @@ export class AuthService {
 
       user.password = await bcrypt.hash(changePasswordDto.newPassword, 10);
       await userRepo.save(user);
+    });
+  }
+
+  async getAuthBriefs(accessToken: string): Promise<any> {
+    return this.dataSource.transaction(async (manager) => {
+      const userRepo = manager.getRepository(User);
+      let payload: any;
+
+      try {
+        payload = this.jwtService.verify(accessToken, {
+          secret: process.env.JWT_SECRET,
+        });
+      } catch (error) {
+        return AuthBriefsDto.of(Role.GUEST, null);
+      }
+
+      const { userId, role } = payload;
+      const user = await userRepo.findOne({ where: { id: userId, role } });
+      if (!user) {
+        throw new CommonException(ErrorCode.NOT_FOUND_LOGIN_USER);
+      }
+      return AuthBriefsDto.of(user.role, user.name);
     });
   }
 
