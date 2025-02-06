@@ -6,10 +6,9 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { CommonException } from '../common/exceptions/common.exception';
+import { CommonException, UnivNotFoundException } from '../common/exceptions/common.exception';
 import { ErrorCode } from '../common/exceptions/error-code';
 import * as XLSX from 'xlsx';
-import { BadRequestException } from '@nestjs/common/exceptions';
 import { User } from '../database/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { Univ } from '../database/entities/univ.entity';
@@ -33,8 +32,9 @@ export class AuthService {
         where: { serialId: loginDto.serialId },
       });
 
+      // 입력한 아이디에 해당하는 사용자가 존재하지 않을 경우 예외 발생
       if (!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.FAILURE_LOGIN);
       }
 
       const isPasswordValid = await bcrypt.compare(
@@ -46,7 +46,7 @@ export class AuthService {
         throw new CommonException(ErrorCode.FAILURE_LOGIN);
       }
 
-      const tokens = this.generateTokens(user.id);
+      const tokens = this.generateTokens(user.id, user.role);
       user.refreshToken = tokens.refreshToken;
       await userRepo.save(user);
 
@@ -54,14 +54,27 @@ export class AuthService {
     });
   }
 
-  async logout(userId: number): Promise<void> {
+  async logout(refreshToken: string): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
       const userRepo = manager.getRepository(User);
-      const user = await this.userRepository.findOne({ where: { id: userId } });
-      if (user) {
-        user.refreshToken = null;
-        await userRepo.save(user);
+
+      let payload: any;
+      try {
+        payload = this.jwtService.verify(refreshToken, {
+          secret: process.env.JWT_SECRET,
+        })
+      } catch (error) {
+        throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
       }
+
+      const { userId, role } = payload;
+
+      const user = await this.userRepository.findOne({ where: { refreshToken, id: userId, role } });
+      if (!user) {
+        throw new CommonException(ErrorCode.NOT_FOUND_LOGIN_USER);
+      }
+      user.refreshToken = null;
+      await userRepo.save(user);
     });
   }
 
@@ -71,7 +84,7 @@ export class AuthService {
 
       // 어드민 코드가 일치하지 않을 경우 예외 발생
       if (authSignUpDto.adminAuthCode !== process.env.ADMIN_AUTH_CODE) {
-        throw new CommonException(ErrorCode.ACCESS_DENIED);
+        throw new CommonException(ErrorCode.INVALID_ADMIN_AUTH_CODE);
       }
 
       // 이미 존재하는 아이디라면 예외 발생
@@ -103,9 +116,9 @@ export class AuthService {
       const univRepo = manager.getRepository(Univ);
       const userRepo = manager.getRepository(User);
 
-      const user = await this.userRepository.findOne({ where: { id: userId } });
+      const admin = await this.userRepository.findOne({ where: { id: userId } });
 
-      if (user.role !== Role.ADMIN) {
+      if (!admin || admin.role !== Role.ADMIN) {
         throw new CommonException(ErrorCode.ACCESS_DENIED);
       }
 
@@ -144,7 +157,7 @@ export class AuthService {
 
         // 없는 학교 명 입력했을 경우 예외발생
         if (!univ) {
-          throw new BadRequestException(row[2] + ' 학교가 존재하지 않습니다.');
+          throw new UnivNotFoundException(row[2]);
         }
 
         // 기존 사용자가 아니라면 새롭게 생성
@@ -175,6 +188,29 @@ export class AuthService {
     });
   }
 
+  async reissue(refreshToken?: string): Promise<JwtTokenDto> {
+    return this.dataSource.transaction(async (manager) => {
+      try {
+        const { userId, role } = this.jwtService.verify(refreshToken, {
+          secret: process.env.JWT_SECRET,
+        });
+
+        const userRepo = manager.getRepository(User);
+        const user = await this.userRepository.findOne({
+          where: { id: userId, refreshToken, role: role },
+        });
+
+        const tokens = this.generateTokens(user.id, role);
+        user.refreshToken = tokens.refreshToken;
+        await userRepo.save(user);
+
+        return tokens;
+      } catch (error) {
+        throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
+      }
+    });
+  }
+
   async changePassword(
     userId: number,
     changePasswordDto: ChangePasswordDto,
@@ -200,31 +236,8 @@ export class AuthService {
     });
   }
 
-  async reissue(refreshToken?: string): Promise<JwtTokenDto> {
-    return this.dataSource.transaction(async (manager) => {
-      try {
-        const { userId } = this.jwtService.verify(refreshToken, {
-          secret: process.env.JWT_SECRET,
-        });
-
-        const userRepo = manager.getRepository(User);
-        const user = await this.userRepository.findOne({
-          where: { id: userId, refreshToken },
-        });
-
-        const tokens = this.generateTokens(user.id);
-        user.refreshToken = tokens.refreshToken;
-        await userRepo.save(user);
-
-        return tokens;
-      } catch (error) {
-        throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
-      }
-    });
-  }
-
-  private generateTokens(userId: number): JwtTokenDto {
-    const payload = { userId };
+  private generateTokens(userId: number, role: Role): JwtTokenDto {
+    const payload = { userId, role };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' }); // accessToken 1시간 유효
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '14d' }); // refreshToken 14일 유효
 

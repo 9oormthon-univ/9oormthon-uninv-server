@@ -26,3 +26,13 @@ export class ValidationException extends CommonException {
     } as ErrorCode);
   }
 }
+
+export class UnivNotFoundException extends CommonException {
+  constructor(univ: string) {
+    super({
+      code: 40405,
+      message: univ + '가 데이터베이스 상에 존재하지 않습니다.',
+      httpStatus: HttpStatus.NOT_FOUND,
+    } as ErrorCode);
+  }
+}
