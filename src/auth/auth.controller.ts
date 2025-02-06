@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Get,
   HttpCode,
   Patch,
   Post,
@@ -126,5 +126,16 @@ export class AuthController {
     const userId = req.user.id;
     await this.authService.changePassword(userId, changePasswordDto);
     return ResponseDto.ok(null);
+  }
+
+  /**
+   * 1.7 인증 정보 간단 조회
+   */
+  @Get('/auth/briefs')
+  async getAuthBriefs(@Req() req: Request): Promise<ResponseDto<any>> {
+    const accessToken = CookieUtil.refineCookie(req, 'access_token');
+    const authBriefs = await this.authService.getAuthBriefs(accessToken);
+
+    return ResponseDto.ok(authBriefs);
   }
 }
