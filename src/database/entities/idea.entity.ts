@@ -19,8 +19,8 @@ export class Idea {
   /* ----------------------------- */
   /* ---- Information Column ----- */
   /* ----------------------------- */
-  @Column({ name: 'name', nullable: false })
-  name: string;
+  @Column({ name: 'title', nullable: false })
+  title: string;
 
   @Column({ name: 'summary', nullable: false })
   summary: string;
