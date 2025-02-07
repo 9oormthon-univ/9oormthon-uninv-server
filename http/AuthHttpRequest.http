@@ -20,7 +20,7 @@ Content-Type: application/json
 {
   "serial_id": "{{auth.API_1_3.serial_id}}",
   "password": "{{auth.API_1_3.password}}",
-  "admin_auth_code": ""
+  "admin_auth_code": "{{auth.API_1_3.admin_auth_code}}"
 }
 
 ### 1.4 회원가입 일괄처리

@@ -26,6 +26,9 @@ export class Apply {
   @Column({ name: 'preference', nullable: false})
   preference: number;
 
+  @Column({ name: 'motivation', nullable: false})
+  motivation: string;
+
   /* ----------------------------- */
   /* ---- Many To One Column ----- */
   /* ----------------------------- */

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Team } from './team.entity';
+import { ERole } from '../enums/role.enum';
 
 @Entity('members')
 export class Member {
@@ -19,8 +20,8 @@ export class Member {
   /* ----------------------------- */
   /* ---- Information Column ----- */
   /* ----------------------------- */
-  @Column({ name: 'role', nullable: false })
-  role: string;
+  @Column({ name: 'role', type: 'enum', enum: ERole, nullable: false })
+  role: ERole;
 
   /* ----------------------------- */
   /* ---- Many To One Column ----- */
