@@ -2,7 +2,7 @@ import { Injectable, UseFilters } from '@nestjs/common';
 import { UserRepository } from '../database/repositories/user.repository';
 import { AdminSignUpDto } from './dto/admin-sign-up.dto';
 import { JwtTokenDto } from './dto/jwt-token.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { HttpExceptionFilter } from '../common/filters/http-exception.filter';

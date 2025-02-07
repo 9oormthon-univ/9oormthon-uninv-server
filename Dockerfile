@@ -9,7 +9,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Setup the production environment
-FROM node:18-alpine AS runner
+FROM node:18 AS runner
 WORKDIR /app
 
 # ✅ builder 스테이지의 node_modules 그대로 복사
