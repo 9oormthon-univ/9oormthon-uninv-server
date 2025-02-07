@@ -35,7 +35,7 @@ export class AuthController {
     @Body(new ValidationPipe({ transform: true }))
     loginDto: LoginDto,
     @Res() res: Response,
-  ): Promise<any> {
+  ): Promise<void> {
     const jwtTokenDto: JwtTokenDto = await this.authService.login(loginDto);
 
     CookieUtil.addCookie(res, 'access_token', jwtTokenDto.accessToken);
@@ -46,7 +46,7 @@ export class AuthController {
       jwtTokenDto.refreshToken,
       60 * 60 * 24 * 14,
     );
-    return res.json({ success: true, data: null, error: null });
+    res.json({ success: true, data: null, error: null });
   }
 
   /**
@@ -55,13 +55,13 @@ export class AuthController {
   @Post('/auth/logout')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
-  async logout(@Req() req: Request, @Res() res: Response): Promise<any> {
+  async logout(@Req() req: Request, @Res() res: Response): Promise<void> {
     const refreshToken = CookieUtil.refineCookie(req, 'refresh_token');
     await this.authService.logout(refreshToken);
 
     CookieUtil.deleteCookie(req, res, 'access_token');
     CookieUtil.deleteCookie(req, res, 'refresh_token');
-    return res.json({ success: true, data: null, error: null });
+    res.json({ success: true, data: null, error: null });
   }
 
   /**
@@ -97,7 +97,7 @@ export class AuthController {
    */
   @Post('/auth/reissue')
   @HttpCode(200)
-  async reissue(@Req() req: Request, @Res() res: Response): Promise<any> {
+  async reissue(@Req() req: Request, @Res() res: Response): Promise<void> {
     const refreshToken = CookieUtil.refineCookie(req, 'refresh_token');
 
     const jwtTokenDto: JwtTokenDto =
@@ -110,7 +110,7 @@ export class AuthController {
       60 * 60 * 24 * 14,
     );
 
-    return res.json({ success: true, data: null, error: null });
+    res.json({ success: true, data: null, error: null });
   }
 
   /**
