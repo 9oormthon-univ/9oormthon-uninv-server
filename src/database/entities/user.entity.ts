@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Univ } from './univ.entity';
-import { Role } from '../enums/security-role.enum';
+import { ESecurityRole } from '../enums/security-role.enum';
 
 @Entity('users')
 export class User {
@@ -58,10 +58,10 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: Role,
-    default: Role.USER,
+    enum: ESecurityRole,
+    default: ESecurityRole.USER,
   })
-  role: Role;
+  role: ESecurityRole;
 
   /* ----------------------------- */
   /* ----- One To One Column ----- */

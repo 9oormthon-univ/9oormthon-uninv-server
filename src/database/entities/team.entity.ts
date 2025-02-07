@@ -24,9 +24,6 @@ export class Team {
   @Column({ name: 'generation', nullable: false })
   generation: number;
 
-  @Column({ name: 'number', nullable: true })
-  number: number;
-
   @Column({ name: 'pm_capacity', nullable: false })
   pmCapacity: number;
 

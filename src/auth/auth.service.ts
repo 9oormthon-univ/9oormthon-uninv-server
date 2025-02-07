@@ -12,7 +12,7 @@ import * as XLSX from 'xlsx';
 import { User } from '../database/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { Univ } from '../database/entities/univ.entity';
-import { Role } from '../database/enums/security-role.enum';
+import { ESecurityRole } from '../database/enums/security-role.enum';
 import { LoginDto } from './dto/login.dto';
 import { AuthBriefsDto } from './dto/auth-briefs.dto';
 
@@ -89,7 +89,7 @@ export class AuthService {
       }
 
       // 이미 존재하는 아이디라면 예외 발생
-      const user = await this.userRepository.findOne({
+      const user = await userRepo.findOne({
         where: { serialId: authSignUpDto.serialId },
       });
 
@@ -105,7 +105,7 @@ export class AuthService {
       newUser.name = authSignUpDto.serialId;
       newUser.phoneNumber = authSignUpDto.serialId;
       newUser.imgUrl = process.env.ADMIN_DEFAULT_PROFILE_IMG_URL;
-      newUser.role = Role.ADMIN;
+      newUser.role = ESecurityRole.ADMIN;
 
       await userRepo.save(newUser);
     });
@@ -119,7 +119,7 @@ export class AuthService {
 
       const admin = await this.userRepository.findOne({ where: { id: userId } });
 
-      if (!admin || admin.role !== Role.ADMIN) {
+      if (!admin || admin.role !== ESecurityRole.ADMIN) {
         throw new CommonException(ErrorCode.ACCESS_DENIED);
       }
 
@@ -247,7 +247,7 @@ export class AuthService {
           secret: process.env.JWT_SECRET,
         });
       } catch (error) {
-        return AuthBriefsDto.of(Role.GUEST, null);
+        return AuthBriefsDto.of(ESecurityRole.GUEST, null);
       }
 
       const { userId, role } = payload;
@@ -259,7 +259,7 @@ export class AuthService {
     });
   }
 
-  private generateTokens(userId: number, role: Role): JwtTokenDto {
+  private generateTokens(userId: number, role: ESecurityRole): JwtTokenDto {
     const payload = { userId, role };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' }); // accessToken 1시간 유효
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '14d' }); // refreshToken 14일 유효

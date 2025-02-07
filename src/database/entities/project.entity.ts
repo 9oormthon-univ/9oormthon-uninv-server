@@ -18,9 +18,6 @@ export class Project {
   /* ----------------------------- */
   /* ---- Information Column ----- */
   /* ----------------------------- */
-  @Column({ name: 'generation', nullable: false })
-  generation: number;
-
   @Column({ name: 'name', nullable: false })
   name: string;
 
@@ -30,6 +27,9 @@ export class Project {
     nullable: false,
   })
   content: string;
+
+  @Column({ name: 'generation', nullable: false })
+  generation: number;
 
   @Column({ name: 'award', nullable: true })
   award: string;

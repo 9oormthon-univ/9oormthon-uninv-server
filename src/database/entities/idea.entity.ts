@@ -32,6 +32,9 @@ export class Idea {
   })
   content: string;
 
+  @Column({ name: 'generation', nullable: false })
+  generation: number;
+
   @Column({ name: 'pm_requirements', nullable: true })
   pmRequirements: string;
 

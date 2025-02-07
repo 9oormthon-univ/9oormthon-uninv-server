@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Idea } from './idea.entity';
+import { EApplyStatus } from '../enums/apply-status.enum';
 
 @Entity('applies')
 export class Apply {
@@ -15,6 +16,15 @@ export class Apply {
   /* ----------------------------- */
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
+
+  /* ----------------------------- */
+  /* ---- Information Column ----- */
+  /* ----------------------------- */
+  @Column({ name: 'status', type: 'enum', enum: EApplyStatus, nullable: false })
+  status: EApplyStatus;
+
+  @Column({ name: 'preference', nullable: false})
+  preference: number;
 
   /* ----------------------------- */
   /* ---- Many To One Column ----- */
