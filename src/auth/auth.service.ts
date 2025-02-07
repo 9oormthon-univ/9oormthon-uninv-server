@@ -89,7 +89,7 @@ export class AuthService {
       }
 
       // 이미 존재하는 아이디라면 예외 발생
-      const user = await this.userRepository.findOne({
+      const user = await userRepo.findOne({
         where: { serialId: authSignUpDto.serialId },
       });
 
