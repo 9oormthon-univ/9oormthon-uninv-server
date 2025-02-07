@@ -117,7 +117,7 @@ export class AuthService {
       const univRepo = manager.getRepository(Univ);
       const userRepo = manager.getRepository(User);
 
-      const admin = await this.userRepository.findOne({ where: { id: userId } });
+      const admin = await userRepo.findOne({ where: { id: userId } });
 
       if (!admin || admin.role !== ESecurityRole.ADMIN) {
         throw new CommonException(ErrorCode.ACCESS_DENIED);
@@ -162,7 +162,7 @@ export class AuthService {
         }
 
         // 기존 사용자가 아니라면 새롭게 생성
-        let user = await this.userRepository.findOne({
+        let user = await userRepo.findOne({
           where: { phoneNumber: row[4], univ: univ },
         });
         if (user === null) {
@@ -197,7 +197,7 @@ export class AuthService {
         });
 
         const userRepo = manager.getRepository(User);
-        const user = await this.userRepository.findOne({
+        const user = await userRepo.findOne({
           where: { id: userId, refreshToken, role: role },
         });
 
@@ -218,7 +218,7 @@ export class AuthService {
   ): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
       const userRepo = manager.getRepository(User);
-      const user = await this.userRepository.findOne({ where: { id: userId } });
+      const user = await userRepo.findOne({ where: { id: userId } });
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
       }
