@@ -12,7 +12,7 @@ export class Team {
   /* ----------------------------- */
   /* ------- Default Column ------ */
   /* ----------------------------- */
-  @PrimaryGeneratedColumn({ name: ' id' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   /* ----------------------------- */
@@ -20,6 +20,9 @@ export class Team {
   /* ----------------------------- */
   @Column({ name: 'name', nullable: true })
   name: string;
+
+  @Column({ name: 'number', nullable: true })
+  number: number;
 
   @Column({ name: 'generation', nullable: false })
   generation: number;
