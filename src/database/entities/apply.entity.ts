@@ -8,6 +8,7 @@ import {
 import { User } from './user.entity';
 import { Idea } from './idea.entity';
 import { EApplyStatus } from '../enums/apply-status.enum';
+import { ERole } from '../enums/role.enum';
 
 @Entity('applies')
 export class Apply {
@@ -20,6 +21,9 @@ export class Apply {
   /* ----------------------------- */
   /* ---- Information Column ----- */
   /* ----------------------------- */
+  @Column({ name: 'phase', nullable: false })
+  phase: number;
+
   @Column({ name: 'status', type: 'enum', enum: EApplyStatus, nullable: false })
   status: EApplyStatus;
 
@@ -28,6 +32,9 @@ export class Apply {
 
   @Column({ name: 'motivation', nullable: false})
   motivation: string;
+
+  @Column({ name: 'role', type: 'enum', enum: ERole, nullable: false })
+  role: ERole;
 
   /* ----------------------------- */
   /* ---- Many To One Column ----- */
