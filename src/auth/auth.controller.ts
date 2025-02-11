@@ -12,15 +12,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AdminSignUpDto } from './dto/admin-sign-up.dto';
-import { JwtTokenDto } from './dto/jwt-token.dto';
+import { AdminSignUpRequestDto } from './dto/request/admin-sign-up.request.dto';
+import { ReissueJwtTokenResponseDto } from './dto/response/reissue-jwt-token.response.dto';
 import { Request, Response } from 'express';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { CookieUtil } from '../common/utils/cookie.util';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { ResponseDto } from '../common/dto/response.dto';
+import { JwtAuthGuard } from '../core/guards/jwt-auth.guard';
+import { CookieUtil } from '../core/utils/cookie.util';
+import { UpdatePasswordRequestDto } from './dto/request/update-password.request.dto';
+import { ResponseDto } from '../core/dto/response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { LoginDto } from './dto/login.dto';
+import { LoginRequestDto } from './dto/request/login.request.dto';
 
 @Controller('/api/v1')
 export class AuthController {
@@ -33,10 +33,10 @@ export class AuthController {
   @HttpCode(200)
   async login(
     @Body(new ValidationPipe({ transform: true }))
-    loginDto: LoginDto,
+    loginDto: LoginRequestDto,
     @Res() res: Response,
   ): Promise<void> {
-    const jwtTokenDto: JwtTokenDto = await this.authService.login(loginDto);
+    const jwtTokenDto: ReissueJwtTokenResponseDto = await this.authService.login(loginDto);
 
     CookieUtil.addCookie(res, 'access_token', jwtTokenDto.accessToken);
 
@@ -70,7 +70,7 @@ export class AuthController {
   @Post('/auth/sign-up-admin')
   async signUpAdmin(
     @Body(new ValidationPipe({ transform: true }))
-    requestDto: AdminSignUpDto,
+    requestDto: AdminSignUpRequestDto,
   ): Promise<ResponseDto<any>> {
     await this.authService.signUpAdmin(requestDto);
     return ResponseDto.created(null);
@@ -100,7 +100,7 @@ export class AuthController {
   async reissue(@Req() req: Request, @Res() res: Response): Promise<void> {
     const refreshToken = CookieUtil.refineCookie(req, 'refresh_token');
 
-    const jwtTokenDto: JwtTokenDto =
+    const jwtTokenDto: ReissueJwtTokenResponseDto =
       await this.authService.reissue(refreshToken);
 
     CookieUtil.addSecureCookie(
@@ -121,7 +121,7 @@ export class AuthController {
   async changePassword(
     @Req() req: Request,
     @Body(new ValidationPipe({ transform: true }))
-    changePasswordDto: ChangePasswordDto,
+    changePasswordDto: UpdatePasswordRequestDto,
   ): Promise<ResponseDto<any>> {
     const userId = req.user.id;
     await this.authService.changePassword(userId, changePasswordDto);
