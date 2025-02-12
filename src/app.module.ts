@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/application/module/user.module';
 import { TeamModule } from './team/application/module/team.module';
 import { IdeaModule } from './idea/application/module/idea.module';
@@ -18,8 +16,6 @@ dotenv.config();
     IdeaModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
