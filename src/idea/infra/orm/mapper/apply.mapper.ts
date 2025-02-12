@@ -1,4 +1,4 @@
-import { ApplyEntity } from '../../../../core/database/entities/apply.entity';
+import { ApplyEntity } from '../../../../core/infra/entities/apply.entity';
 import { ApplyModel } from '../../../domain/apply.model';
 import { UserMapper } from '../../../../user/infra/orm/mapper/user.mapper';
 import { IdeaMapper } from './idea.mapper';
@@ -16,6 +16,10 @@ export class ApplyMapper {
       IdeaMapper.toDomain(entity.idea),
       entity.createdAt
     );
+  }
+
+  static toDomains(entities: ApplyEntity[]): ApplyModel[] {
+    return entities.map(entity => this.toDomain(entity));
   }
 
   static toEntity(domain: ApplyModel): ApplyEntity {

@@ -20,4 +20,40 @@ export class IdeaModel {
     public readonly ideaSubject?: IdeaSubjectModel,
     public readonly createdAt?: Date
   ) {}
+
+  static createIdea(
+    title: string,
+    summary: string,
+    content: string,
+    generation: number,
+    pmRequirements: string,
+    pmRequiredTechStacks: string[],
+    pdRequirements: string,
+    pdRequiredTechStacks: string[],
+    feRequirements: string,
+    feRequiredTechStacks: string[],
+    beRequirements: string,
+    beRequiredTechStacks: string[],
+    provider: UserModel,
+    ideaSubject: IdeaSubjectModel
+  ): IdeaModel {
+    return new IdeaModel(
+      null,
+      title,
+      summary,
+      content,
+      generation,
+      pmRequirements,
+      pmRequiredTechStacks,
+      pdRequirements,
+      pdRequiredTechStacks,
+      feRequirements,
+      feRequiredTechStacks,
+      beRequirements,
+      beRequiredTechStacks,
+      provider,
+      ideaSubject,
+      new Date()
+    );
+  }
 }

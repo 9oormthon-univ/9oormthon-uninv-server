@@ -1,4 +1,4 @@
-import { IdeaEntity } from '../../../../core/database/entities/idea.entity';
+import { IdeaEntity } from '../../../../core/infra/entities/idea.entity';
 import { IdeaModel } from '../../../domain/idea.model';
 import { UserMapper } from '../../../../user/infra/orm/mapper/user.mapper';
 import { IdeaSubjectMapper } from './idea-subject.mapper';
@@ -26,6 +26,10 @@ export class IdeaMapper {
       IdeaSubjectMapper.toDomain(entity.ideaSubject),
       entity.createdAt
     );
+  }
+
+  static toDomains(entities: IdeaEntity[]): IdeaModel[] {
+    return entities.map(entity => this.toDomain(entity));
   }
 
   /**

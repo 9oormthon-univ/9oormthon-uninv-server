@@ -2,13 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { DataSource, EntityManager } from 'typeorm';
 import { UserModel } from '../domain/user.model';
-import { UserEntity } from '../../core/database/entities/user.entity';
+import { UserEntity } from '../../core/infra/entities/user.entity';
 import { UserMapper } from '../infra/orm/mapper/user.mapper';
 import { ESecurityRole } from '../../core/enums/security-role.enum';
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly dataSource: DataSource) {}
+
+  async findById(id: number, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { id },
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
 
   async findByIdWithUniv(id: number, manager?: EntityManager): Promise<UserModel | null> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);

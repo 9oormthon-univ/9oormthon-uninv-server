@@ -1,6 +1,6 @@
 import { UnivModel } from '../domain/univ.model';
 import { EntityManager } from 'typeorm';
-import { UnivEntity } from '../../core/database/entities/univ.entity';
+import { UnivEntity } from '../../core/infra/entities/univ.entity';
 
 export interface UnivRepository {
   findById(id: number, manager? : EntityManager): Promise<UnivModel | null>;

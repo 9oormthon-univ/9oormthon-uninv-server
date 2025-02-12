@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { ApplyEntity } from '../../core/database/entities/apply.entity';
+import { EntityManager } from 'typeorm';
+import { ApplyModel } from '../domain/apply.model';
 
-@Injectable()
-export class ApplyRepository extends Repository<ApplyEntity> {}
+export interface ApplyRepository {
+  findAllByUserId(userId: number, manager? : EntityManager): Promise<ApplyModel[]>;
+  findAllByIdeaId(ideaId: number, manager? : EntityManager): Promise<ApplyModel[]>;
+  findById(id: number, manager? : EntityManager): Promise<ApplyModel | null>;
+  save(apply: ApplyModel, manager? : EntityManager): Promise<void>;
+  delete(id: number, manager? : EntityManager): Promise<void>;
+}

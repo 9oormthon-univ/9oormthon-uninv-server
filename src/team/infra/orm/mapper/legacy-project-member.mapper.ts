@@ -1,4 +1,4 @@
-import { LegacyProjectMemberEntity } from '../../../../core/database/entities/legacy-project-member.entity';
+import { LegacyProjectMemberEntity } from '../../../../core/infra/entities/legacy-project-member.entity';
 import { LegacyProjectMemberModel } from '../../../domain/legacy-project-member.model';
 import { ProjectMapper } from './project.mapper';
 

@@ -1,5 +1,4 @@
 import { Injectable, UseFilters } from '@nestjs/common';
-import { UserRepository } from '../../repository/user.repository';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { ReadUserDetailResponseDto } from '../dto/response/read-user-detail.response.dto';
 import { ReadUserDetailUseCase } from '../usecase/read-user-detail.usecase';

@@ -1,21 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Put,
-  Req,
-  UseFilters,
-  UseGuards,
-  UseInterceptors,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ResponseInterceptor } from '../../../../core/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../../../../core/filters/http-exception.filter';
-import { UpdateUserUseCase } from '../../usecase/update-user.service';
 import { JwtAuthGuard } from '../../../../core/guards/jwt-auth.guard';
 import { ResponseDto } from '../../../../core/dto/response.dto';
-import { UpdateUserRequestDto } from '../../dto/request/update-user.request.dto';
-import { ReadUserDetailUseCase } from '../../usecase/read-user-detail.usecase';
 import { ReadUserDetailService } from '../../service/read-user-detail.service';
 
 @Controller('/api/v1/users')

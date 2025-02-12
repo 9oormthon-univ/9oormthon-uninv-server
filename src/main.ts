@@ -16,9 +16,17 @@ async function bootstrap() {
     new ValidationPipe({
       exceptionFactory: (errors) => {
         const error = errors[0];
-        const message = Object.values(error.constraints)[0];
+        let message = 'Validation error occurred';
 
-        return new ValidationException([message]);
+        if (error.constraints) {
+          message = Object.values(error.constraints)[0];
+        } else if (error.children && error.children.length > 0) {
+          const child = error.children[0];
+          if (child.constraints) {
+            message = Object.values(child.constraints)[0];
+          }
+          return new ValidationException([message]);
+        }
       },
     }),
   );

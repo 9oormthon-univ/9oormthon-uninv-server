@@ -1,4 +1,4 @@
-import { IdeaSubjectEntity } from '../../../../core/database/entities/idea-subject.entity';
+import { IdeaSubjectEntity } from '../../../../core/infra/entities/idea-subject.entity';
 import { IdeaSubjectModel } from '../../../domain/idea-subject.model';
 
 export class IdeaSubjectMapper {
@@ -9,6 +9,10 @@ export class IdeaSubjectMapper {
       entity.name,
       entity.isActive
     );
+  }
+
+  static toDomains(entities: IdeaSubjectEntity[]): IdeaSubjectModel[] {
+    return entities.map(entity => this.toDomain(entity));
   }
 
   static toEntity(domain: IdeaSubjectModel): IdeaSubjectEntity {

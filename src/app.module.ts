@@ -4,7 +4,7 @@ import { TeamModule } from './team/application/module/team.module';
 import { IdeaModule } from './idea/application/module/idea.module';
 import { LoggerMiddleware } from './core/middlewares/logger/logger.middleware';
 import * as dotenv from 'dotenv';
-import { DatabaseModule } from './core/database/database.module';
+import { DatabaseModule } from './core/infra/database.module';
 import { AuthModule } from './auth/application/module/auth.module';
 
 dotenv.config();

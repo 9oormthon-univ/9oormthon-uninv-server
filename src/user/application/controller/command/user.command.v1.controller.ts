@@ -1,7 +1,6 @@
 import { Body, Controller, Put, Req, UseFilters, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from '../../../../core/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../../../../core/filters/http-exception.filter';
-import { UpdateUserUseCase } from '../../usecase/update-user.service';
 import { JwtAuthGuard } from '../../../../core/guards/jwt-auth.guard';
 import { ResponseDto } from '../../../../core/dto/response.dto';
 import { UpdateUserRequestDto } from '../../dto/request/update-user.request.dto';

@@ -1,4 +1,4 @@
-import { TeamEntity } from '../../../../core/database/entities/team.entity';
+import { TeamEntity } from '../../../../core/infra/entities/team.entity';
 import { TeamModel } from '../../../domain/team.model';
 import { IdeaMapper } from '../../../../idea/infra/orm/mapper/idea.mapper';
 

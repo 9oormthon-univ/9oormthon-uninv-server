@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { BookmarkEntity } from '../../core/database/entities/bookmark.entity';
+import { EntityManager } from 'typeorm';
+import { BookmarkModel } from '../domain/bookmark.model';
 
-@Injectable()
-export class BookmarkRepository extends Repository<BookmarkEntity> {}
+export interface BookmarkRepository {
+  save(bookmark: BookmarkModel, manager? : EntityManager): Promise<void>;
+  delete(id: number, manager? : EntityManager): Promise<void>;
+}

@@ -1,4 +1,4 @@
-import { ProjectEntity } from '../../../../core/database/entities/project.entity';
+import { ProjectEntity } from '../../../../core/infra/entities/project.entity';
 import { ProjectModel } from '../../../domain/project.model';
 import { TeamMapper } from './team.mapper';
 
