@@ -1,18 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { IdeaEntity } from '../../core/infra/entities/idea.entity';
+import { EntityManager } from 'typeorm';
+import { IdeaModel } from '../domain/idea.model';
 
-@Injectable()
-export class IdeaRepository extends Repository<IdeaEntity> {
-  async findAll(): Promise<IdeaEntity[]> {
-    return await this.find();
-  }
-
-  async findById(id: number): Promise<IdeaEntity> {
-    return await this.findOne({
-      where: {
-        id: id,
-      },
-    });
-  }
+export interface IdeaRepository {
+  findAll(manager? : EntityManager): Promise<IdeaModel[]>;
+  findById(id: number, manager? : EntityManager): Promise<IdeaModel | null>;
+  findByUserId(userId: number, manager? : EntityManager): Promise<IdeaModel[]>;
+  findByUserIdAndIsBookmarked(userId: number, manager? : EntityManager): Promise<IdeaModel[]>;
+  save(idea: IdeaModel, manager? : EntityManager): Promise<void>;
+  delete(id: number, manager? : EntityManager): Promise<void>;
 }

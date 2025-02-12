@@ -18,6 +18,10 @@ export class ApplyMapper {
     );
   }
 
+  static toDomains(entities: ApplyEntity[]): ApplyModel[] {
+    return entities.map(entity => this.toDomain(entity));
+  }
+
   static toEntity(domain: ApplyModel): ApplyEntity {
     const entity = new ApplyEntity();
     entity.id = domain.id;

@@ -10,6 +10,14 @@ import { ESecurityRole } from '../../core/enums/security-role.enum';
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly dataSource: DataSource) {}
 
+  async findById(id: number, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { id },
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
   async findByIdWithUniv(id: number, manager?: EntityManager): Promise<UserModel | null> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
 

@@ -1,12 +1,13 @@
 import {
   Column,
   Entity,
-  JoinColumn,
+  JoinColumn, OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { IdeaSubjectEntity } from './idea-subject.entity';
+import { BookmarkEntity } from './bookmark.entity';
 
 @Entity('ideas')
 export class IdeaEntity {
@@ -69,6 +70,12 @@ export class IdeaEntity {
   @OneToOne(() => IdeaSubjectEntity)
   @JoinColumn({ name: 'idea_subject_id' })
   ideaSubject: IdeaSubjectEntity;
+
+  /* ----------------------------- */
+  /* ---- One To Many Column ----- */
+  /* ----------------------------- */
+  @OneToMany(() => BookmarkEntity, (bookmark) => bookmark.idea)
+  bookmarks: BookmarkEntity[];
 
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */

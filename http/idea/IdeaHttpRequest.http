@@ -1,0 +1,39 @@
+### 3.1 아이디어 생성
+//@no-log
+POST {{host_url}}/api/v1/users/ideas
+Content-Type: application/json
+
+{
+  "idea_info":
+  {
+    "idea_subject_id": {{idea.API_3_1.idea_info.idea_subject_id}},
+    "title": "{{idea.API_3_1.idea_info.title}}",
+    "summary": "{{idea.API_3_1.idea_info.summary}}",
+    "content": "{{idea.API_3_1.idea_info.content}}",
+    "generation": {{idea.API_3_1.idea_info.generation}},
+    "provider_role": "{{idea.API_3_1.idea_info.provider_role}}"
+  },
+  "requirements":
+  {
+    "pm":
+    {
+      "requirement": "{{idea.API_3_1.requirements.pm.requirement}}",
+      "capacity": {{idea.API_3_1.requirements.pm.capacity}}
+    },
+    "pd":
+    {
+      "requirement": "{{idea.API_3_1.requirements.pd.requirement}}",
+      "capacity": {{idea.API_3_1.requirements.pd.capacity}}
+    },
+    "fe":
+    {
+      "requirement": "{{idea.API_3_1.requirements.fe.requirement}}",
+      "capacity": {{idea.API_3_1.requirements.fe.capacity}}
+    },
+    "be":
+    {
+      "requirement": "{{idea.API_3_1.requirements.be.requirement}}",
+      "capacity": {{idea.API_3_1.requirements.be.capacity}}
+    }
+  }
+}

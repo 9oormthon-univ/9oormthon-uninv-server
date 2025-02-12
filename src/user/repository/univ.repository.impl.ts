@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityManager, Like, Repository } from 'typeorm';
+import { DataSource, EntityManager, Like } from 'typeorm';
 import { UnivEntity } from '../../core/infra/entities/univ.entity';
 import { UnivMapper } from '../infra/orm/mapper/univ.mapper';
 import { UnivRepository } from './univ.repository';

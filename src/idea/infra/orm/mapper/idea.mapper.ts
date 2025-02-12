@@ -28,6 +28,10 @@ export class IdeaMapper {
     );
   }
 
+  static toDomains(entities: IdeaEntity[]): IdeaModel[] {
+    return entities.map(entity => this.toDomain(entity));
+  }
+
   /**
    * 순수 도메인 모델을 ORM 엔티티로 변환
    * (관계 엔티티는 필요에 따라 별도로 조회 및 할당)

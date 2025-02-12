@@ -2,6 +2,7 @@ import { UserModel } from '../domain/user.model';
 import { EntityManager } from 'typeorm';
 
 export interface UserRepository {
+  findById(id: number, manager? : EntityManager): Promise<UserModel | null>;
   findByIdWithUniv(id: number, manager? : EntityManager): Promise<UserModel | null>;
   findByPhoneNumberAndUniv(name: string, univId: number, manager? : EntityManager): Promise<UserModel | null>;
   findBySerialId(serialId: string, manager? : EntityManager): Promise<UserModel | null>;

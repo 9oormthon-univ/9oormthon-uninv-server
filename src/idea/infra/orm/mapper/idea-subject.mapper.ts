@@ -11,6 +11,10 @@ export class IdeaSubjectMapper {
     );
   }
 
+  static toDomains(entities: IdeaSubjectEntity[]): IdeaSubjectModel[] {
+    return entities.map(entity => this.toDomain(entity));
+  }
+
   static toEntity(domain: IdeaSubjectModel): IdeaSubjectEntity {
     const entity = new IdeaSubjectEntity();
     entity.id = domain.id;
