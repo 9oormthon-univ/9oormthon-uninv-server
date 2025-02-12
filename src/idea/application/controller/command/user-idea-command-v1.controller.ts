@@ -1,10 +1,22 @@
-import { Body, Controller, Post, Req, UseFilters, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Post,
+  Req,
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ResponseInterceptor } from '../../../../core/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../../../../core/filters/http-exception.filter';
 import { CreateIdeaService } from '../../service/create-idea.service';
 import { CreateIdeaRequestDto } from '../../dto/request/create-idea.request.dto';
 import { ResponseDto } from '../../../../core/dto/response.dto';
 import { JwtAuthGuard } from '../../../../core/guards/jwt-auth.guard';
+import { CreateApplyService } from '../../service/create-apply.service';
+import { CreateApplyRequestDto } from '../../dto/request/create-apply.request.dto';
 
 @Controller('/api/v1/users/ideas')
 @UseInterceptors(ResponseInterceptor)
@@ -12,8 +24,12 @@ import { JwtAuthGuard } from '../../../../core/guards/jwt-auth.guard';
 export class UserIdeaCommandV1Controller {
   constructor(
     private readonly createIdeaUseCase: CreateIdeaService,
+    private readonly createApplyUseCase: CreateApplyService,
   ) {}
 
+  /**
+   * 3.1 아이디어 생성
+   */
   @Post()
   @UseGuards(JwtAuthGuard)
   async createIdea(
@@ -21,6 +37,20 @@ export class UserIdeaCommandV1Controller {
     @Body(new ValidationPipe({ transform: true })) requestDto: CreateIdeaRequestDto
   ): Promise<ResponseDto<any>> {
     await this.createIdeaUseCase.execute(req.user.id, requestDto);
+    return ResponseDto.created(null);
+  }
+
+  /**
+   * 3.4 아이디어 지원
+   */
+  @Post(':id/applies')
+  @UseGuards(JwtAuthGuard)
+  async createApply(
+    @Req() req,
+    @Param('id') id: number,
+    @Body(new ValidationPipe({ transform: true })) requestDto: CreateApplyRequestDto,
+  ): Promise<ResponseDto<any>> {
+    await this.createApplyUseCase.execute(req.user.id, id, requestDto);
     return ResponseDto.created(null);
   }
 }

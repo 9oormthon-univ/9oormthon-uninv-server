@@ -15,6 +15,7 @@ import { BookmarkRepositoryImpl } from '../../repository/bookmark.repository.imp
 import { AdminIdeaCommandV1Controller } from '../controller/command/admin-idea-command-v1.controller';
 import { AdminIdeaQueryV1Controller } from '../controller/query/admin-idea-query-v1.controller';
 import { UpdateIdeaSubjectIsActiveService } from '../service/update-idea-subject-is-active.service';
+import { CreateApplyService } from '../service/create-apply.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { UpdateIdeaSubjectIsActiveService } from '../service/update-idea-subject
     CreateIdeaService,
     CreateIdeaSubjectService,
     UpdateIdeaSubjectIsActiveService,
+    CreateApplyService,
     IdeaRepositoryImpl,
     IdeaSubjectRepositoryImpl,
     ApplyRepositoryImpl,

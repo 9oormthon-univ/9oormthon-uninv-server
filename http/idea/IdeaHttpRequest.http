@@ -50,3 +50,15 @@ Content-Type: application/json
 ### 3.3 아이디어 주제 노출 상태 토글(활성화 or 비활성화)
 //@no-log
 POST {{host_url}}/api/v1/admins/idea-subjects/2/toggle-active
+
+### 3.4 아이디어 지원
+//@no-log
+POST {{host_url}}/api/v1/users/ideas/4/applies
+Content-Type: application/json
+
+{
+    "phase": 1,
+    "preference": 1,
+    "motivation" : "열심히하겠습니다.",
+    "role": "BE"
+}
