@@ -128,4 +128,8 @@ export class UserModel {
       this.createdAt
     );
   }
+
+  public isAdmin(): boolean {
+    return this.role === ESecurityRole.ADMIN;
+  }
 }
