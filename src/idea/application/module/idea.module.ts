@@ -9,6 +9,11 @@ import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
 import { UserIdeaQueryV1Controller } from '../controller/query/user-idea-query-v1.controller';
 import { UserModule } from '../../../user/application/module/user.module';
 import { IdeaSubjectRepositoryImpl } from '../../repository/idea-subject.repository.impl';
+import { CreateIdeaSubjectService } from '../service/create-idea-subject.service';
+import { ApplyRepositoryImpl } from '../../repository/apply.repository.impl';
+import { BookmarkRepositoryImpl } from '../../repository/bookmark.repository.impl';
+import { AdminIdeaCommandV1Controller } from '../controller/command/admin-idea-command-v1.controller';
+import { AdminIdeaQueryV1Controller } from '../controller/query/admin-idea-query-v1.controller';
 
 @Module({
   imports: [
@@ -20,12 +25,17 @@ import { IdeaSubjectRepositoryImpl } from '../../repository/idea-subject.reposit
   ],
   controllers: [
     UserIdeaCommandV1Controller,
-    UserIdeaQueryV1Controller
+    UserIdeaQueryV1Controller,
+    AdminIdeaCommandV1Controller,
+    AdminIdeaQueryV1Controller
   ],
   providers: [
     CreateIdeaService,
+    CreateIdeaSubjectService,
     IdeaRepositoryImpl,
-    IdeaSubjectRepositoryImpl
+    IdeaSubjectRepositoryImpl,
+    ApplyRepositoryImpl,
+    BookmarkRepositoryImpl
   ],
 })
 export class IdeaModule {}

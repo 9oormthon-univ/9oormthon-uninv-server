@@ -4,4 +4,14 @@ export class IdeaSubjectModel {
     public readonly name: string,
     public readonly isActive: boolean,
   ) {}
+
+  static createIdeaSubject(
+    name: string,
+  ): IdeaSubjectModel {
+    return new IdeaSubjectModel(
+      null,
+      name,
+      false
+    );
+  }
 }
