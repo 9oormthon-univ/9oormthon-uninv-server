@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { DataSource, EntityManager } from 'typeorm';
 import { UserModel } from '../domain/user.model';
-import { UserEntity } from '../../core/database/entities/user.entity';
+import { UserEntity } from '../../core/infra/entities/user.entity';
 import { UserMapper } from '../infra/orm/mapper/user.mapper';
 import { ESecurityRole } from '../../core/enums/security-role.enum';
 

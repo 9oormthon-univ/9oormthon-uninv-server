@@ -1,4 +1,4 @@
-import { UserEntity } from '../../../../core/database/entities/user.entity';
+import { UserEntity } from '../../../../core/infra/entities/user.entity';
 import { UserModel } from '../../../domain/user.model';
 import { UnivMapper } from './univ.mapper';
 

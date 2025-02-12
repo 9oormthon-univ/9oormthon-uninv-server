@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ReadUserDetailService } from '../service/read-user-detail.service';
-import { UserEntity } from '../../../core/database/entities/user.entity';
+import { UserEntity } from '../../../core/infra/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DatabaseModule } from '../../../core/database/database.module';
+import { DatabaseModule } from '../../../core/infra/database.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UpdateUserService } from '../service/update-user.service';
 import { UserQueryV1Controller } from '../controller/query/user.query.v1.controller';

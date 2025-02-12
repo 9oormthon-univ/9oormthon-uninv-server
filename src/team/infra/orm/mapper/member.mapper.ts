@@ -1,4 +1,4 @@
-import { MemberEntity } from '../../../../core/database/entities/member.entity';
+import { MemberEntity } from '../../../../core/infra/entities/member.entity';
 import { MemberModel } from '../../../domain/member.model';
 import { TeamMapper } from './team.mapper';
 import { UserMapper } from '../../../../user/infra/orm/mapper/user.mapper';

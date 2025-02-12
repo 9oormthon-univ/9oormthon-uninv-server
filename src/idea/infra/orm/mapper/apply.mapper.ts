@@ -1,4 +1,4 @@
-import { ApplyEntity } from '../../../../core/database/entities/apply.entity';
+import { ApplyEntity } from '../../../../core/infra/entities/apply.entity';
 import { ApplyModel } from '../../../domain/apply.model';
 import { UserMapper } from '../../../../user/infra/orm/mapper/user.mapper';
 import { IdeaMapper } from './idea.mapper';

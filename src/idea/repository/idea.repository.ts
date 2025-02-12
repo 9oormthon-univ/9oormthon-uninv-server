@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { IdeaEntity } from '../../core/database/entities/idea.entity';
+import { IdeaEntity } from '../../core/infra/entities/idea.entity';
 
 @Injectable()
 export class IdeaRepository extends Repository<IdeaEntity> {

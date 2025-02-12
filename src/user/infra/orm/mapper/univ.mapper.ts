@@ -1,4 +1,4 @@
-import { UnivEntity } from '../../../../core/database/entities/univ.entity';
+import { UnivEntity } from '../../../../core/infra/entities/univ.entity';
 import { UnivModel } from '../../../domain/univ.model';
 
 export class UnivMapper {

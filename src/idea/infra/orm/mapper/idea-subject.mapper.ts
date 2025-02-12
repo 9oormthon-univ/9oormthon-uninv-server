@@ -1,4 +1,4 @@
-import { IdeaSubjectEntity } from '../../../../core/database/entities/idea-subject.entity';
+import { IdeaSubjectEntity } from '../../../../core/infra/entities/idea-subject.entity';
 import { IdeaSubjectModel } from '../../../domain/idea-subject.model';
 
 export class IdeaSubjectMapper {
