@@ -17,6 +17,7 @@ import { ResponseDto } from '../../../../core/dto/response.dto';
 import { JwtAuthGuard } from '../../../../core/guards/jwt-auth.guard';
 import { CreateApplyService } from '../../service/create-apply.service';
 import { CreateApplyRequestDto } from '../../dto/request/create-apply.request.dto';
+import { CreateOrDeleteBookmarkService } from '../../service/create-or-delete-bookmark.service';
 
 @Controller('/api/v1/users/ideas')
 @UseInterceptors(ResponseInterceptor)
@@ -25,6 +26,7 @@ export class UserIdeaCommandV1Controller {
   constructor(
     private readonly createIdeaUseCase: CreateIdeaService,
     private readonly createApplyUseCase: CreateApplyService,
+    private readonly createOrDeleteBookmarkUseCase: CreateOrDeleteBookmarkService,
   ) {}
 
   /**
@@ -52,5 +54,18 @@ export class UserIdeaCommandV1Controller {
   ): Promise<ResponseDto<any>> {
     await this.createApplyUseCase.execute(req.user.id, id, requestDto);
     return ResponseDto.created(null);
+  }
+
+  /**
+   * 3.5 북마크 토글(생성 or 삭제)
+   */
+  @Post(':id/bookmarks')
+  @UseGuards(JwtAuthGuard)
+  async createOrDeleteBookmark(
+    @Req() req,
+    @Param('id') id: number
+  ): Promise<ResponseDto<any>> {
+    await this.createOrDeleteBookmarkUseCase.execute(req.user.id, id);
+    return ResponseDto.ok(null);
   }
 }
