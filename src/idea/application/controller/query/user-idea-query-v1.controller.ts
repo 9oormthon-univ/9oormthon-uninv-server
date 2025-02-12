@@ -5,4 +5,9 @@ import { HttpExceptionFilter } from '../../../../core/filters/http-exception.fil
 @Controller('/api/v1/users/ideas')
 @UseInterceptors(ResponseInterceptor)
 @UseFilters(HttpExceptionFilter)
-export class UserIdeaQueryV1Controller {}
+export class UserIdeaQueryV1Controller {
+  constructor(
+
+  ) {
+  }
+}

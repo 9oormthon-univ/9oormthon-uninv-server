@@ -25,8 +25,8 @@ async function bootstrap() {
           if (child.constraints) {
             message = Object.values(child.constraints)[0];
           }
-          return new ValidationException([message]);
         }
+        return new ValidationException([message]); // 항상 예외를 반환하도록 수정
       },
     }),
   );

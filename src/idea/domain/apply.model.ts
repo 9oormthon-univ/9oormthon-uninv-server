@@ -14,5 +14,27 @@ export class ApplyModel {
     public readonly user: UserModel,
     public readonly idea: IdeaModel,
     public readonly createdAt: Date,
-  ) {}
+  ) {
+  }
+
+  static createApply(
+    phase: number,
+    preference: number,
+    motivation: string,
+    role: ERole,
+    user: UserModel,
+    idea: IdeaModel
+  ): ApplyModel {
+    return new ApplyModel(
+      null,
+      phase,
+      EApplyStatus.WAITING,
+      preference,
+      motivation,
+      role,
+      user,
+      idea,
+      new Date()
+    );
+  }
 }
