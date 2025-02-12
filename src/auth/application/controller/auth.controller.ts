@@ -11,20 +11,34 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AdminSignUpRequestDto } from './dto/request/admin-sign-up.request.dto';
-import { ReissueJwtTokenResponseDto } from './dto/response/reissue-jwt-token.response.dto';
+import { SignUpAdminRequestDto } from '../dto/request/sign-up-admin.request.dto';
+import { JwtTokenResponseDto } from '../dto/response/jwt-token.response.dto';
 import { Request, Response } from 'express';
-import { JwtAuthGuard } from '../core/guards/jwt-auth.guard';
-import { CookieUtil } from '../core/utils/cookie.util';
-import { UpdatePasswordRequestDto } from './dto/request/update-password.request.dto';
-import { ResponseDto } from '../core/dto/response.dto';
+import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
+import { CookieUtil } from '../../../core/utils/cookie.util';
+import { UpdatePasswordRequestDto } from '../dto/request/update-password.request.dto';
+import { ResponseDto } from '../../../core/dto/response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { LoginRequestDto } from './dto/request/login.request.dto';
+import { LoginRequestDto } from '../dto/request/login.request.dto';
+import { ChangePasswordService } from '../service/change-password.service';
+import { LoginService } from '../service/login.service';
+import { LogoutService } from '../service/logout.service';
+import { ReadAuthBriefService } from '../service/read-auth-brief.service';
+import { ReissueJwtService } from '../service/reissue-jwt.service';
+import { SignUpService } from '../service/sign-up.service';
+import { SignUpAdminService } from '../service/sign-up-admin.service';
 
 @Controller('/api/v1')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly changePasswordUseCase: ChangePasswordService,
+    private readonly loginUseCase: LoginService,
+    private readonly logoutUseCase: LogoutService,
+    private readonly readAuthBriefUseCase: ReadAuthBriefService,
+    private readonly reissueJwtUseCase: ReissueJwtService,
+    private readonly signUpUseCase: SignUpService,
+    private readonly signUpAdminUseCase: SignUpAdminService,
+    ) {}
 
   /**
    * 1.1 로그인
@@ -33,10 +47,10 @@ export class AuthController {
   @HttpCode(200)
   async login(
     @Body(new ValidationPipe({ transform: true }))
-    loginDto: LoginRequestDto,
+    requestDto: LoginRequestDto,
     @Res() res: Response,
   ): Promise<void> {
-    const jwtTokenDto: ReissueJwtTokenResponseDto = await this.authService.login(loginDto);
+    const jwtTokenDto: JwtTokenResponseDto = await this.loginUseCase.execute(requestDto);
 
     CookieUtil.addCookie(res, 'access_token', jwtTokenDto.accessToken);
 
@@ -57,7 +71,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async logout(@Req() req: Request, @Res() res: Response): Promise<void> {
     const refreshToken = CookieUtil.refineCookie(req, 'refresh_token');
-    await this.authService.logout(refreshToken);
+    await this.logoutUseCase.execute(refreshToken);
 
     CookieUtil.deleteCookie(req, res, 'access_token');
     CookieUtil.deleteCookie(req, res, 'refresh_token');
@@ -70,9 +84,9 @@ export class AuthController {
   @Post('/auth/sign-up-admin')
   async signUpAdmin(
     @Body(new ValidationPipe({ transform: true }))
-    requestDto: AdminSignUpRequestDto,
+    requestDto: SignUpAdminRequestDto,
   ): Promise<ResponseDto<any>> {
-    await this.authService.signUpAdmin(requestDto);
+    await this.signUpAdminUseCase.execute(requestDto);
     return ResponseDto.created(null);
   }
 
@@ -88,7 +102,7 @@ export class AuthController {
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<ResponseDto<any>> {
-    await this.authService.signUp(req.user.id, file);
+    await this.signUpUseCase.execute(req.user.id, file);
     return ResponseDto.created(null);
   }
 
@@ -100,8 +114,8 @@ export class AuthController {
   async reissue(@Req() req: Request, @Res() res: Response): Promise<void> {
     const refreshToken = CookieUtil.refineCookie(req, 'refresh_token');
 
-    const jwtTokenDto: ReissueJwtTokenResponseDto =
-      await this.authService.reissue(refreshToken);
+    const jwtTokenDto: JwtTokenResponseDto =
+      await this.reissueJwtUseCase.execute(refreshToken);
 
     CookieUtil.addSecureCookie(
       res,
@@ -121,10 +135,10 @@ export class AuthController {
   async changePassword(
     @Req() req: Request,
     @Body(new ValidationPipe({ transform: true }))
-    changePasswordDto: UpdatePasswordRequestDto,
+    requestDto: UpdatePasswordRequestDto,
   ): Promise<ResponseDto<any>> {
     const userId = req.user.id;
-    await this.authService.changePassword(userId, changePasswordDto);
+    await this.changePasswordUseCase.execute(userId, requestDto);
     return ResponseDto.ok(null);
   }
 
@@ -134,7 +148,7 @@ export class AuthController {
   @Get('/auth/briefs')
   async getAuthBriefs(@Req() req: Request): Promise<ResponseDto<any>> {
     const accessToken = CookieUtil.refineCookie(req, 'access_token');
-    const authBriefs = await this.authService.getAuthBriefs(accessToken);
+    const authBriefs = await this.readAuthBriefUseCase.execute(accessToken);
 
     return ResponseDto.ok(authBriefs);
   }
