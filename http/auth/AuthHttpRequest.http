@@ -1,11 +1,21 @@
-### 1.1 로그인
+### 1.1 로그인(유저)
 //@no-log
 POST {{host_url}}/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "serial_id": "{{auth.API_1_1.serial_id}}",
-  "password": "{{auth.API_1_1.password}}"
+  "serial_id": "{{auth.API_1_1_USER.serial_id}}",
+  "password": "{{auth.API_1_1_USER.password}}"
+}
+
+### 1.1 로그인(어드민)
+//@no-log
+POST {{host_url}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "serial_id": "{{auth.API_1_1_ADMIN.serial_id}}",
+  "password": "{{auth.API_1_1_ADMIN.password}}"
 }
 
 ### 1.2 로그아웃
@@ -40,7 +50,11 @@ Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 //@no-log
 POST {{host_url}}/api/v1/auth/reissue
 
-### 1.6 비밀번호 변경
+### 1.6 인증 정보 간단 조회
+//@no-log
+GET {{host_url}}/api/v1/auth/briefs
+
+### 1.7 비밀번호 재설정
 //@no-log
 PATCH {{host_url}}/api/v1/auth/password
 Content-Type: application/json
@@ -49,8 +63,4 @@ Content-Type: application/json
   "current_password": "{{auth.API_1_6.current_password}}",
   "new_password": "{{auth.API_1_6.new_password}}"
 }
-
-### 1.7 인증 정보 간단 조회
-//@no-log
-GET {{host_url}}/api/v1/auth/briefs
 
