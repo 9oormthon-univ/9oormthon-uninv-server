@@ -8,4 +8,13 @@ export class BookmarkModel {
     public readonly idea: IdeaModel,
     public readonly createdAt: Date
   ) {}
+
+  static createBookmark(user: UserModel, idea: IdeaModel): BookmarkModel {
+    return new BookmarkModel(
+      null,
+      user,
+      idea,
+      new Date()
+    );
+  }
 }

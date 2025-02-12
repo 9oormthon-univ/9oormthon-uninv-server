@@ -62,3 +62,8 @@ Content-Type: application/json
     "motivation" : "열심히하겠습니다.",
     "role": "BE"
 }
+
+### 3.5 북마크 토글(생성 or 삭제)
+//@no-log
+POST {{host_url}}/api/v1/users/ideas/4/bookmarks
+
