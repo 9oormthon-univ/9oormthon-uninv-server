@@ -17,6 +17,7 @@ import { AdminIdeaQueryV1Controller } from '../controller/query/admin-idea-query
 import { UpdateIdeaSubjectIsActiveService } from '../service/update-idea-subject-is-active.service';
 import { CreateApplyService } from '../service/create-apply.service';
 import { CreateOrDeleteBookmarkService } from '../service/create-or-delete-bookmark.service';
+import { ReadIdeaOverviewService } from '../service/read-idea-overview.service';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { CreateOrDeleteBookmarkService } from '../service/create-or-delete-bookm
     UpdateIdeaSubjectIsActiveService,
     CreateApplyService,
     CreateOrDeleteBookmarkService,
+    ReadIdeaOverviewService,
     IdeaRepositoryImpl,
     IdeaSubjectRepositoryImpl,
     ApplyRepositoryImpl,

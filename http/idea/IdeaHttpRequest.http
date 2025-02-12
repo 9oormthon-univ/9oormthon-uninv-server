@@ -67,3 +67,6 @@ Content-Type: application/json
 //@no-log
 POST {{host_url}}/api/v1/users/ideas/4/bookmarks
 
+### 3.6 아이디어 요약 리스트 조회
+//@no-log
+GET {{host_url}}/api/v1/users/ideas/overviews?page=1&size=10&generation=4

@@ -8,4 +8,5 @@ export interface IdeaRepository {
   findByUserIdAndIsBookmarked(userId: number, manager? : EntityManager): Promise<IdeaModel[]>;
   save(idea: IdeaModel, manager? : EntityManager): Promise<void>;
   delete(id: number, manager? : EntityManager): Promise<void>;
+  getIsBookmarkedByUserIdAndIdeaIds(userId: number, ideaIds: number[], manager? : EntityManager): Promise<{ ideaId: number, isBookmarked: boolean }[]>;
 }

@@ -66,4 +66,21 @@ export class IdeaRepositoryImpl implements IdeaRepository {
 
     await repo.delete(id);
   }
+
+  async getIsBookmarkedByUserIdAndIdeaIds(userId: number, ideaIds: number[], manager?: EntityManager): Promise<{ ideaId: number, isBookmarked: boolean }[]> {
+    const repo = manager
+      ? manager.getRepository(IdeaEntity)
+      : this.dataSource.getRepository(IdeaEntity);
+
+    const entities = await repo.createQueryBuilder('idea')
+      .leftJoin('idea.bookmarks', 'bookmark')
+      .leftJoin('bookmark.user', 'user')
+      .select('idea.id as ideaId')
+      .addSelect('CASE WHEN user.id = :userId THEN true ELSE false END as isBookmarked', 'isBookmarked')
+      .where('idea.id IN (:...ideaIds)', { ideaIds })
+      .setParameter('userId', userId)
+      .getRawMany();
+
+    return entities.map(({ ideaId, isBookmarked }) => ({ ideaId, isBookmarked }));
+  }
 }
