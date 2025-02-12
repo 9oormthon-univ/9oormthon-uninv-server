@@ -42,8 +42,8 @@ export class ReissueJwtService implements ReissueJwtUseCase{
 
   private generateTokens(userId: number, role: ESecurityRole): JwtTokenResponseDto {
     const payload = { userId, role };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' }); // accessToken 1시간 유효
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '14d' }); // refreshToken 14일 유효
+    const accessToken = this.jwtService.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
 
     return { accessToken, refreshToken };
   }
