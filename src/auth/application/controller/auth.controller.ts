@@ -128,7 +128,18 @@ export class AuthController {
   }
 
   /**
-   * 1.6 비밀번호 변경
+   * 1.6 인증 정보 간단 조회
+   */
+  @Get('/auth/briefs')
+  async getAuthBriefs(@Req() req: Request): Promise<ResponseDto<any>> {
+    const accessToken = CookieUtil.refineCookie(req, 'access_token');
+    const authBriefs = await this.readAuthBriefUseCase.execute(accessToken);
+
+    return ResponseDto.ok(authBriefs);
+  }
+
+  /**
+   * 1.7 비밀번호 재설정
    */
   @Patch('/auth/password')
   @UseGuards(JwtAuthGuard)
@@ -140,16 +151,5 @@ export class AuthController {
     const userId = req.user.id;
     await this.changePasswordUseCase.execute(userId, requestDto);
     return ResponseDto.ok(null);
-  }
-
-  /**
-   * 1.7 인증 정보 간단 조회
-   */
-  @Get('/auth/briefs')
-  async getAuthBriefs(@Req() req: Request): Promise<ResponseDto<any>> {
-    const accessToken = CookieUtil.refineCookie(req, 'access_token');
-    const authBriefs = await this.readAuthBriefUseCase.execute(accessToken);
-
-    return ResponseDto.ok(authBriefs);
   }
 }

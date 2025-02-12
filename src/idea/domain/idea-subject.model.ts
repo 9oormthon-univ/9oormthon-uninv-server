@@ -14,4 +14,12 @@ export class IdeaSubjectModel {
       false
     );
   }
+
+  public isActiveToggle(): IdeaSubjectModel {
+    return new IdeaSubjectModel(
+      this.id,
+      this.name,
+      !this.isActive
+    );
+  }
 }
