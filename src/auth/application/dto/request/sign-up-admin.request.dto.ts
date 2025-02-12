@@ -2,7 +2,7 @@ import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class AdminSignUpRequestDto {
+export class SignUpAdminRequestDto {
   @ApiProperty({
     description: '시리얼 ID',
     example: 'example@example.com',

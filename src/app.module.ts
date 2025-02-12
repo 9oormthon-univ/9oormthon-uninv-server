@@ -1,13 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/application/modules/user.module';
-import { TeamModule } from './team/application/modules/team.module';
-import { IdeaModule } from './idea/application/modules/idea.module';
+import { UserModule } from './user/application/module/user.module';
+import { TeamModule } from './team/application/module/team.module';
+import { IdeaModule } from './idea/application/module/idea.module';
 import { LoggerMiddleware } from './core/middlewares/logger/logger.middleware';
 import * as dotenv from 'dotenv';
 import { DatabaseModule } from './core/database/database.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/application/module/auth.module';
 
 dotenv.config();
 @Module({

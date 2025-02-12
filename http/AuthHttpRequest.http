@@ -36,14 +36,18 @@ Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 
 --boundary
 
+### 1.5 JWT 토큰 갱신
+//@no-log
+POST {{host_url}}/api/v1/auth/reissue
+
 ### 1.6 비밀번호 변경
 //@no-log
 PATCH {{host_url}}/api/v1/auth/password
 Content-Type: application/json
 
 {
-  "current_password": "{{auth.API_1_5.current_password}}",
-  "new_password": "{{auth.API_1_5.new_password}}"
+  "current_password": "{{auth.API_1_6.current_password}}",
+  "new_password": "{{auth.API_1_6.new_password}}"
 }
 
 ### 1.7 인증 정보 간단 조회
