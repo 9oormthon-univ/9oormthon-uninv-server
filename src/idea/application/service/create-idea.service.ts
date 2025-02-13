@@ -32,6 +32,11 @@ export class CreateIdeaService implements CreateIdeaUseCase{
         throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
       }
 
+      const existedIdea = await this.ideaRepository.findByUserId(userId, manager);
+      if(existedIdea.length > 0){
+        throw new CommonException(ErrorCode.ALREADY_SUBMITTED_IDEA);
+      }
+
       const idea = IdeaModel.createIdea(
         requestDto.ideaInfo.title,
         requestDto.ideaInfo.summary,
@@ -49,6 +54,8 @@ export class CreateIdeaService implements CreateIdeaUseCase{
         ideaSubject
       )
       await this.ideaRepository.save(idea, manager);
+
+      // TODO: 팀 생성 후 아이디어 제시자를 팀에 추가하는 로직 추가
     });
   }
 }

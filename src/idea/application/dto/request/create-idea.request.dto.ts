@@ -82,7 +82,6 @@ export class RoleRequirementDto {
     description: '요구 사항 내용',
     example: '해당 역할에 필요한 요구 사항',
   })
-  @IsNotEmpty({ message: '요구 사항을 입력해주세요.' })
   @IsString()
   @Expose({ name: 'requirement' })
   requirement: string;
@@ -119,8 +118,8 @@ export class RequirementsDto {
     type: RoleRequirementDto,
     required: false,
   })
-  @IsOptional()
   @ValidateNested()
+  @IsNotEmpty({ message: 'PM 요구 사항을 입력해주세요.' })
   @Type(() => RoleRequirementDto)
   @Expose({ name: 'pm' })
   pm?: RoleRequirementDto;
@@ -130,8 +129,8 @@ export class RequirementsDto {
     type: RoleRequirementDto,
     required: false,
   })
-  @IsOptional()
   @ValidateNested()
+  @IsNotEmpty({ message: 'PD 요구 사항을 입력해주세요.' })
   @Type(() => RoleRequirementDto)
   @Expose({ name: 'pd' })
   pd?: RoleRequirementDto;
@@ -141,8 +140,8 @@ export class RequirementsDto {
     type: RoleRequirementDto,
     required: false,
   })
-  @IsOptional()
   @ValidateNested()
+  @IsNotEmpty({ message: 'FE 요구 사항을 입력해주세요.' })
   @Type(() => RoleRequirementDto)
   @Expose({ name: 'fe' })
   fe?: RoleRequirementDto;
@@ -152,8 +151,8 @@ export class RequirementsDto {
     type: RoleRequirementDto,
     required: false,
   })
-  @IsOptional()
   @ValidateNested()
+  @IsNotEmpty({ message: 'BE 요구 사항을 입력해주세요.' })
   @Type(() => RoleRequirementDto)
   @Expose({ name: 'be' })
   be?: RoleRequirementDto;
