@@ -1,7 +1,7 @@
 import {
   Column,
   Entity,
-  JoinColumn, OneToMany,
+  JoinColumn, ManyToOne, OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -67,7 +67,10 @@ export class IdeaEntity {
   @JoinColumn({ name: 'provider_id' })
   provider: UserEntity;
 
-  @OneToOne(() => IdeaSubjectEntity)
+  /* ----------------------------- */
+  /* ---- Many To One Column ----- */
+  /* ----------------------------- */
+  @ManyToOne(() => IdeaSubjectEntity)
   @JoinColumn({ name: 'idea_subject_id' })
   ideaSubject: IdeaSubjectEntity;
 
