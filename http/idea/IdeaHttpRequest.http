@@ -82,3 +82,7 @@ GET {{host_url}}/api/v1/users/ideas/details
 ### 3.8 아이디어 상세 조회
 //@no-log
 GET {{host_url}}/api/v1/users/ideas/9/details
+
+### 3.9 아이디어 주제 간단 리스트 조회
+//@no-log
+GET {{host_url}}/api/v1/idea-subjects/briefs
