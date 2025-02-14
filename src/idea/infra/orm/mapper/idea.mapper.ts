@@ -14,13 +14,13 @@ export class IdeaMapper {
       entity.summary,
       entity.content,
       entity.generation,
-      entity.pmRequirements,
+      entity.pmRequirement,
       entity.pmRequiredTechStacks,
-      entity.pdRequirements,
+      entity.pdRequirement,
       entity.pdRequiredTechStacks,
-      entity.feRequirements,
+      entity.feRequirement,
       entity.feRequiredTechStacks,
-      entity.beRequirements,
+      entity.beRequirement,
       entity.beRequiredTechStacks,
       UserMapper.toDomain(entity.provider),
       IdeaSubjectMapper.toDomain(entity.ideaSubject),
@@ -43,13 +43,13 @@ export class IdeaMapper {
     entity.summary = domain.summary;
     entity.content = domain.content;
     entity.generation = domain.generation;
-    entity.pmRequirements = domain.pmRequirements;
+    entity.pmRequirement = domain.pmRequirement;
     entity.pmRequiredTechStacks = domain.pmRequiredTechStacks;
-    entity.pdRequirements = domain.pdRequirements;
+    entity.pdRequirement = domain.pdRequirement;
     entity.pdRequiredTechStacks = domain.pdRequiredTechStacks;
-    entity.feRequirements = domain.feRequirements;
+    entity.feRequirement = domain.feRequirement;
     entity.feRequiredTechStacks = domain.feRequiredTechStacks;
-    entity.beRequirements = domain.beRequirements;
+    entity.beRequirement = domain.beRequirement;
     entity.beRequiredTechStacks = domain.beRequiredTechStacks;
     entity.createdAt = domain.createdAt;
     if (domain.provider) {

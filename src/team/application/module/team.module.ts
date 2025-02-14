@@ -9,6 +9,8 @@ import { ProjectEntity } from '../../../core/infra/entities/project.entity';
 import { ProjectRepository } from '../../repository/project.repository';
 import { TeamQueryV1Controller } from '../controller/query/team-query-v1.controller';
 import { TeamCommandV1Controller } from '../controller/command/team-command-v1.controller';
+import { TeamRepositoryImpl } from '../../repository/team.repository.impl';
+import { MemberRepositoryImpl } from '../../repository/member.repository.impl';
 
 @Module({
   imports: [
@@ -16,9 +18,7 @@ import { TeamCommandV1Controller } from '../controller/command/team-command-v1.c
     TypeOrmModule.forFeature(
       [
         TeamEntity,
-        TeamRepository,
         MemberEntity,
-        MemberRepository,
         ProjectEntity,
         ProjectRepository
       ]
@@ -26,7 +26,9 @@ import { TeamCommandV1Controller } from '../controller/command/team-command-v1.c
   ],
   controllers: [TeamQueryV1Controller, TeamCommandV1Controller],
   providers: [
-
+    TeamRepositoryImpl,
+    MemberRepositoryImpl
   ],
+  exports: [TeamRepositoryImpl, MemberRepositoryImpl]
 })
 export class TeamModule {}

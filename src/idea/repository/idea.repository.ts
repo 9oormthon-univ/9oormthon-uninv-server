@@ -7,7 +7,7 @@ export interface IdeaRepository {
   findById(id: number, manager? : EntityManager): Promise<IdeaModel | null>;
   findByUserId(userId: number, manager? : EntityManager): Promise<IdeaModel[]>;
   findByUserIdAndIsBookmarked(userId: number, manager? : EntityManager): Promise<IdeaModel[]>;
-  save(idea: IdeaModel, manager? : EntityManager): Promise<void>;
+  save(idea: IdeaModel, manager? : EntityManager): Promise<IdeaModel>;
   delete(id: number, manager? : EntityManager): Promise<void>;
   findIdeaOverview(
     page: number,
@@ -19,4 +19,8 @@ export interface IdeaRepository {
     userId: number,
     manager?: EntityManager
   ): Promise<{ ideas: IdeaOverviewDto[]; totalItems: number }>;
+  findMyIdeaDetail(
+    userId: number,
+    manager?: EntityManager
+  ): Promise<{ idea: IdeaModel; isBookmarked: boolean; isActive: boolean }>
 }
