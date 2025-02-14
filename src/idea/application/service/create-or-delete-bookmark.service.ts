@@ -23,12 +23,16 @@ export class CreateOrDeleteBookmarkService implements CreateOrDeleteBookmarkUseC
     return this.dataSource.transaction(async (manager) => {
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
       const idea = await this.ideaRepository.findById(ideaId, manager);
       if (!idea) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_IDEA);
+      }
+
+      if (idea.provider.id === user.id) {
+        throw new CommonException(ErrorCode.CANNOT_BOOKMARK_MY_IDEA);
       }
 
       const bookmark = await this.bookmarkRepository.findByUserIdAndIdeaId(userId, ideaId, manager);

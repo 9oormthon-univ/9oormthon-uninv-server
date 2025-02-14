@@ -19,6 +19,10 @@ export class ErrorCode {
   static readonly NOT_FOUND_RESOURCE = new ErrorCode(40403, HttpStatus.NOT_FOUND, "해당 리소스를 찾을 수 없습니다.");
   static readonly NOT_FOUND_ENUM = new ErrorCode(40404, HttpStatus.NOT_FOUND, "해당 열거형을 찾을 수 없습니다.");
   static readonly NOT_FOUND_UNIV = new ErrorCode(40405, HttpStatus.NOT_FOUND, "해당 대학을 찾을 수 없습니다.");
+  static readonly NOT_FOUND_USER = new ErrorCode(40406, HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다.");
+  static readonly NOT_FOUND_TEAM = new ErrorCode(40407, HttpStatus.NOT_FOUND, "해당 팀을 찾을 수 없습니다.");
+  static readonly NOT_FOUND_IDEA = new ErrorCode(40408, HttpStatus.NOT_FOUND, "해당 아이디어를 찾을 수 없습니다.");
+  static readonly NOT_FOUND_IDEA_SUBJECT = new ErrorCode(40409, HttpStatus.NOT_FOUND, "해당 아이디어 주제를 찾을 수 없습니다.");
 
   // Invalid Argument Error
   static readonly MISSING_REQUEST_PARAMETER = new ErrorCode(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다.");
@@ -34,6 +38,9 @@ export class ErrorCode {
   static readonly FAILURE_CHANGE_PASSWORD = new ErrorCode(40010, HttpStatus.BAD_REQUEST, "현재 비밀번호가 일치하지 않습니다.");
   static readonly VALIDATION_ERROR = new ErrorCode(40011, HttpStatus.BAD_REQUEST, "유효성 검사 오류입니다.");
   static readonly INVALID_ADMIN_AUTH_CODE = new ErrorCode(40012, HttpStatus.BAD_REQUEST, "관리자 인증 코드가 일치하지 않습니다.");
+  static readonly CANNOT_BOOKMARK_MY_IDEA = new ErrorCode(40013, HttpStatus.BAD_REQUEST, "본인의 아이디어는 북마크할 수 없습니다.");
+  static readonly CANNOT_APPLY_MY_IDEA = new ErrorCode(40014, HttpStatus.BAD_REQUEST, "본인의 아이디어에는 지원할 수 없습니다.");
+  static readonly ALREADY_HAVE_TEAM = new ErrorCode(40015, HttpStatus.BAD_REQUEST, "이미 팀이 존재합니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
