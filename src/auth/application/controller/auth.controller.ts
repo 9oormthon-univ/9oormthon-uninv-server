@@ -117,6 +117,8 @@ export class AuthController {
     const jwtTokenDto: JwtTokenResponseDto =
       await this.reissueJwtUseCase.execute(refreshToken);
 
+    CookieUtil.addCookie(res, 'access_token', jwtTokenDto.accessToken);
+
     CookieUtil.addSecureCookie(
       res,
       'refresh_token',
