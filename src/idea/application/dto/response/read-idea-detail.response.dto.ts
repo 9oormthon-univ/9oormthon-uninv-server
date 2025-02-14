@@ -46,18 +46,20 @@ export class IdeaInfoDto {
 }
 
 export class CurrentMemberDto {
+  id: number;
   img_url: string;
   name: string;
   univ: string;
 
-  constructor(imgUrl: string, name: string, univ: string) {
+  constructor(id: number, imgUrl: string, name: string, univ: string) {
+    this.id = id;
     this.img_url = imgUrl;
     this.name = name;
     this.univ = univ;
   }
 
   static from(model: UserModel): CurrentMemberDto {
-    return new CurrentMemberDto(model.imgUrl, model.name, model.univ.name);
+    return new CurrentMemberDto(model.id, model.imgUrl, model.name, model.univ.name);
   }
 }
 
