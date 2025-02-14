@@ -18,22 +18,26 @@ Content-Type: application/json
     "pm":
     {
       "requirement": "{{idea.API_3_1.requirements.pm.requirement}}",
-      "capacity": {{idea.API_3_1.requirements.pm.capacity}}
+      "capacity": {{idea.API_3_1.requirements.pm.capacity}},
+      "required_tech_stacks": ["bash"]
     },
     "pd":
     {
       "requirement": "{{idea.API_3_1.requirements.pd.requirement}}",
-      "capacity": {{idea.API_3_1.requirements.pd.capacity}}
+      "capacity": {{idea.API_3_1.requirements.pd.capacity}},
+      "required_tech_stacks": ["bash"]
     },
     "fe":
     {
       "requirement": "{{idea.API_3_1.requirements.fe.requirement}}",
-      "capacity": {{idea.API_3_1.requirements.fe.capacity}}
+      "capacity": {{idea.API_3_1.requirements.fe.capacity}},
+      "required_tech_stacks": ["bash"]
     },
     "be":
     {
       "requirement": "{{idea.API_3_1.requirements.be.requirement}}",
-      "capacity": {{idea.API_3_1.requirements.be.capacity}}
+      "capacity": {{idea.API_3_1.requirements.be.capacity}},
+      "required_tech_stacks": ["bash", "java"]
     }
   }
 }

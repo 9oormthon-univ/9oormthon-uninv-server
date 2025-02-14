@@ -56,6 +56,7 @@ export class ErrorCode {
   // Conflict Error
   static readonly ALREADY_EXISTS_USER = new ErrorCode(40900, HttpStatus.CONFLICT, "중복된 아이디의 사용자가 존재합니다.");
   static readonly ALREADY_EXISTS_UNIV = new ErrorCode(40901, HttpStatus.CONFLICT, "이미 존재하는 유니브입니다.");
+  static readonly ALREADY_SUBMITTED_IDEA = new ErrorCode(40902, HttpStatus.CONFLICT, "이미 아이디어를 등록한 유저입니다.");
 
   // Internal Server Error
   static readonly INTERNAL_SERVER_ERROR = new ErrorCode(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
