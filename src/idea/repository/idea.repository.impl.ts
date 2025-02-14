@@ -4,7 +4,6 @@ import { IdeaModel } from '../domain/idea.model';
 import { IdeaEntity } from '../../core/infra/entities/idea.entity';
 import { IdeaMapper } from '../infra/orm/mapper/idea.mapper';
 import { IdeaOverviewDto } from '../application/dto/response/read-idea-overview.response.dto';
-import { Logger } from '@nestjs/common';
 
 export class IdeaRepositoryImpl implements IdeaRepository {
   constructor(private readonly dataSource: DataSource) {
@@ -314,18 +313,6 @@ export class IdeaRepositoryImpl implements IdeaRepository {
       .distinct(true);
 
     const { entities, raw } = await qb.getRawAndEntities();
-
-    Logger.log("entities: "+ entities);
-    Logger.log("raw: "+ raw);
-
-    for (let i = 0; i < entities.length; i++) {
-      Logger.log("entities["+i+"]: "+ JSON.stringify(entities[i]));
-    }
-
-    for (let i = 0; i < raw.length; i++) {
-      Logger.log("raw["+i+"]: "+ JSON.stringify(raw[i]));
-    }
-
 
     if (entities.length === 0) {
       return { idea: null, isBookmarked: false, isActive: false };

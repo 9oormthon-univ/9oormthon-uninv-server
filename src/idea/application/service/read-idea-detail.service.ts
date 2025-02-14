@@ -1,5 +1,5 @@
 import { ReadIdeaDetailUseCase } from '../usecase/read-idea-detail.usecase';
-import { Injectable, Logger, UseFilters } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
 import { TeamRepositoryImpl } from '../../../team/repository/team.repository.impl';
@@ -32,9 +32,6 @@ export class ReadIdeaDetailService implements ReadIdeaDetailUseCase {
       if(!idea) {
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA);
       }
-
-      Logger.log("isBookmarked: " + isBookmarked);
-      Logger.log("isActive: " + isActive);
 
       const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
       if(!team) {
