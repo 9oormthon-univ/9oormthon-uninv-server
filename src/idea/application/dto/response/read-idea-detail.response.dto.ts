@@ -113,7 +113,7 @@ export class RequirementsDto {
   }
 }
 
-export class ReadMyIdeaDetailResponseDto {
+export class ReadIdeaDetailResponseDto {
   provider_info: ProviderInfoDto;
   idea_info: IdeaInfoDto;
   requirements: RequirementsDto;
@@ -126,8 +126,8 @@ export class ReadMyIdeaDetailResponseDto {
     this.is_provider = isProvider;
   }
 
-  static of(user: UserModel, idea: IdeaModel, team: TeamModel, isActive: boolean, isBookmarked: boolean): ReadMyIdeaDetailResponseDto {
-    return new ReadMyIdeaDetailResponseDto(
+  static of(user: UserModel, idea: IdeaModel, team: TeamModel, isActive: boolean, isBookmarked: boolean): ReadIdeaDetailResponseDto {
+    return new ReadIdeaDetailResponseDto(
       ProviderInfoDto.from(idea.provider),
       IdeaInfoDto.of(idea, isBookmarked, isActive),
       RequirementsDto.of(idea, team),

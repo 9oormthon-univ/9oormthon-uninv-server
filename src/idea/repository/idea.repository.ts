@@ -23,4 +23,10 @@ export interface IdeaRepository {
     userId: number,
     manager?: EntityManager
   ): Promise<{ idea: IdeaModel; isBookmarked: boolean; isActive: boolean }>
+
+  findIdeaDetail(
+    ideaId: number,
+    userId: number,
+    manager?: EntityManager
+  ): Promise<{ idea: IdeaModel; isBookmarked: boolean; isActive: boolean }>
 }
