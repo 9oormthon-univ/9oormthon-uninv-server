@@ -1,4 +1,14 @@
-import { Controller, Get, Query, Req, UseFilters, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Req,
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ResponseInterceptor } from '../../../../core/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../../../../core/filters/http-exception.filter';
 import { ReadIdeaOverviewService } from '../../service/read-idea-overview.service';
@@ -6,6 +16,7 @@ import { JwtAuthGuard } from '../../../../core/guards/jwt-auth.guard';
 import { ReadIdeaOverviewQueryDto } from '../../dto/request/read-idea-overview.request.dto';
 import { ResponseDto } from '../../../../core/dto/response.dto';
 import { ReadMyIdeaDetailService } from '../../service/read-my-idea-detail.service';
+import { ReadIdeaDetailService } from '../../service/read-idea-detail.service';
 
 @Controller('/api/v1/users/ideas')
 @UseInterceptors(ResponseInterceptor)
@@ -13,7 +24,8 @@ import { ReadMyIdeaDetailService } from '../../service/read-my-idea-detail.servi
 export class UserIdeaQueryV1Controller {
   constructor(
     private readonly readIdeaOverviewUseCase: ReadIdeaOverviewService,
-    private readonly readMyIdeaDetailUseCase: ReadMyIdeaDetailService
+    private readonly readMyIdeaDetailUseCase: ReadMyIdeaDetailService,
+    private readonly readIdeaDetailUseCase: ReadIdeaDetailService,
   ) {}
 
   @Get('overviews')
@@ -43,6 +55,20 @@ export class UserIdeaQueryV1Controller {
     return ResponseDto.ok(
       await this.readMyIdeaDetailUseCase.execute(
         req.user.id
+      )
+    );
+  }
+
+  @Get(':id/details')
+  @UseGuards(JwtAuthGuard)
+  async readIdeaDetail(
+    @Req() req,
+    @Param('id') id: number,
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(
+      await this.readIdeaDetailUseCase.execute(
+        req.user.id,
+        id
       )
     );
   }

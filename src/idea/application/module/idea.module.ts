@@ -20,6 +20,7 @@ import { CreateOrDeleteBookmarkService } from '../service/create-or-delete-bookm
 import { ReadIdeaOverviewService } from '../service/read-idea-overview.service';
 import { TeamModule } from '../../../team/application/module/team.module';
 import { ReadMyIdeaDetailService } from '../service/read-my-idea-detail.service';
+import { ReadIdeaDetailService } from '../service/read-idea-detail.service';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ReadMyIdeaDetailService } from '../service/read-my-idea-detail.service'
     CreateOrDeleteBookmarkService,
     ReadIdeaOverviewService,
     ReadMyIdeaDetailService,
+    ReadIdeaDetailService,
     IdeaRepositoryImpl,
     IdeaSubjectRepositoryImpl,
     ApplyRepositoryImpl,
