@@ -236,6 +236,10 @@ export class IdeaRepositoryImpl implements IdeaRepository {
 
     const { entities, raw } = await qb.getRawAndEntities();
 
+    if (entities.length === 0) {
+      return { idea: null, isBookmarked: false, isActive: false };
+    }
+
     const idea = IdeaMapper.toDomain(entities[0]);
     const isBookmarked = !!raw[0].bookmark_id;
     const isActive = raw[0].is_active === true || raw[0].is_active === 'true';
@@ -292,6 +296,10 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     `, 'is_active');
 
     const { entities, raw } = await qb.getRawAndEntities();
+
+    if (entities.length === 0) {
+      return { idea: null, isBookmarked: false, isActive: false };
+    }
 
     const idea = IdeaMapper.toDomain(entities[0]);
     const isBookmarked = !!raw[0].bookmark_id;

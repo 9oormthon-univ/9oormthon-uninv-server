@@ -6,6 +6,8 @@ import { UserRepositoryImpl } from '../../../user/repository/user.repository.imp
 import { TeamRepositoryImpl } from '../../../team/repository/team.repository.impl';
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
+import { CommonException } from '../../../core/exceptions/common.exception';
+import { ErrorCode } from '../../../core/exceptions/error-code';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -21,10 +23,19 @@ export class ReadMyIdeaDetailService implements ReadMyIdeaDetailUseCase {
     return this.dataSource.transaction(async (manager) => {
 
       const user = await this.userRepository.findByIdWithUniv(userId, manager);
+      if(!user) {
+        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+      }
 
       const { idea, isBookmarked, isActive } = await this.ideaRepository.findMyIdeaDetail(userId, manager);
+      if(!idea) {
+        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+      }
 
       const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
+      if(!team) {
+        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+      }
 
       return ReadMyIdeaDetailResponseDto.of(user, idea, team, isActive, isBookmarked);
     });
