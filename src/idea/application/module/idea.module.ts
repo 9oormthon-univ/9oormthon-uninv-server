@@ -21,6 +21,8 @@ import { ReadIdeaOverviewService } from '../service/read-idea-overview.service';
 import { TeamModule } from '../../../team/application/module/team.module';
 import { ReadMyIdeaDetailService } from '../service/read-my-idea-detail.service';
 import { ReadIdeaDetailService } from '../service/read-idea-detail.service';
+import { ReadIdeaSubjectBriefService } from '../service/read-idea-subject-brief.service';
+import { IdeaQueryV1Controller } from '../controller/query/idea-query-v1.controller';
 
 @Module({
   imports: [
@@ -35,7 +37,8 @@ import { ReadIdeaDetailService } from '../service/read-idea-detail.service';
     UserIdeaCommandV1Controller,
     UserIdeaQueryV1Controller,
     AdminIdeaCommandV1Controller,
-    AdminIdeaQueryV1Controller
+    AdminIdeaQueryV1Controller,
+    IdeaQueryV1Controller
   ],
   providers: [
     CreateIdeaService,
@@ -46,6 +49,7 @@ import { ReadIdeaDetailService } from '../service/read-idea-detail.service';
     ReadIdeaOverviewService,
     ReadMyIdeaDetailService,
     ReadIdeaDetailService,
+    ReadIdeaSubjectBriefService,
     IdeaRepositoryImpl,
     IdeaSubjectRepositoryImpl,
     ApplyRepositoryImpl,
