@@ -21,7 +21,7 @@ export class UpdateIdeaSubjectIsActiveService implements UpdateIdeaSubjectIsActi
 
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
       if (!user.isAdmin()) {
         throw new CommonException(ErrorCode.ACCESS_DENIED);
@@ -29,7 +29,7 @@ export class UpdateIdeaSubjectIsActiveService implements UpdateIdeaSubjectIsActi
 
       const ideaSubject = await this.ideaSubjectRepository.findById(ideaSubjectId, manager);
       if (!ideaSubject) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_IDEA_SUBJECT);
       }
       const updatedIdeaSubject = ideaSubject.isActiveToggle();
       await this.ideaSubjectRepository.save(updatedIdeaSubject, manager);

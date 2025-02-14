@@ -30,16 +30,15 @@ export class CreateIdeaService implements CreateIdeaUseCase{
     return this.dataSource.transaction(async (manager) => {
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
       const ideaSubject = await this.ideaSubjectRepository.findById(requestDto.ideaInfo.ideaSubjectId, manager);
       if(!ideaSubject){
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_IDEA_SUBJECT);
       }
 
-      const existedIdea = await this.ideaRepository.findByUserId(userId, manager);
-      if(existedIdea.length > 0){
+      if (await this.memberRepository.findByUserIdAndGeneration(userId, requestDto.ideaInfo.generation, manager)) {
         throw new CommonException(ErrorCode.ALREADY_SUBMITTED_IDEA);
       }
 

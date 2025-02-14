@@ -24,17 +24,17 @@ export class ReadMyIdeaDetailService implements ReadMyIdeaDetailUseCase {
 
       const user = await this.userRepository.findByIdWithUniv(userId, manager);
       if(!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
       const { idea, isBookmarked, isActive } = await this.ideaRepository.findMyIdeaDetail(userId, manager);
       if(!idea) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_IDEA);
       }
 
       const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
       if(!team) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
 
       return ReadMyIdeaDetailResponseDto.of(user, idea, team, isActive, isBookmarked);

@@ -93,12 +93,14 @@ export class IdeaRepositoryImpl implements IdeaRepository {
 
     // is-bookmarked 필터
     if (isBookmarked === true) {
-      qb.innerJoin('idea.bookmarks', 'bookmark')
-        .innerJoin('bookmark.user', 'bookmarkUser')
-        .andWhere('bookmarkUser.id = :userId', { userId });
-    } else {
-      qb.leftJoin('idea.bookmarks', 'bookmark', 'bookmark.user_id = :userId', { userId });
+      qb.andWhere(`(SELECT COUNT(*) FROM bookmarks b WHERE b.idea_id = idea.id AND b.user_id = :userId) > 0`);
     }
+
+    // bookmark_count를 서브쿼리로 계산 (나중에 매핑할 때 사용)
+    qb.addSelect(
+      `(SELECT COUNT(*) FROM bookmarks b WHERE b.idea_id = idea.id AND b.user_id = :userId)`,
+      'bookmark_count'
+    );
 
     // is_active 계산. 서브쿼리로 각 아이디어의 모집 상태 산출
     qb.addSelect(`
@@ -126,6 +128,11 @@ export class IdeaRepositoryImpl implements IdeaRepository {
         )
       THEN true ELSE false END
     `, 'is_active');
+    qb.setParameter('userId', userId)
+      .orderBy('idea.createdAt', 'DESC')
+      .skip((page - 1) * size)
+      .take(size)
+      .distinct(true);
 
     // is-active 필터 조건 적용
     if (typeof isActive === 'boolean') {
@@ -167,9 +174,7 @@ export class IdeaRepositoryImpl implements IdeaRepository {
       .skip((page - 1) * size)
       .take(size);
 
-    // 전체 아이템 수 계산
     const totalItems = await qb.getCount();
-    // 실제 데이터 조회
     const { entities, raw } = await qb.getRawAndEntities();
 
     const ideas: IdeaOverviewDto[] = entities.map((idea, index) => {
@@ -179,8 +184,8 @@ export class IdeaRepositoryImpl implements IdeaRepository {
         subject: idea.ideaSubject ? idea.ideaSubject.name : null,
         title: idea.title,
         summary: idea.summary,
-        is_active: rawRow.is_active === true || rawRow.is_active === 'true',
-        is_bookmarked: isBookmarked === true ? true : !!rawRow.bookmark_id,
+        is_active: Number(rawRow.is_active) === 1,
+        is_bookmarked: Number(rawRow.bookmark_count) > 0,
       };
     });
 
@@ -202,7 +207,12 @@ export class IdeaRepositoryImpl implements IdeaRepository {
       .leftJoinAndSelect('member.user', 'memberUser')
       .leftJoinAndSelect('memberUser.univ', 'univ')
 
-      .where('idea.provider.id = :userId', { userId });
+      .where('idea.provider.id = :userId', { userId })
+      // is-bookmarked 계산
+      .addSelect(
+        `(SELECT COUNT(*) FROM bookmarks b WHERE b.idea_id = idea.id AND b.user_id = :userId)`,
+        'bookmark_count'
+      );
 
     // is-bookmarked 계산
     qb.leftJoin('idea.bookmarks', 'bookmark', 'bookmark.user_id = :userId', { userId });
@@ -232,7 +242,9 @@ export class IdeaRepositoryImpl implements IdeaRepository {
             )
         )
       THEN true ELSE false END
-    `, 'is_active');
+    `, 'is_active')
+      .setParameter('userId', userId)
+      .distinct(true);
 
     const { entities, raw } = await qb.getRawAndEntities();
 
@@ -241,8 +253,9 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     }
 
     const idea = IdeaMapper.toDomain(entities[0]);
-    const isBookmarked = !!raw[0].bookmark_id;
-    const isActive = raw[0].is_active === true || raw[0].is_active === 'true';
+    const bookmarkCount = Number(raw[0].bookmark_count);
+    const isBookmarked = bookmarkCount > 0;
+    const isActive = raw[0].is_active === true || raw[0].is_active === 'true' || raw[0].is_active == 1;
 
     return { idea, isBookmarked, isActive };
   }
@@ -263,11 +276,13 @@ export class IdeaRepositoryImpl implements IdeaRepository {
       .leftJoinAndSelect('member.user', 'memberUser')
       .leftJoinAndSelect('memberUser.univ', 'univ')
 
-      .where('idea.id = :ideaId', { ideaId });
+      .where('idea.id = :ideaId', { ideaId })
 
-    // is-bookmarked 계산
-    qb.leftJoin('idea.bookmarks', 'bookmark', 'bookmark.user_id = :userId', { userId });
-
+      // is-bookmarked 계산
+      .addSelect(
+        `(SELECT COUNT(*) FROM bookmarks b WHERE b.idea_id = idea.id AND b.user_id = :userId)`,
+        'bookmark_count'
+      );
     // is-active 계산. 서브쿼리로 각 아이디어의 모집 상태 산출
     qb.addSelect(`
       CASE 
@@ -293,7 +308,9 @@ export class IdeaRepositoryImpl implements IdeaRepository {
             )
         )
       THEN true ELSE false END
-    `, 'is_active');
+    `, 'is_active')
+      .setParameter('userId', userId)
+      .distinct(true);
 
     const { entities, raw } = await qb.getRawAndEntities();
 
@@ -302,8 +319,9 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     }
 
     const idea = IdeaMapper.toDomain(entities[0]);
-    const isBookmarked = !!raw[0].bookmark_id;
-    const isActive = raw[0].is_active === true || raw[0].is_active === 'true';
+    const bookmarkCount = Number(raw[0].bookmark_count);
+    const isBookmarked = bookmarkCount > 0;
+    const isActive = raw[0].is_active === true || raw[0].is_active === 'true' || raw[0].is_active == 1;
 
     return { idea, isBookmarked, isActive };
   }

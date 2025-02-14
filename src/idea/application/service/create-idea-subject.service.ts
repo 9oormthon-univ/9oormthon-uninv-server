@@ -23,7 +23,7 @@ export class CreateIdeaSubjectService implements CreateIdeaSubjectUseCase {
 
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {
-        throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
       if (!user.isAdmin()) {
         throw new CommonException(ErrorCode.ACCESS_DENIED);
