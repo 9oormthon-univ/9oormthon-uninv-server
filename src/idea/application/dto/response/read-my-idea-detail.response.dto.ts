@@ -63,13 +63,15 @@ export class CurrentMemberDto {
 
 export class RoleRequirementDto {
   requirement?: string | null;
-  capacity: string;
+  current_count: number;
+  max_count: number;
   required_tech_stacks?: string[];
   current_members: CurrentMemberDto[];
 
-  constructor(requirement: string | null, capacity: string, requiredTechStacks: string[], currentMembers: CurrentMemberDto[]) {
+  constructor(requirement: string | null, current_count: number, max_count: number, requiredTechStacks: string[], currentMembers: CurrentMemberDto[]) {
     this.requirement = requirement;
-    this.capacity = capacity;
+    this.current_count = current_count;
+    this.max_count = max_count;
     this.required_tech_stacks = requiredTechStacks;
     this.current_members = currentMembers;
   }
@@ -77,13 +79,13 @@ export class RoleRequirementDto {
   static of(idea: IdeaModel, team: TeamModel, role: ERole) : RoleRequirementDto {
     switch (role) {
       case ERole.PM:
-        return new RoleRequirementDto(idea.pmRequirement, team.members.filter((member) => member.role === ERole.PM).length.toString() + '/' + team.pmCapacity.toString(), idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(idea.pmRequirement, team.members.filter((member) => member.role === ERole.PM).length, team.pmCapacity, idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member.user)));
       case ERole.PD:
-        return new RoleRequirementDto(idea.pdRequirement, team.members.filter((member) => member.role === ERole.PD).length.toString() + '/' + team.pdCapacity.toString(), idea.pdRequiredTechStacks, team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(idea.pdRequirement, team.members.filter((member) => member.role === ERole.PD).length, team.pdCapacity, idea.pdRequiredTechStacks, team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member.user)));
       case ERole.FE:
-        return new RoleRequirementDto(idea.feRequirement, team.members.filter((member) => member.role === ERole.FE).length.toString() + '/' + team.feCapacity.toString(), idea.feRequiredTechStacks, team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(idea.feRequirement, team.members.filter((member) => member.role === ERole.FE).length, team.feCapacity, idea.feRequiredTechStacks, team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member.user)));
       case ERole.BE:
-        return new RoleRequirementDto(idea.beRequirement, team.members.filter((member) => member.role === ERole.BE).length.toString() + '/' + team.beCapacity.toString(), idea.beRequiredTechStacks, team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(idea.beRequirement, team.members.filter((member) => member.role === ERole.BE).length, team.beCapacity, idea.beRequiredTechStacks, team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member.user)));
       default:
         throw new CommonException(ErrorCode.NOT_FOUND_ENUM);
     }
