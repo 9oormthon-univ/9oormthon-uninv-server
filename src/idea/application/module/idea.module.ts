@@ -18,6 +18,8 @@ import { UpdateIdeaSubjectIsActiveService } from '../service/update-idea-subject
 import { CreateApplyService } from '../service/create-apply.service';
 import { CreateOrDeleteBookmarkService } from '../service/create-or-delete-bookmark.service';
 import { ReadIdeaOverviewService } from '../service/read-idea-overview.service';
+import { TeamModule } from '../../../team/application/module/team.module';
+import { ReadMyIdeaDetailService } from '../service/read-my-idea-detail.service';
 
 @Module({
   imports: [
@@ -25,7 +27,8 @@ import { ReadIdeaOverviewService } from '../service/read-idea-overview.service';
     TypeOrmModule.forFeature(
       [IdeaEntity]
     ),
-    UserModule
+    UserModule,
+    TeamModule
   ],
   controllers: [
     UserIdeaCommandV1Controller,
@@ -40,6 +43,7 @@ import { ReadIdeaOverviewService } from '../service/read-idea-overview.service';
     CreateApplyService,
     CreateOrDeleteBookmarkService,
     ReadIdeaOverviewService,
+    ReadMyIdeaDetailService,
     IdeaRepositoryImpl,
     IdeaSubjectRepositoryImpl,
     ApplyRepositoryImpl,

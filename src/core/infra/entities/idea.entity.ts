@@ -8,6 +8,7 @@ import {
 import { UserEntity } from './user.entity';
 import { IdeaSubjectEntity } from './idea-subject.entity';
 import { BookmarkEntity } from './bookmark.entity';
+import { TeamEntity } from './team.entity';
 
 @Entity('ideas')
 export class IdeaEntity {
@@ -36,26 +37,26 @@ export class IdeaEntity {
   @Column({ name: 'generation', nullable: false })
   generation: number;
 
-  @Column({ name: 'pm_requirements', nullable: true })
-  pmRequirements: string;
+  @Column({ name: 'pm_requirement', nullable: true })
+  pmRequirement: string;
 
   @Column('simple-array', { name: 'pm_required_tech_stacks', nullable: true })
   pmRequiredTechStacks: string[];
 
-  @Column({ name: 'pd_requirements', nullable: true })
-  pdRequirements: string;
+  @Column({ name: 'pd_requirement', nullable: true })
+  pdRequirement: string;
 
   @Column('simple-array', { name: 'pd_required_tech_stacks', nullable: true })
   pdRequiredTechStacks: string[];
 
-  @Column({ name: 'fe_requirements', nullable: true })
-  feRequirements: string;
+  @Column({ name: 'fe_requirement', nullable: true })
+  feRequirement: string;
 
   @Column('simple-array', { name: 'fe_required_tech_stacks', nullable: true })
   feRequiredTechStacks: string[];
 
-  @Column({ name: 'be_requirements', nullable: true })
-  beRequirements: string;
+  @Column({ name: 'be_requirement', nullable: true })
+  beRequirement: string;
 
   @Column('simple-array', { name: 'be_required_tech_stacks', nullable: true })
   beRequiredTechStacks: string[];
@@ -66,6 +67,9 @@ export class IdeaEntity {
   @OneToOne(() => UserEntity)
   @JoinColumn({ name: 'provider_id' })
   provider: UserEntity;
+
+  @OneToOne(() => TeamEntity, (team) => team.idea)
+  team: TeamEntity;
 
   @OneToOne(() => IdeaSubjectEntity)
   @JoinColumn({ name: 'idea_subject_id' })

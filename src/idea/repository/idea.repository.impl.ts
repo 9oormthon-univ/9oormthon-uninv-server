@@ -57,10 +57,10 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     return IdeaMapper.toDomains(entities);
   }
 
-  async save(idea: IdeaModel, manager?: EntityManager): Promise<void> {
+  async save(idea: IdeaModel, manager?: EntityManager): Promise<IdeaModel> {
     const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
 
-    await repo.save(IdeaMapper.toEntity(idea));
+    return IdeaMapper.toDomain(await repo.save(IdeaMapper.toEntity(idea)));
   }
 
   async delete(id: number, manager?: EntityManager): Promise<void> {
@@ -185,5 +185,61 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     });
 
     return { ideas, totalItems };
+  }
+
+  async findMyIdeaDetail(
+    userId: number,
+    manager?: EntityManager
+  ): Promise<{ idea: IdeaModel; isBookmarked: boolean; isActive: boolean }> {
+    const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
+
+    const qb = repo.createQueryBuilder('idea')
+      .leftJoinAndSelect('idea.ideaSubject', 'ideaSubject')
+      .leftJoinAndSelect('idea.provider', 'provider')
+      .leftJoinAndSelect('provider.univ', 'providerUniv')
+      .leftJoinAndSelect('idea.team', 'team')
+      .leftJoinAndSelect('team.members', 'member')
+      .leftJoinAndSelect('member.user', 'memberUser')
+      .leftJoinAndSelect('memberUser.univ', 'univ')
+
+      .where('idea.provider.id = :userId', { userId });
+
+    // is-bookmarked 계산
+    qb.leftJoin('idea.bookmarks', 'bookmark', 'bookmark.user_id = :userId', { userId });
+
+    // is-active 계산. 서브쿼리로 각 아이디어의 모집 상태 산출
+    qb.addSelect(`
+      CASE 
+        WHEN NOT EXISTS (
+          SELECT 1 FROM teams t WHERE t.idea_id = idea.id
+        )
+        OR EXISTS (
+          SELECT 1 FROM teams t 
+          WHERE t.idea_id = idea.id 
+            AND (
+              t.pm_capacity > (
+                SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'PM'
+              )
+           OR t.pd_capacity > (
+                SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'PD'
+              )
+           OR t.fe_capacity > (
+                SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'FE'
+              )
+           OR t.be_capacity > (
+                SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'BE'
+              )
+            )
+        )
+      THEN true ELSE false END
+    `, 'is_active');
+
+    const { entities, raw } = await qb.getRawAndEntities();
+
+    const idea = IdeaMapper.toDomain(entities[0]);
+    const isBookmarked = !!raw[0].bookmark_id;
+    const isActive = raw[0].is_active === true || raw[0].is_active === 'true';
+
+    return { idea, isBookmarked, isActive };
   }
 }

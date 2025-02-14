@@ -1,9 +1,10 @@
 import { TeamEntity } from '../../../../core/infra/entities/team.entity';
 import { TeamModel } from '../../../domain/team.model';
 import { IdeaMapper } from '../../../../idea/infra/orm/mapper/idea.mapper';
+import { MemberMapper } from './member.mapper';
 
 export class TeamMapper {
-  static toDomain(entity:TeamEntity): TeamModel {
+  static toDomain(entity:TeamEntity, options?: { skipMembers?: boolean }): TeamModel {
     return new TeamModel(
       entity.id,
       entity.name,
@@ -14,6 +15,9 @@ export class TeamMapper {
       entity.feCapacity,
       entity.beCapacity,
       IdeaMapper.toDomain(entity.idea),
+      options?.skipMembers
+        ? []
+        : (entity.members ?? []).map(member => MemberMapper.toDomain(member, { skipTeam: true })),
       entity.createdAt
     );
   }

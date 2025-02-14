@@ -2,14 +2,17 @@ import { MemberEntity } from '../../../../core/infra/entities/member.entity';
 import { MemberModel } from '../../../domain/member.model';
 import { TeamMapper } from './team.mapper';
 import { UserMapper } from '../../../../user/infra/orm/mapper/user.mapper';
+import { TeamModel } from '../../../domain/team.model';
 
 export class MemberMapper {
-  static toDomain(entity: MemberEntity): MemberModel {
+  static toDomain(entity: MemberEntity, options?: { skipTeam?: boolean }): MemberModel {
     return new MemberModel(
       entity.id,
       entity.role,
       UserMapper.toDomain(entity.user),
-      TeamMapper.toDomain(entity.team),
+      options?.skipTeam
+        ? ({ id: entity.team.id } as TeamModel)
+        : TeamMapper.toDomain(entity.team, { skipMembers: true }),
       entity.createdAt
     );
   }

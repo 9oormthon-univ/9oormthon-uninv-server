@@ -10,4 +10,18 @@ export class MemberModel {
     public readonly team: TeamModel,
     public readonly createdAt: Date
   ) {}
+
+  static createMember(
+    role: ERole,
+    user: UserModel,
+    team: TeamModel
+  ): MemberModel {
+    return new MemberModel(
+      null,
+      role,
+      user,
+      team,
+      new Date()
+    );
+  }
 }

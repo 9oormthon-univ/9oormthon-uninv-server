@@ -1,11 +1,6 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IdeaEntity } from './idea.entity';
+import { MemberEntity } from './member.entity';
 
 @Entity('teams')
 export class TeamEntity {
@@ -42,9 +37,12 @@ export class TeamEntity {
   /* ----------------------------- */
   /* ----- One To One Column ----- */
   /* ----------------------------- */
-  @ManyToOne(() => IdeaEntity)
+  @OneToOne(() => IdeaEntity)
   @JoinColumn({ name: 'idea_id' })
   idea: IdeaEntity;
+
+  @OneToMany(() => MemberEntity, (member) => member.team)
+  members: MemberEntity[];
 
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */

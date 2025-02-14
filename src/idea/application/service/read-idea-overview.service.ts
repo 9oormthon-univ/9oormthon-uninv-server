@@ -3,8 +3,8 @@ import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { DataSource } from 'typeorm';
 import { ReadIdeaOverviewResponseDto } from '../dto/response/read-idea-overview.response.dto';
-import { IdeaEntity } from '../../../core/infra/entities/idea.entity';
 import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
+import { PageInfoDto } from '../../../core/dto/page-info.dto';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -38,21 +38,9 @@ export class ReadIdeaOverviewService implements ReadIdeaOverviewUsecase {
 
       const totalPages = Math.ceil(totalItems / size);
 
-      const response: ReadIdeaOverviewResponseDto = {
-        success: true,
-        data: {
-          ideas,
-          page_info: {
-            current_page: page,
-            page_size: size,
-            total_pages: totalPages,
-            total_items: totalItems,
-          },
-        },
-        error: null,
-      };
+      const pageInfoDto = PageInfoDto.of(page, size, totalPages, totalItems);
 
-      return response;
+      return ReadIdeaOverviewResponseDto.of(ideas,pageInfoDto);
     });
   }
 }

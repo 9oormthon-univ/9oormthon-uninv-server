@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { MemberEntity } from '../../core/infra/entities/member.entity';
+import { MemberModel } from '../domain/member.model';
+import { EntityManager } from 'typeorm';
 
-@Injectable()
-export class MemberRepository extends Repository<MemberEntity> {}
+export interface MemberRepository {
+  save(member: MemberModel, manager? : EntityManager) : Promise<void>;
+}

@@ -9,6 +9,10 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
 import { IdeaSubjectRepositoryImpl } from '../../repository/idea-subject.repository.impl';
 import { IdeaModel } from '../../domain/idea.model';
+import { TeamRepositoryImpl } from '../../../team/repository/team.repository.impl';
+import { TeamModel } from '../../../team/domain/team.model';
+import { MemberRepositoryImpl } from '../../../team/repository/member.repository.impl';
+import { MemberModel } from '../../../team/domain/member.model';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -17,6 +21,8 @@ export class CreateIdeaService implements CreateIdeaUseCase{
     private readonly userRepository: UserRepositoryImpl,
     private readonly ideaRepository: IdeaRepositoryImpl,
     private readonly ideaSubjectRepository: IdeaSubjectRepositoryImpl,
+    private readonly teamRepository: TeamRepositoryImpl,
+    private readonly memberRepository: MemberRepositoryImpl,
     private readonly dataSource: DataSource
   ) {}
 
@@ -48,7 +54,28 @@ export class CreateIdeaService implements CreateIdeaUseCase{
         user,
         ideaSubject
       )
-      await this.ideaRepository.save(idea, manager);
+      const createdIdea = await this.ideaRepository.save(idea, manager);
+
+      const team = TeamModel.createTeam(
+        null,
+        null,
+        idea.generation,
+        requestDto.requirements.pm.capacity,
+        requestDto.requirements.pd.capacity,
+        requestDto.requirements.fe.capacity,
+        requestDto.requirements.be.capacity,
+        createdIdea
+      );
+
+      const createdTeam = await this.teamRepository.save(team, manager);
+
+      const member = MemberModel.createMember(
+        requestDto.ideaInfo.providerRole,
+        user,
+        createdTeam
+      );
+
+      await this.memberRepository.save(member, manager);
     });
   }
 }
