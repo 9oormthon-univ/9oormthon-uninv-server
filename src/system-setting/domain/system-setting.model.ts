@@ -45,18 +45,12 @@ export class SystemSettingModel {
   }
 
   public validateIdeaApplyPeriod(phase: number): void {
-    const now = new Date();
     if (
-      !(
-        (this.phase1TeamBuildingStart <= now && now <= this.phase1TeamBuildingEnd) ||
-        (this.phase2TeamBuildingStart <= now && now <= this.phase2TeamBuildingEnd) ||
-        (this.phase3TeamBuildingStart <= now && now <= this.phase3TeamBuildingEnd)
-      )
+      this.getWhichPeriod() !== 'phase1TeamBuilding' ||
+      this.getWhichPeriod() !== 'phase2TeamBuilding' ||
+      this.getWhichPeriod() !== 'phase3TeamBuilding' ||
+      this.getWhichPeriod() !== `phase${phase}TeamBuilding`
     ) {
-      throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
-    }
-    // phase 와 현재 기간 불일치시 예외처리
-    if (this.getWhichPeriod() !== `phase${phase}TeamBuilding`) {
       throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
     }
   }
