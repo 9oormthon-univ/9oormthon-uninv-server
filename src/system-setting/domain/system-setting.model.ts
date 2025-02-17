@@ -1,3 +1,6 @@
+import { CommonException } from '../../core/exceptions/common.exception';
+import { ErrorCode } from '../../core/exceptions/error-code';
+
 export class SystemSettingModel {
   constructor(
     public readonly id: number,
@@ -20,6 +23,19 @@ export class SystemSettingModel {
     public readonly updatedAt: Date
   ) {}
 
+  public validateIdeaApplyPeriod(): void {
+    const now = new Date();
+    if (
+      !(
+        (this.phase1TeamBuildingStart <= now && now <= this.phase1TeamBuildingEnd) ||
+        (this.phase2TeamBuildingStart <= now && now <= this.phase2TeamBuildingEnd) ||
+        (this.phase3TeamBuildingStart <= now && now <= this.phase3TeamBuildingEnd)
+      )
+    ) {
+      throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
+    }
+
+  }
 }
 
 

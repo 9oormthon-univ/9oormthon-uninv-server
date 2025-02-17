@@ -23,6 +23,7 @@ export class ErrorCode {
   static readonly NOT_FOUND_TEAM = new ErrorCode(40407, HttpStatus.NOT_FOUND, "해당 팀을 찾을 수 없습니다.");
   static readonly NOT_FOUND_IDEA = new ErrorCode(40408, HttpStatus.NOT_FOUND, "해당 아이디어를 찾을 수 없습니다.");
   static readonly NOT_FOUND_IDEA_SUBJECT = new ErrorCode(40409, HttpStatus.NOT_FOUND, "해당 아이디어 주제를 찾을 수 없습니다.");
+  static readonly NOT_FOUND_SYSTEM_SETTING = new ErrorCode(40410, HttpStatus.NOT_FOUND, "시스템 설정을 찾을 수 없습니다.");
 
   // Invalid Argument Error
   static readonly MISSING_REQUEST_PARAMETER = new ErrorCode(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다.");
@@ -35,18 +36,20 @@ export class ErrorCode {
   static readonly SEARCH_SHORT_LENGTH_ERROR = new ErrorCode(40007, HttpStatus.BAD_REQUEST, "검색어는 2글자 이상이어야 합니다.");
   static readonly INVALID_ROLE = new ErrorCode(40008, HttpStatus.BAD_REQUEST, "유효하지 않은 권한입니다.");
   static readonly INVALID_FILE = new ErrorCode(40009, HttpStatus.BAD_REQUEST, "유효하지 않은 파일입니다.");
-  static readonly FAILURE_CHANGE_PASSWORD = new ErrorCode(40010, HttpStatus.BAD_REQUEST, "현재 비밀번호가 일치하지 않습니다.");
+  static readonly FAILURE_CHANGE_PASSWORD_ERROR = new ErrorCode(40010, HttpStatus.BAD_REQUEST, "현재 비밀번호가 일치하지 않습니다.");
   static readonly VALIDATION_ERROR = new ErrorCode(40011, HttpStatus.BAD_REQUEST, "유효성 검사 오류입니다.");
-  static readonly INVALID_ADMIN_AUTH_CODE = new ErrorCode(40012, HttpStatus.BAD_REQUEST, "관리자 인증 코드가 일치하지 않습니다.");
-  static readonly CANNOT_BOOKMARK_MY_IDEA = new ErrorCode(40013, HttpStatus.BAD_REQUEST, "본인의 아이디어는 북마크할 수 없습니다.");
+  static readonly INVALID_ADMIN_AUTH_CODE_ERROR = new ErrorCode(40012, HttpStatus.BAD_REQUEST, "관리자 인증 코드가 일치하지 않습니다.");
+  static readonly CANNOT_BOOKMARK_MY_IDEA_ERROR = new ErrorCode(40013, HttpStatus.BAD_REQUEST, "본인의 아이디어는 북마크할 수 없습니다.");
   static readonly CANNOT_APPLY_MY_IDEA = new ErrorCode(40014, HttpStatus.BAD_REQUEST, "본인의 아이디어에는 지원할 수 없습니다.");
-  static readonly ALREADY_HAVE_TEAM = new ErrorCode(40015, HttpStatus.BAD_REQUEST, "이미 팀이 존재합니다.");
+  static readonly ALREADY_HAVE_TEAM_ERROR = new ErrorCode(40015, HttpStatus.BAD_REQUEST, "이미 팀이 존재합니다.");
   static readonly TOTAL_CAPACITY_ERROR = new ErrorCode(40016, HttpStatus.BAD_REQUEST, "팀원 수는 6명을 초과할 수 없습니다.");
   static readonly PM_CAPACITY_ERROR = new ErrorCode(40017, HttpStatus.BAD_REQUEST, "PM은 1명을 초과할 수 없습니다.");
   static readonly PD_CAPACITY_ERROR = new ErrorCode(40018, HttpStatus.BAD_REQUEST, "디자이너는 1명을 초과할 수 없습니다.");
   static readonly FE_CAPACITY_ERROR = new ErrorCode(40019, HttpStatus.BAD_REQUEST, "프론트엔드는 3명을 초과할 수 없습니다.");
   static readonly BE_CAPACITY_ERROR = new ErrorCode(40020, HttpStatus.BAD_REQUEST, "백엔드는 3명을 초과할 수 없습니다.");
-
+  static readonly CLOSED_APPLY_ERROR = new ErrorCode(40021, HttpStatus.BAD_REQUEST, "지원이 마감된 파트입니다.");
+  static readonly ALREADY_APPLIED_IDEA_ERROR = new ErrorCode(40022, HttpStatus.BAD_REQUEST, "이미 지원한 아이디어입니다.");
+  static readonly NOT_IDEA_APPLY_PERIOD_ERROR = new ErrorCode(40023, HttpStatus.BAD_REQUEST, "아이디어 지원 기간이 아닙니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");

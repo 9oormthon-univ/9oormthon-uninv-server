@@ -32,7 +32,7 @@ export class CreateOrDeleteBookmarkService implements CreateOrDeleteBookmarkUseC
       }
 
       if (idea.provider.id === user.id) {
-        throw new CommonException(ErrorCode.CANNOT_BOOKMARK_MY_IDEA);
+        throw new CommonException(ErrorCode.CANNOT_BOOKMARK_MY_IDEA_ERROR);
       }
 
       const bookmark = await this.bookmarkRepository.findByUserIdAndIdeaId(userId, ideaId, manager);
