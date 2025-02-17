@@ -56,6 +56,7 @@ export class SystemSettingModel {
         (this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING)
       ) || this.getWhichPeriod() !== EPeriod.fromPhase(phase)
     ) {
+      Logger.log("에러 발생. getWhichPeriod() : " + this.getWhichPeriod() + " fromPhase(phase) : " + EPeriod.fromPhase(phase));
       throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
     }
   }
