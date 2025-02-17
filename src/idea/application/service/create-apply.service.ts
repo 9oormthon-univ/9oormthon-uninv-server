@@ -3,7 +3,7 @@ import { UserRepositoryImpl } from '../../../user/repository/user.repository.imp
 import { DataSource } from 'typeorm';
 import { ApplyRepositoryImpl } from '../../repository/apply.repository.impl';
 import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable, Logger, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { CreateApplyRequestDto } from '../dto/request/create-apply.request.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
@@ -34,9 +34,8 @@ export class CreateApplyService implements CreateApplyUseCase {
       if (!idea) {
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA);
       }
-
       // 이미 팀에 속해있는지 확인
-      if (this.memberRepository.findByUserIdAndGeneration(userId, idea.generation, manager)) {
+      if (await this.memberRepository.findByUserIdAndGeneration(userId, idea.generation, manager)) {
         throw new CommonException(ErrorCode.ALREADY_HAVE_TEAM);
       }
 

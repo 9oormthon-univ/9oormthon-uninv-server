@@ -46,6 +46,19 @@ export class ApplyRepositoryImpl implements ApplyRepository {
     return entity ? ApplyMapper.toDomain(entity) : null;
   }
 
+  async findByUserIdAndGenerationAndPhase(userId: number, generation: number, phase: number, manager?: EntityManager): Promise<ApplyModel[] | null> {
+    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
+
+    const entities = await repo.find(
+      {
+        where: { user: { id: userId }, idea: { generation }, phase },
+        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject']
+      }
+    );
+
+    return entities ? ApplyMapper.toDomains(entities) : null;
+  }
+
   async save(apply: ApplyModel, manager?: EntityManager): Promise<void> {
     const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
 

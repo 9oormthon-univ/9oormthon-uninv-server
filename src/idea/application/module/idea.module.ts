@@ -23,6 +23,8 @@ import { ReadMyIdeaDetailService } from '../service/read-my-idea-detail.service'
 import { ReadIdeaDetailService } from '../service/read-idea-detail.service';
 import { ReadIdeaSubjectBriefService } from '../service/read-idea-subject-brief.service';
 import { IdeaQueryV1Controller } from '../controller/query/idea-query-v1.controller';
+import { SystemSettingModule } from '../../../system-setting/application/module/system-setting.module';
+import { ReadRemainPreferenceBriefService } from '../service/read-remain-preference-brief.service';
 
 @Module({
   imports: [
@@ -31,7 +33,8 @@ import { IdeaQueryV1Controller } from '../controller/query/idea-query-v1.control
       [IdeaEntity]
     ),
     UserModule,
-    TeamModule
+    TeamModule,
+    SystemSettingModule
   ],
   controllers: [
     UserIdeaCommandV1Controller,
@@ -50,6 +53,7 @@ import { IdeaQueryV1Controller } from '../controller/query/idea-query-v1.control
     ReadMyIdeaDetailService,
     ReadIdeaDetailService,
     ReadIdeaSubjectBriefService,
+    ReadRemainPreferenceBriefService,
     IdeaRepositoryImpl,
     IdeaSubjectRepositoryImpl,
     ApplyRepositoryImpl,

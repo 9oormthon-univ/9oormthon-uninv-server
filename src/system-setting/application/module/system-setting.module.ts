@@ -20,5 +20,9 @@ import { SystemSettingRepositoryImpl } from '../../repository/system-setting.rep
   providers: [
     SystemSettingRepositoryImpl
   ],
+
+  exports: [
+    SystemSettingRepositoryImpl
+  ]
 })
 export class SystemSettingModule {}
