@@ -41,6 +41,12 @@ export class ErrorCode {
   static readonly CANNOT_BOOKMARK_MY_IDEA = new ErrorCode(40013, HttpStatus.BAD_REQUEST, "본인의 아이디어는 북마크할 수 없습니다.");
   static readonly CANNOT_APPLY_MY_IDEA = new ErrorCode(40014, HttpStatus.BAD_REQUEST, "본인의 아이디어에는 지원할 수 없습니다.");
   static readonly ALREADY_HAVE_TEAM = new ErrorCode(40015, HttpStatus.BAD_REQUEST, "이미 팀이 존재합니다.");
+  static readonly TOTAL_CAPACITY_ERROR = new ErrorCode(40016, HttpStatus.BAD_REQUEST, "팀원 수는 6명을 초과할 수 없습니다.");
+  static readonly PM_CAPACITY_ERROR = new ErrorCode(40017, HttpStatus.BAD_REQUEST, "PM은 1명을 초과할 수 없습니다.");
+  static readonly PD_CAPACITY_ERROR = new ErrorCode(40018, HttpStatus.BAD_REQUEST, "디자이너는 1명을 초과할 수 없습니다.");
+  static readonly FE_CAPACITY_ERROR = new ErrorCode(40019, HttpStatus.BAD_REQUEST, "프론트엔드는 3명을 초과할 수 없습니다.");
+  static readonly BE_CAPACITY_ERROR = new ErrorCode(40020, HttpStatus.BAD_REQUEST, "백엔드는 3명을 초과할 수 없습니다.");
+
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
