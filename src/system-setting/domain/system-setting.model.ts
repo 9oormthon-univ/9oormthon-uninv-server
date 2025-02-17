@@ -1,5 +1,7 @@
 import { CommonException } from '../../core/exceptions/common.exception';
 import { ErrorCode } from '../../core/exceptions/error-code';
+import { Logger } from '@nestjs/common';
+import { EPeriod } from '../../core/enums/period.enum';
 
 export class SystemSettingModel {
   constructor(
@@ -23,34 +25,37 @@ export class SystemSettingModel {
     public readonly updatedAt: Date
   ) {}
 
-  public getWhichPeriod(): string {
+  public getWhichPeriod(): EPeriod {
     const now = new Date();
+    Logger.log("현재 시간은!!!!!!!!!! : " + now);
     if (this.ideaSubmissionStart <= now && now <= this.ideaSubmissionEnd) {
-      return 'ideaSubmission';
+      return EPeriod.IDEA_SUBMISSION;
     } else if (this.phase1TeamBuildingStart <= now && now <= this.phase1TeamBuildingEnd) {
-      return 'phase1TeamBuilding';
+      return EPeriod.PHASE1_TEAM_BUILDING;
     } else if (this.phase1ConfirmationStart <= now && now <= this.phase1ConfirmationEnd) {
-      return 'phase1Confirmation';
+      return EPeriod.PHASE1_CONFIRMATION;
     } else if (this.phase2TeamBuildingStart <= now && now <= this.phase2TeamBuildingEnd) {
-      return 'phase2TeamBuilding';
+      return EPeriod.PHASE2_TEAM_BUILDING;
     } else if (this.phase2ConfirmationStart <= now && now <= this.phase2ConfirmationEnd) {
-      return 'phase2Confirmation';
+      return EPeriod.PHASE2_CONFIRMATION;
     } else if (this.phase3TeamBuildingStart <= now && now <= this.phase3TeamBuildingEnd) {
-      return 'phase3TeamBuilding';
+      return EPeriod.PHASE3_TEAM_BUILDING;
     } else if (this.phase3ConfirmationStart <= now && now <= this.phase3ConfirmationEnd) {
-      return 'phase3Confirmation';
+      return EPeriod.PHASE3_CONFIRMATION;
     } else {
-      return 'none';
+      return EPeriod.NONE;
     }
   }
 
   public validateIdeaApplyPeriod(phase: number): void {
+    Logger.log("현재 기간은!!!!!!!!!! : " + this.getWhichPeriod());
     if (
-      this.getWhichPeriod() !== 'phase1TeamBuilding' ||
-      this.getWhichPeriod() !== 'phase2TeamBuilding' ||
-      this.getWhichPeriod() !== 'phase3TeamBuilding' ||
-      this.getWhichPeriod() !== `phase${phase}TeamBuilding`
+      this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING ||
+      this.getWhichPeriod() !== EPeriod.PHASE2_TEAM_BUILDING ||
+      this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING ||
+      this.getWhichPeriod() !== EPeriod.fromPhase(phase)
     ) {
+      Logger.log("에러 발생. getWhichPeriod() : " + this.getWhichPeriod() + " fromPhase(phase) : " + EPeriod.fromPhase(phase));
       throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
     }
   }
