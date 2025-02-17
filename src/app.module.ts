@@ -6,6 +6,7 @@ import { LoggerMiddleware } from './core/middlewares/logger/logger.middleware';
 import * as dotenv from 'dotenv';
 import { DatabaseModule } from './core/infra/database.module';
 import { AuthModule } from './auth/application/module/auth.module';
+import { SystemSettingModule } from './system-setting/application/module/system-setting.module';
 
 dotenv.config();
 @Module({
@@ -15,6 +16,7 @@ dotenv.config();
     TeamModule,
     IdeaModule,
     AuthModule,
+    SystemSettingModule
   ],
 })
 export class AppModule implements NestModule {
