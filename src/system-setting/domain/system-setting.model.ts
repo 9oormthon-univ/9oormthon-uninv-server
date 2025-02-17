@@ -50,12 +50,12 @@ export class SystemSettingModel {
   public validateIdeaApplyPeriod(phase: number): void {
     Logger.log("현재 기간은!!!!!!!!!! : " + this.getWhichPeriod());
     if (
-      this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING ||
-      this.getWhichPeriod() !== EPeriod.PHASE2_TEAM_BUILDING ||
-      this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING ||
-      this.getWhichPeriod() !== EPeriod.fromPhase(phase)
+      (
+        (this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING) &&
+        (this.getWhichPeriod() !== EPeriod.PHASE2_TEAM_BUILDING) &&
+        (this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING)
+      ) || this.getWhichPeriod() !== EPeriod.fromPhase(phase)
     ) {
-      Logger.log("에러 발생. getWhichPeriod() : " + this.getWhichPeriod() + " fromPhase(phase) : " + EPeriod.fromPhase(phase));
       throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
     }
   }
