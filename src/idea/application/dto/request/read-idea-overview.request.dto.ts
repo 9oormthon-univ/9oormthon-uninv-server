@@ -28,6 +28,7 @@ export class ReadIdeaOverviewQueryDto {
   // isActive는 선택사항 (모집중/완료 필터)
   @IsOptional()
   @Transform(({ value }) => {
+    if (value === undefined || value === null) return value;
     if (typeof value === 'boolean') return value;
     return value === 'true';
   })
@@ -38,6 +39,7 @@ export class ReadIdeaOverviewQueryDto {
   // isBookmarked는 선택사항 (내 찜 필터)
   @IsOptional()
   @Transform(({ value }) => {
+    if (value === undefined || value === null) return value;
     if (typeof value === 'boolean') return value;
     return value === 'true';
   })
