@@ -4,6 +4,7 @@ import { IdeaModel } from '../domain/idea.model';
 import { IdeaEntity } from '../../core/infra/entities/idea.entity';
 import { IdeaMapper } from '../infra/orm/mapper/idea.mapper';
 import { IdeaOverviewDto } from '../application/dto/response/read-idea-overview.response.dto';
+import { Logger } from '@nestjs/common';
 
 export class IdeaRepositoryImpl implements IdeaRepository {
   constructor(private readonly dataSource: DataSource) {
@@ -105,10 +106,10 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     // is_active 계산. 서브쿼리로 각 아이디어의 모집 상태 산출
     qb.addSelect(`
       CASE 
-        WHEN NOT EXISTS (
+        WHEN EXISTS (
           SELECT 1 FROM teams t WHERE t.idea_id = idea.id
         )
-        OR EXISTS (
+        AND EXISTS (
           SELECT 1 FROM teams t 
           WHERE t.idea_id = idea.id 
             AND (
@@ -128,19 +129,15 @@ export class IdeaRepositoryImpl implements IdeaRepository {
         )
       THEN true ELSE false END
     `, 'is_active');
-    qb.setParameter('userId', userId)
-      .orderBy('idea.createdAt', 'DESC')
-      .skip((page - 1) * size)
-      .take(size)
-      .distinct(true);
 
+    Logger.log(`isActive: ${isActive}`);
+    Logger.log(`isActive type: ${typeof isActive}`);
     // is-active 필터 조건 적용
     if (typeof isActive === 'boolean') {
       if (isActive === true) {
-        // 모집중은, 팀이 없거나, 한 팀 내의 어느 직군이라도 capacity보다 member 수가 적은 경우
+        // 모집중은, 한 팀 내의 어느 직군이라도 capacity보다 member 수가 적은 경우
         qb.andWhere(`(
-          NOT EXISTS (SELECT 1 FROM teams t WHERE t.idea_id = idea.id)
-          OR EXISTS (
+          EXISTS (
             SELECT 1 FROM teams t 
             WHERE t.idea_id = idea.id 
               AND (
@@ -154,8 +151,7 @@ export class IdeaRepositoryImpl implements IdeaRepository {
       } else {
         // 모집완료는, 적어도 하나의 팀이 존재하며, 모든 팀에서 각 직군의 capacity가 모두 채워진 경우
         qb.andWhere(`(
-          EXISTS (SELECT 1 FROM teams t WHERE t.idea_id = idea.id)
-          AND NOT EXISTS (
+          NOT EXISTS (
             SELECT 1 FROM teams t 
             WHERE t.idea_id = idea.id 
               AND (
@@ -170,9 +166,11 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     }
 
     // 정렬 및 페이지네이션 적용
-    qb.orderBy('idea.createdAt', 'DESC')
+    qb.setParameter('userId', userId)
+      .orderBy('idea.createdAt', 'DESC')
       .skip((page - 1) * size)
-      .take(size);
+      .take(size)
+      .distinct(true);
 
     const totalItems = await qb.getCount();
     const { entities, raw } = await qb.getRawAndEntities();
