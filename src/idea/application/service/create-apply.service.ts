@@ -36,7 +36,7 @@ export class CreateApplyService implements CreateApplyUseCase {
       }
 
       // 아이디어 지원 기간 확인
-      systemSetting.validateIdeaApplyPeriod();
+      systemSetting.validateIdeaApplyPeriod(requestDto.phase);
 
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {

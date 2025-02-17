@@ -23,18 +23,36 @@ export class SystemSettingModel {
     public readonly updatedAt: Date
   ) {}
 
-  public validateIdeaApplyPeriod(): void {
+  public getWhichPeriod(): string {
     const now = new Date();
+    if (this.ideaSubmissionStart <= now && now <= this.ideaSubmissionEnd) {
+      return 'ideaSubmission';
+    } else if (this.phase1TeamBuildingStart <= now && now <= this.phase1TeamBuildingEnd) {
+      return 'phase1TeamBuilding';
+    } else if (this.phase1ConfirmationStart <= now && now <= this.phase1ConfirmationEnd) {
+      return 'phase1Confirmation';
+    } else if (this.phase2TeamBuildingStart <= now && now <= this.phase2TeamBuildingEnd) {
+      return 'phase2TeamBuilding';
+    } else if (this.phase2ConfirmationStart <= now && now <= this.phase2ConfirmationEnd) {
+      return 'phase2Confirmation';
+    } else if (this.phase3TeamBuildingStart <= now && now <= this.phase3TeamBuildingEnd) {
+      return 'phase3TeamBuilding';
+    } else if (this.phase3ConfirmationStart <= now && now <= this.phase3ConfirmationEnd) {
+      return 'phase3Confirmation';
+    } else {
+      return 'none';
+    }
+  }
+
+  public validateIdeaApplyPeriod(phase: number): void {
     if (
-      !(
-        (this.phase1TeamBuildingStart <= now && now <= this.phase1TeamBuildingEnd) ||
-        (this.phase2TeamBuildingStart <= now && now <= this.phase2TeamBuildingEnd) ||
-        (this.phase3TeamBuildingStart <= now && now <= this.phase3TeamBuildingEnd)
-      )
+      this.getWhichPeriod() !== 'phase1TeamBuilding' ||
+      this.getWhichPeriod() !== 'phase2TeamBuilding' ||
+      this.getWhichPeriod() !== 'phase3TeamBuilding' ||
+      this.getWhichPeriod() !== `phase${phase}TeamBuilding`
     ) {
       throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
     }
-
   }
 }
 
