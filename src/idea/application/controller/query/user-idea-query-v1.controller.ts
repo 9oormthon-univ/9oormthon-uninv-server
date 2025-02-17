@@ -17,8 +17,11 @@ import { ReadIdeaOverviewQueryDto } from '../../dto/request/read-idea-overview.r
 import { ResponseDto } from '../../../../core/dto/response.dto';
 import { ReadMyIdeaDetailService } from '../../service/read-my-idea-detail.service';
 import { ReadIdeaDetailService } from '../../service/read-idea-detail.service';
+import { ReadRemainPreferenceBriefService } from '../../service/read-remain-preference-brief.service';
+import { ReadRemainPreferenceBriefRequestDto } from '../../dto/request/read-remain-preference-brief.request.dto';
+import { ReadRemainPreferenceBriefResponseDto } from '../../dto/response/read-remain-preference-brief.response.dto';
 
-@Controller('/api/v1/users/ideas')
+@Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
 @UseFilters(HttpExceptionFilter)
 export class UserIdeaQueryV1Controller {
@@ -26,9 +29,10 @@ export class UserIdeaQueryV1Controller {
     private readonly readIdeaOverviewUseCase: ReadIdeaOverviewService,
     private readonly readMyIdeaDetailUseCase: ReadMyIdeaDetailService,
     private readonly readIdeaDetailUseCase: ReadIdeaDetailService,
+    private readonly readRemainPreferenceBriefUseCase: ReadRemainPreferenceBriefService
   ) {}
 
-  @Get('overviews')
+  @Get('ideas/overviews')
   @UseGuards(JwtAuthGuard)
   async readIdeaOverview(
     @Req() req,
@@ -47,7 +51,7 @@ export class UserIdeaQueryV1Controller {
     );
   }
 
-  @Get('details')
+  @Get('ideas/details')
   @UseGuards(JwtAuthGuard)
   async readMyIdeaDetail(
     @Req() req,
@@ -59,7 +63,7 @@ export class UserIdeaQueryV1Controller {
     );
   }
 
-  @Get(':id/details')
+  @Get('ideas/:id/details')
   @UseGuards(JwtAuthGuard)
   async readIdeaDetail(
     @Req() req,
@@ -69,6 +73,20 @@ export class UserIdeaQueryV1Controller {
       await this.readIdeaDetailUseCase.execute(
         req.user.id,
         id
+      )
+    );
+  }
+
+  @Get('applies/briefs')
+  @UseGuards(JwtAuthGuard)
+  async readRemainPreferenceBrief(
+    @Req() req,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadRemainPreferenceBriefRequestDto,
+  ): Promise<ResponseDto<ReadRemainPreferenceBriefResponseDto>> {
+    return ResponseDto.ok(
+      await this.readRemainPreferenceBriefUseCase.execute(
+        req.user.id,
+        query
       )
     );
   }
