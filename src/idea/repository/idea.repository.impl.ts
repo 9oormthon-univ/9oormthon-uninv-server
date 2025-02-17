@@ -4,7 +4,6 @@ import { IdeaModel } from '../domain/idea.model';
 import { IdeaEntity } from '../../core/infra/entities/idea.entity';
 import { IdeaMapper } from '../infra/orm/mapper/idea.mapper';
 import { IdeaOverviewDto } from '../application/dto/response/read-idea-overview.response.dto';
-import { Logger } from '@nestjs/common';
 
 export class IdeaRepositoryImpl implements IdeaRepository {
   constructor(private readonly dataSource: DataSource) {
@@ -130,8 +129,6 @@ export class IdeaRepositoryImpl implements IdeaRepository {
       THEN true ELSE false END
     `, 'is_active');
 
-    Logger.log(`isActive: ${isActive}`);
-    Logger.log(`isActive type: ${typeof isActive}`);
     // is-active 필터 조건 적용
     if (typeof isActive === 'boolean') {
       if (isActive === true) {

@@ -1,5 +1,5 @@
 import { ReadIdeaOverviewUsecase } from '../usecase/read-idea-overview.usecase';
-import { Injectable, Logger, UseFilters } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { DataSource } from 'typeorm';
 import { ReadIdeaOverviewResponseDto } from '../dto/response/read-idea-overview.response.dto';
@@ -24,7 +24,7 @@ export class ReadIdeaOverviewService implements ReadIdeaOverviewUsecase {
     userId: number,
   ): Promise<ReadIdeaOverviewResponseDto> {
     return this.dataSource.transaction(async (manager) => {
-      Logger.log("isActivated: " + isActive);
+
       const { ideas, totalItems } = await this.ideaRepository.findIdeaOverview(
         page,
         size,
