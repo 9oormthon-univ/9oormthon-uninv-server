@@ -45,7 +45,7 @@ export class TeamModel {
 
   public validateCapacity(): void {
     const totalCapacity = this.pmCapacity + this.pdCapacity + this.feCapacity + this.beCapacity;
-    if (totalCapacity !== this.members.length) {
+    if (totalCapacity > 6) {
       throw new CommonException(ErrorCode.TOTAL_CAPACITY_ERROR);
     }
 

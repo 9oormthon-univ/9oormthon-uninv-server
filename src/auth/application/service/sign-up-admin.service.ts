@@ -22,7 +22,7 @@ export class SignUpAdminService implements SignUpAdminUseCase{
     return this.dataSource.transaction(async (manager) => {
       // 어드민 코드가 일치하지 않을 경우 예외 발생
       if (authSignUpDto.adminAuthCode !== process.env.ADMIN_AUTH_CODE) {
-        throw new CommonException(ErrorCode.INVALID_ADMIN_AUTH_CODE);
+        throw new CommonException(ErrorCode.INVALID_ADMIN_AUTH_CODE_ERROR);
       }
 
       // 이미 존재하는 아이디라면 예외 발생

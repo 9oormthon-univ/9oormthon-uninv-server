@@ -33,7 +33,7 @@ export class ChangePasswordService implements ChangePasswordUseCase{
       );
 
       if (!isPasswordValid) {
-        throw new CommonException(ErrorCode.FAILURE_CHANGE_PASSWORD);
+        throw new CommonException(ErrorCode.FAILURE_CHANGE_PASSWORD_ERROR);
       }
 
       const updatedUser = user.updatePassword(await bcrypt.hash(changePasswordDto.newPassword, 10));
