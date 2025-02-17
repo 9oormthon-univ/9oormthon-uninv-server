@@ -71,6 +71,9 @@ export class CreateIdeaService implements CreateIdeaUseCase{
         createdIdea
       );
 
+      // 팀원 수 유효성 검증
+      team.validateCapacity();
+
       const createdTeam = await this.teamRepository.save(team, manager);
 
       const member = MemberModel.createMember(

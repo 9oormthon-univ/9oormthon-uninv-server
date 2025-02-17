@@ -1,5 +1,7 @@
 import { IdeaModel } from '../../idea/domain/idea.model';
 import { MemberModel } from './member.model';
+import { CommonException } from '../../core/exceptions/common.exception';
+import { ErrorCode } from '../../core/exceptions/error-code';
 
 export class TeamModel {
   constructor(
@@ -39,5 +41,28 @@ export class TeamModel {
       [],
       new Date()
     );
+  }
+
+  public validateCapacity(): void {
+    const totalCapacity = this.pmCapacity + this.pdCapacity + this.feCapacity + this.beCapacity;
+    if (totalCapacity !== this.members.length) {
+      throw new CommonException(ErrorCode.TOTAL_CAPACITY_ERROR);
+    }
+
+    if (this.pmCapacity > 1) {
+      throw new CommonException(ErrorCode.PM_CAPACITY_ERROR);
+    }
+
+    if (this.pdCapacity > 1) {
+      throw new CommonException(ErrorCode.PD_CAPACITY_ERROR);
+    }
+
+    if (this.feCapacity > 3) {
+      throw new CommonException(ErrorCode.FE_CAPACITY_ERROR);
+    }
+
+    if (this.beCapacity > 3) {
+      throw new CommonException(ErrorCode.BE_CAPACITY_ERROR);
+    }
   }
 }
