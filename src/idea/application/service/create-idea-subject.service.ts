@@ -1,9 +1,8 @@
-import { CreateIdeaSubjectUseCase } from '../usecase/create-idea-subject.usecase';
-import { IdeaSubjectRepositoryImpl } from '../../repository/idea-subject.repository.impl';
+import { IdeaSubjectRepository } from '../../repository/idea-subject.repository';
 import { DataSource } from 'typeorm';
 import { CreateIdeaSubjectRequestDto } from '../dto/request/create-idea-subject.request.dto';
 import { IdeaSubjectModel } from '../../domain/idea-subject.model';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
+import { UserRepository } from '../../../user/repository/user.repository';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { Injectable, UseFilters } from '@nestjs/common';
@@ -11,10 +10,10 @@ import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class CreateIdeaSubjectService implements CreateIdeaSubjectUseCase {
+export class CreateIdeaSubjectService {
   constructor(
-    private readonly userRepository: UserRepositoryImpl,
-    private readonly ideaSubjectRepository: IdeaSubjectRepositoryImpl,
+    private readonly userRepository: UserRepository,
+    private readonly ideaSubjectRepository: IdeaSubjectRepository,
     private readonly dataSource: DataSource
   ) {}
 

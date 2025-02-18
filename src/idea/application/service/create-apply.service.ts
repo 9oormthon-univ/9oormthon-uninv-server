@@ -1,28 +1,27 @@
-import { CreateApplyUseCase } from '../usecase/create-apply.usecase';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
+import { UserRepository } from '../../../user/repository/user.repository';
 import { DataSource } from 'typeorm';
-import { ApplyRepositoryImpl } from '../../repository/apply.repository.impl';
-import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
+import { ApplyRepository } from '../../repository/apply.repository';
+import { IdeaRepository } from '../../repository/idea.repository';
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { CreateApplyRequestDto } from '../dto/request/create-apply.request.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { ApplyModel } from '../../domain/apply.model';
-import { MemberRepositoryImpl } from '../../../team/repository/member.repository.impl';
-import { TeamRepositoryImpl } from '../../../team/repository/team.repository.impl';
-import { SystemSettingRepositoryImpl } from '../../../system-setting/repository/system-setting.repository.impl';
+import { MemberRepository } from '../../../team/repository/member.repository';
+import { TeamRepository } from '../../../team/repository/team.repository';
+import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class CreateApplyService implements CreateApplyUseCase {
+export class CreateApplyService {
   constructor(
-    private readonly userRepository: UserRepositoryImpl,
-    private readonly ideaRepository: IdeaRepositoryImpl,
-    private readonly applyRepository: ApplyRepositoryImpl,
-    private readonly memberRepository: MemberRepositoryImpl,
-    private readonly teamRepository: TeamRepositoryImpl,
-    private readonly systemSettingRepository: SystemSettingRepositoryImpl,
+    private readonly userRepository: UserRepository,
+    private readonly ideaRepository: IdeaRepository,
+    private readonly applyRepository: ApplyRepository,
+    private readonly memberRepository: MemberRepository,
+    private readonly teamRepository: TeamRepository,
+    private readonly systemSettingRepository: SystemSettingRepository,
     private readonly dataSource: DataSource
   ) {}
 

@@ -4,15 +4,14 @@ import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { DataSource } from 'typeorm';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
-import { LogoutUseCase } from '../usecase/logout.usecase';
+import { UserRepository } from '../../../user/repository/user.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class LogoutService implements LogoutUseCase {
+export class LogoutService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource,
   ) {
   }

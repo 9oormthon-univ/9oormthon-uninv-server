@@ -1,18 +1,17 @@
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
-import { UpdateUserUseCase } from '../usecase/update-user.service';
 import { UpdateUserRequestDto } from '../dto/request/update-user.request.dto';
 import { UserModel } from '../../domain/user.model';
 import { DataSource } from 'typeorm';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
-import { UserRepositoryImpl } from '../../repository/user.repository.impl';
+import { UserRepository } from '../../repository/user.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class UpdateUserService implements UpdateUserUseCase{
+export class UpdateUserService {
   constructor(
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource
   ) {}
 

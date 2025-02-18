@@ -5,14 +5,13 @@ import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { DataSource } from 'typeorm';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
-import { ChangePasswordUseCase } from '../usecase/change-password.usecase';
+import { UserRepository } from '../../../user/repository/user.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class ChangePasswordService implements ChangePasswordUseCase{
+export class ChangePasswordService {
   constructor(
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource,
   ) {
   }

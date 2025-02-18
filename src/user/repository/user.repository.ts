@@ -1,15 +1,105 @@
+import { Injectable } from '@nestjs/common';
+import { DataSource, EntityManager } from 'typeorm';
 import { UserModel } from '../domain/user.model';
-import { EntityManager } from 'typeorm';
+import { UserEntity } from '../../core/infra/entities/user.entity';
+import { UserMapper } from '../../core/infra/mapper/user.mapper';
+import { ESecurityRole } from '../../core/enums/security-role.enum';
 
-export interface UserRepository {
-  findById(id: number, manager? : EntityManager): Promise<UserModel | null>;
-  findByIdWithUniv(id: number, manager? : EntityManager): Promise<UserModel | null>;
-  findByPhoneNumberAndUniv(name: string, univId: number, manager? : EntityManager): Promise<UserModel | null>;
-  findBySerialId(serialId: string, manager? : EntityManager): Promise<UserModel | null>;
-  findByRefreshTokenAndId(refreshToken: string, id: number, manager? : EntityManager): Promise<UserModel | null>;
-  findByIdAndRole(id: number, role: string, manager? : EntityManager): Promise<UserModel | null>;
-  findByIdAndRefreshTokenAndRole(id: number, refreshToken: string, role: string, manager? : EntityManager): Promise<UserModel | null>;
-  save(user: UserModel, manager? : EntityManager): Promise<void>;
-  saveAll(users: UserModel[], manager? : EntityManager): Promise<void>;
-  delete(id: number, manager? : EntityManager): Promise<void>;
+@Injectable()
+export class UserRepository {
+  constructor(private readonly dataSource: DataSource) {}
+
+  async findById(id: number, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { id },
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findByIdWithUniv(id: number, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+
+    const entity = await repo.findOne(
+      {
+        where: { id },
+        relations: ['univ']
+      }
+    );
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findByPhoneNumberAndUniv(
+    phoneNumber: string,
+    univId: number,
+    manager?: EntityManager
+  ): Promise<UserModel | null> {
+
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { phoneNumber, univ: { id: univId } },
+      relations: ['univ'],
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findBySerialId(serialId: string, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { serialId },
+      relations: ['univ'],
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findByRefreshTokenAndId(refreshToken: string, id: number, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { refreshToken, id },
+      relations: ['univ'],
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findByIdAndRole(id: number, role: ESecurityRole, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { id, role },
+      relations: ['univ'],
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findByIdAndRefreshTokenAndRole(
+    id: number,
+    refreshToken: string,
+    role: ESecurityRole,
+    manager?: EntityManager
+  ): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { id, refreshToken, role },
+      relations: ['univ'],
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async save(user: UserModel, manager? : EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = UserMapper.toEntity(user);
+    await repo.save(entity);
+  }
+
+  async saveAll(users: UserModel[], manager? : EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entities = users.map((user) => UserMapper.toEntity(user));
+    await repo.save(entities);
+  }
+
+  async delete(id: number, manager? : EntityManager): Promise<void> {
+
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+
+    await repo.delete(id);
+  }
 }

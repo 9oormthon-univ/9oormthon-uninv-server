@@ -1,8 +1,7 @@
-import { CreateOrDeleteBookmarkUseCase } from '../usecase/create-or-delete-bookmark.usecase';
 import { DataSource } from 'typeorm';
-import { BookmarkRepositoryImpl } from '../../repository/bookmark.repository.impl';
-import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
+import { BookmarkRepository } from '../../repository/bookmark.repository';
+import { IdeaRepository } from '../../repository/idea.repository';
+import { UserRepository } from '../../../user/repository/user.repository';
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { CommonException } from '../../../core/exceptions/common.exception';
@@ -11,11 +10,11 @@ import { BookmarkModel } from '../../domain/bookmark.model';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class CreateOrDeleteBookmarkService implements CreateOrDeleteBookmarkUseCase {
+export class CreateOrDeleteBookmarkService {
   constructor(
-    private readonly userRepository: UserRepositoryImpl,
-    private readonly ideaRepository: IdeaRepositoryImpl,
-    private readonly bookmarkRepository: BookmarkRepositoryImpl,
+    private readonly userRepository: UserRepository,
+    private readonly ideaRepository: IdeaRepository,
+    private readonly bookmarkRepository: BookmarkRepository,
     private readonly dataSource: DataSource,
   ) {}
 

@@ -8,15 +8,14 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import { DataSource } from 'typeorm';
 import { ESecurityRole } from '../../../core/enums/security-role.enum';
 import { LoginRequestDto } from '../dto/request/login.request.dto';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
-import { LoginUseCase } from '../usecase/login.usecase';
+import { UserRepository } from '../../../user/repository/user.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class LoginService implements LoginUseCase{
+export class LoginService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource,
   ) {
   }

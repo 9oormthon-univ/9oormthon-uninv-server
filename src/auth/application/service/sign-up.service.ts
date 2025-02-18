@@ -7,18 +7,17 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import * as XLSX from 'xlsx';
 import { DataSource } from 'typeorm';
 import { ESecurityRole } from '../../../core/enums/security-role.enum';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
+import { UserRepository } from '../../../user/repository/user.repository';
 import { UserModel } from '../../../user/domain/user.model';
-import { UnivRepositoryImpl } from '../../../user/repository/univ.repository.impl';
-import { SignUpUseCase } from '../usecase/sign-up.usecase';
+import { UnivRepository } from '../../../user/repository/univ.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class SignUpService implements SignUpUseCase{
+export class SignUpService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userRepository: UserRepositoryImpl,
-    private readonly univRepository: UnivRepositoryImpl,
+    private readonly userRepository: UserRepository,
+    private readonly univRepository: UnivRepository,
     private readonly dataSource: DataSource,
   ) {
   }
