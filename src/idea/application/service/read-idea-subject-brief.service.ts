@@ -14,6 +14,8 @@ export class ReadIdeaSubjectBriefService {
 
   async execute(): Promise<ReadIdeaSubjectBriefResponseDto> {
     return this.dataSource.transaction(async (manager) => {
+
+      // 아이디어 주제 조회
       const ideaSubjects = await this.ideaSubjectRepository.findAll(manager);
 
       return ReadIdeaSubjectBriefResponseDto.from(ideaSubjects);

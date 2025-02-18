@@ -28,8 +28,8 @@ export class CreateApplyService {
   async execute(userId: number, ideaId: number, requestDto: CreateApplyRequestDto): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
 
+      // 시스템 설정 조회
       const systemSetting = await this.systemSettingRepository.findFirst(manager);
-
       if (!systemSetting) {
         throw new CommonException(ErrorCode.NOT_FOUND_SYSTEM_SETTING);
       }
@@ -37,22 +37,27 @@ export class CreateApplyService {
       // 아이디어 지원 기간 확인
       systemSetting.validateIdeaApplyPeriod(requestDto.phase);
 
+      // 유저 조회
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
+      // 아이디어 조회
       const idea = await this.ideaRepository.findById(ideaId, manager);
       if (!idea) {
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA);
       }
-      // 이미 팀에 속해있는지 확인
-      if (await this.memberRepository.findByUserIdAndGeneration(userId, idea.generation, manager)) {
+
+      // 사용자가 이미 팀에 속해있는지 확인
+      const existedTeam = await this.memberRepository.findByUserIdAndGeneration(userId, idea.generation, manager);
+      if (existedTeam) {
         throw new CommonException(ErrorCode.ALREADY_HAVE_TEAM_ERROR);
       }
 
-      // 이미 지원한 아이디어인지 확인
-      if (await this.applyRepository.findByUserIdAndIdeaId(userId, ideaId, manager)) {
+      // 사용자가 이미 지원한 아이디어인지 확인
+      const existedApply = await this.applyRepository.findByUserIdAndIdeaId(userId, ideaId, manager);
+      if (existedApply) {
         throw new CommonException(ErrorCode.ALREADY_APPLIED_IDEA_ERROR);
       }
 
@@ -60,30 +65,7 @@ export class CreateApplyService {
       const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
 
       // 지원이 마감된 파트에 대한 지원인지 확인
-      switch (requestDto.role) {
-        case 'PM':
-          if (team.pmCapacity <= team.members.map(member => member.role).filter(role => role === 'PM').length) {
-            throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
-          }
-          break;
-        case 'PD':
-          if (team.pdCapacity <= team.members.map(member => member.role).filter(role => role === 'PD').length) {
-            throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
-          }
-          break;
-        case 'FE':
-          if (team.feCapacity <= team.members.map(member => member.role).filter(role => role === 'FE').length) {
-            throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
-          }
-          break;
-        case 'BE':
-          if (team.beCapacity <= team.members.map(member => member.role).filter(role => role === 'BE').length) {
-            throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
-          }
-          break;
-        default:
-          throw new CommonException(ErrorCode.INVALID_ROLE);
-      }
+      team.validateTeamCapacityLimits(requestDto.role);
 
       const apply = ApplyModel.createApply(
         requestDto.phase,

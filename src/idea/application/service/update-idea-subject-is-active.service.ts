@@ -18,18 +18,22 @@ export class UpdateIdeaSubjectIsActiveService {
   async execute(userId: number, ideaSubjectId: number): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
 
+      // 유저 조회
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
-      if (!user.isAdmin()) {
-        throw new CommonException(ErrorCode.ACCESS_DENIED);
-      }
 
+      // 관리자 권한 확인
+      user.validateAdminRole();
+
+      // 아이디어 주제 조회
       const ideaSubject = await this.ideaSubjectRepository.findById(ideaSubjectId, manager);
       if (!ideaSubject) {
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA_SUBJECT);
       }
+
+      // 아이디어 주제 활성화 토글
       const updatedIdeaSubject = ideaSubject.isActiveToggle();
       await this.ideaSubjectRepository.save(updatedIdeaSubject, manager);
     });

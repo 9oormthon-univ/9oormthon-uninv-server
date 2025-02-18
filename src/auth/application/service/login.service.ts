@@ -22,24 +22,28 @@ export class LoginService {
 
   async execute(requestDto: LoginRequestDto): Promise<JwtTokenResponseDto> {
     return this.dataSource.transaction(async (manager) => {
-      const user = await this.userRepository.findBySerialId(requestDto.serialId, manager);
 
-      // 입력한 아이디에 해당하는 사용자가 존재하지 않을 경우 예외 발생
+      // 유저 조회
+      const user = await this.userRepository.findBySerialId(requestDto.serialId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.FAILURE_LOGIN);
       }
 
+      // 비밀번호 확인
       const isPasswordValid = await bcrypt.compare(
         requestDto.password,
         user.password,
       );
-
       if (!isPasswordValid) {
         throw new CommonException(ErrorCode.FAILURE_LOGIN);
       }
 
+      // 토큰 생성
       const tokens = this.generateTokens(user.id, user.role);
+
+      // 리프레시 토큰 업데이트
       const updatedUser = user.updateRefreshToken(tokens.refreshToken);
+
       await this.userRepository.save(updatedUser);
 
       return tokens;

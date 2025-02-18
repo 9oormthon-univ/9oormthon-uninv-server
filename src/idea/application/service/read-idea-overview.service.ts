@@ -24,6 +24,7 @@ export class ReadIdeaOverviewService {
   ): Promise<ReadIdeaOverviewResponseDto> {
     return this.dataSource.transaction(async (manager) => {
 
+      // 아이디어 조회
       const { ideas, totalItems } = await this.ideaRepository.findIdeaOverview(
         page,
         size,

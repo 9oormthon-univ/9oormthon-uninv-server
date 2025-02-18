@@ -19,6 +19,7 @@ export class SignUpAdminService {
 
   async execute(authSignUpDto: SignUpAdminRequestDto): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
+
       // 어드민 코드가 일치하지 않을 경우 예외 발생
       if (authSignUpDto.adminAuthCode !== process.env.ADMIN_AUTH_CODE) {
         throw new CommonException(ErrorCode.INVALID_ADMIN_AUTH_CODE_ERROR);

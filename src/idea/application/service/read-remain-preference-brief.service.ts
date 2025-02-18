@@ -22,13 +22,17 @@ export class ReadRemainPreferenceBriefService {
 
   async execute(userId: number, requestDto: ReadRemainPreferenceBriefRequestDto): Promise<ReadRemainPreferenceBriefResponseDto> {
     return this.dataSource.transaction(async (manager) => {
+
+      // 유저 조회
       const user = await this.userRepository.findById(userId);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
+      // 유저의 지원 정보 조회
       const applies = await this.applyRepository.findByUserIdAndGenerationAndPhase(userId, requestDto.generation, requestDto.phase, manager);
 
+      // 시스템 설정 조회
       const systemSetting = await this.systemSettingRepository.findFirst(manager);
 
       return ReadRemainPreferenceBriefResponseDto.of(applies, systemSetting.maxPreferencesPerUser);
