@@ -1,5 +1,7 @@
 import { ESecurityRole } from '../../core/enums/security-role.enum';
 import { UnivModel } from './univ.model';
+import { CommonException } from '../../core/exceptions/common.exception';
+import { ErrorCode } from '../../core/exceptions/error-code';
 
 export class UserModel {
   constructor(
@@ -129,7 +131,9 @@ export class UserModel {
     );
   }
 
-  public isAdmin(): boolean {
-    return this.role === ESecurityRole.ADMIN;
+  public validateAdminRole(): void {
+    if (this.role !== ESecurityRole.ADMIN) {
+      throw new CommonException(ErrorCode.ACCESS_DENIED);
+    }
   }
 }

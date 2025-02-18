@@ -21,6 +21,7 @@ export class LogoutService {
 
       let payload: any;
       try {
+        // 리프레시 토큰 검증
         payload = this.jwtService.verify(refreshToken, {
           secret: process.env.JWT_SECRET,
         })
@@ -30,11 +31,15 @@ export class LogoutService {
 
       const { userId, role } = payload;
 
+      // 유저 조회
       const user = await this.userRepository.findByRefreshTokenAndId(refreshToken, userId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_LOGIN_USER);
       }
+
+      // 리프레시 토큰 null 로 업데이트
       const updatedUser = user.updateRefreshToken(null);
+
       await this.userRepository.save(updatedUser);
     });
   }

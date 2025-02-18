@@ -20,9 +20,11 @@ export class ReadAuthBriefService {
 
   async execute(accessToken: string): Promise<any> {
     return this.dataSource.transaction(async (manager) => {
+
       let payload: any;
 
       try {
+        // 액세스 토큰 검증
         payload = this.jwtService.verify(accessToken, {
           secret: process.env.JWT_SECRET,
         });
@@ -31,10 +33,13 @@ export class ReadAuthBriefService {
       }
 
       const { userId, role } = payload;
+
+      // 유저 조회
       const user = await this.userRepository.findByIdAndRole(userId, role, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_LOGIN_USER);
       }
+
       return ReadAuthBriefResponseDto.of(user.role, user.name);
     });
   }

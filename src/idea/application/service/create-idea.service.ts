@@ -70,8 +70,8 @@ export class CreateIdeaService {
         createdIdea
       );
 
-      // 팀원 수 유효성 검증
-      team.validateCapacity();
+      // 팀원 수 시스템 유효성 검증
+      team.validateSystemCapacityLimits();
 
       const createdTeam = await this.teamRepository.save(team, manager);
 

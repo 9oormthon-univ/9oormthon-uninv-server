@@ -21,16 +21,19 @@ export class ReadMyIdeaDetailService {
   async execute(userId: number): Promise<ReadMyIdeaDetailResponseDto> {
     return this.dataSource.transaction(async (manager) => {
 
+      // 유저 조회
       const user = await this.userRepository.findByIdWithUniv(userId, manager);
       if(!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
+      // 아이디어 조회
       const { idea, isBookmarked, isActive } = await this.ideaRepository.findMyIdeaDetail(userId, manager);
       if(!idea) {
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA);
       }
 
+      // 팀 조회
       const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
       if(!team) {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);

@@ -21,21 +21,25 @@ export class ChangePasswordService {
     changePasswordDto: UpdatePasswordRequestDto,
   ): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
+
+      // 유저 조회
       const user = await this.userRepository.findByIdWithUniv(userId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
       }
 
+      // 비밀번호 확인
       const isPasswordValid = await bcrypt.compare(
         changePasswordDto.currentPassword,
         user.password,
       );
-
       if (!isPasswordValid) {
         throw new CommonException(ErrorCode.FAILURE_CHANGE_PASSWORD_ERROR);
       }
 
+      // 비밀번호 변경
       const updatedUser = user.updatePassword(await bcrypt.hash(changePasswordDto.newPassword, 10));
+
       await this.userRepository.save(updatedUser);
     });
   }

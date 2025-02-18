@@ -24,14 +24,16 @@ export class SignUpService {
 
   async execute(userId: number, file: Express.Multer.File): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
+
       const users: UserModel[] = [];
 
+      // 어드민 조회
       const admin = await this.userRepository.findByIdWithUniv(userId, manager);
 
-      if (!admin || admin.role !== ESecurityRole.ADMIN) {
-        throw new CommonException(ErrorCode.ACCESS_DENIED);
-      }
+      // 어드민 권한 검증
+      admin.validateAdminRole();
 
+      // 파일이 없을 경우 예외 발생
       if (!file) {
         throw new CommonException(ErrorCode.MISSING_REQUEST_PARAMETER);
       }

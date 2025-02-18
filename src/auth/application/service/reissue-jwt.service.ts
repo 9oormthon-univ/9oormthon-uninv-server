@@ -20,15 +20,22 @@ export class ReissueJwtService {
 
   async execute(refreshToken?: string): Promise<JwtTokenResponseDto> {
     return this.dataSource.transaction(async (manager) => {
+
       try {
+        // 리프레시 토큰 검증
         const { userId, role } = this.jwtService.verify(refreshToken, {
           secret: process.env.JWT_SECRET,
         });
 
+        // 유저 조회
         const user = await this.userRepository.findByIdAndRefreshTokenAndRole(userId, refreshToken, role, manager);
 
+        // 토큰 생성
         const tokens = this.generateTokens(user.id, role);
+
+        // 리프레시 토큰 업데이트
         const updatedUser = user.updateRefreshToken(tokens.refreshToken);
+
         await this.userRepository.save(updatedUser);
 
         return tokens;
