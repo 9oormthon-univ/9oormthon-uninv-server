@@ -1,16 +1,15 @@
-import { ReadIdeaOverviewUsecase } from '../usecase/read-idea-overview.usecase';
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { DataSource } from 'typeorm';
 import { ReadIdeaOverviewResponseDto } from '../dto/response/read-idea-overview.response.dto';
-import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
+import { IdeaRepository } from '../../repository/idea.repository';
 import { PageInfoDto } from '../../../core/dto/page-info.dto';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class ReadIdeaOverviewService implements ReadIdeaOverviewUsecase {
+export class ReadIdeaOverviewService {
   constructor(
-    private readonly ideaRepository: IdeaRepositoryImpl,
+    private readonly ideaRepository: IdeaRepository,
     private readonly dataSource: DataSource
   ) {}
 

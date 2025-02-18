@@ -5,15 +5,14 @@ import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { DataSource } from 'typeorm';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
+import { UserRepository } from '../../../user/repository/user.repository';
 import { UserModel } from '../../../user/domain/user.model';
-import { SignUpAdminUseCase } from '../usecase/sign-up-admin.usecase';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class SignUpAdminService implements SignUpAdminUseCase{
+export class SignUpAdminService {
   constructor(
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource,
   ) {
   }

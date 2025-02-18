@@ -6,15 +6,14 @@ import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { DataSource } from 'typeorm';
 import { ESecurityRole } from '../../../core/enums/security-role.enum';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
-import { ReissueJwtUseCase } from '../usecase/reissue-jwt.usecase';
+import { UserRepository } from '../../../user/repository/user.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class ReissueJwtService implements ReissueJwtUseCase{
+export class ReissueJwtService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource,
   ) {
   }

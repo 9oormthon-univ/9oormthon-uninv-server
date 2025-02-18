@@ -6,15 +6,14 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import { DataSource } from 'typeorm';
 import { ESecurityRole } from '../../../core/enums/security-role.enum';
 import { ReadAuthBriefResponseDto } from '../dto/response/read-auth-brief.response.dto';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
-import { ReadAuthBriefUsecase } from '../usecase/read-auth-brief.usecase';
+import { UserRepository } from '../../../user/repository/user.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class ReadAuthBriefService implements ReadAuthBriefUsecase{
+export class ReadAuthBriefService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource,
   ) {
   }

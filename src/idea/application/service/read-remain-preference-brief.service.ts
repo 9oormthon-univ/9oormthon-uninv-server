@@ -1,22 +1,21 @@
-import { ReadRemainPreferenceBriefUseCase } from '../usecase/read-remain-preference-brief.usecase';
 import { ReadRemainPreferenceBriefRequestDto } from '../dto/request/read-remain-preference-brief.request.dto';
 import { ReadRemainPreferenceBriefResponseDto } from '../dto/response/read-remain-preference-brief.response.dto';
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
-import { ApplyRepositoryImpl } from '../../repository/apply.repository.impl';
-import { SystemSettingRepositoryImpl } from '../../../system-setting/repository/system-setting.repository.impl';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
+import { ApplyRepository } from '../../repository/apply.repository';
+import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
+import { UserRepository } from '../../../user/repository/user.repository';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { DataSource } from 'typeorm';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class ReadRemainPreferenceBriefService implements ReadRemainPreferenceBriefUseCase {
+export class ReadRemainPreferenceBriefService {
   constructor(
-    private readonly applyRepository: ApplyRepositoryImpl,
-    private readonly systemSettingRepository: SystemSettingRepositoryImpl,
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly applyRepository: ApplyRepository,
+    private readonly systemSettingRepository: SystemSettingRepository,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource
   ) {}
 

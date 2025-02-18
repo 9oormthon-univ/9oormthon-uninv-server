@@ -1,9 +1,8 @@
-import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
-import { ReadMyIdeaDetailUseCase } from '../usecase/read-my-idea-detail.usecase';
+import { IdeaRepository } from '../../repository/idea.repository';
 import { DataSource } from 'typeorm';
 import { ReadMyIdeaDetailResponseDto } from '../dto/response/read-my-idea-detail.response.dto';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
-import { TeamRepositoryImpl } from '../../../team/repository/team.repository.impl';
+import { UserRepository } from '../../../user/repository/user.repository';
+import { TeamRepository } from '../../../team/repository/team.repository';
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { CommonException } from '../../../core/exceptions/common.exception';
@@ -11,11 +10,11 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class ReadMyIdeaDetailService implements ReadMyIdeaDetailUseCase {
+export class ReadMyIdeaDetailService {
   constructor(
-    private readonly ideaRepository: IdeaRepositoryImpl,
-    private readonly teamRepository: TeamRepositoryImpl,
-    private readonly userRepository: UserRepositoryImpl,
+    private readonly ideaRepository: IdeaRepository,
+    private readonly teamRepository: TeamRepository,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource
   ) {}
 

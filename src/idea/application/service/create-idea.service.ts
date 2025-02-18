@@ -1,28 +1,27 @@
 import { Injectable, UseFilters } from '@nestjs/common';
-import { UserRepositoryImpl } from '../../../user/repository/user.repository.impl';
+import { UserRepository } from '../../../user/repository/user.repository';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { DataSource } from 'typeorm';
-import { CreateIdeaUseCase } from '../usecase/create-idea.usecase';
 import { CreateIdeaRequestDto } from '../dto/request/create-idea.request.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
-import { IdeaRepositoryImpl } from '../../repository/idea.repository.impl';
-import { IdeaSubjectRepositoryImpl } from '../../repository/idea-subject.repository.impl';
+import { IdeaRepository } from '../../repository/idea.repository';
+import { IdeaSubjectRepository } from '../../repository/idea-subject.repository';
 import { IdeaModel } from '../../domain/idea.model';
-import { TeamRepositoryImpl } from '../../../team/repository/team.repository.impl';
+import { TeamRepository } from '../../../team/repository/team.repository';
 import { TeamModel } from '../../../team/domain/team.model';
-import { MemberRepositoryImpl } from '../../../team/repository/member.repository.impl';
+import { MemberRepository } from '../../../team/repository/member.repository';
 import { MemberModel } from '../../../team/domain/member.model';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class CreateIdeaService implements CreateIdeaUseCase{
+export class CreateIdeaService {
   constructor(
-    private readonly userRepository: UserRepositoryImpl,
-    private readonly ideaRepository: IdeaRepositoryImpl,
-    private readonly ideaSubjectRepository: IdeaSubjectRepositoryImpl,
-    private readonly teamRepository: TeamRepositoryImpl,
-    private readonly memberRepository: MemberRepositoryImpl,
+    private readonly userRepository: UserRepository,
+    private readonly ideaRepository: IdeaRepository,
+    private readonly ideaSubjectRepository: IdeaSubjectRepository,
+    private readonly teamRepository: TeamRepository,
+    private readonly memberRepository: MemberRepository,
     private readonly dataSource: DataSource
   ) {}
 
