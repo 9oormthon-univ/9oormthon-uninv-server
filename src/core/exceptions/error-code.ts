@@ -41,7 +41,6 @@ export class ErrorCode {
   static readonly INVALID_ADMIN_AUTH_CODE_ERROR = new ErrorCode(40012, HttpStatus.BAD_REQUEST, "관리자 인증 코드가 일치하지 않습니다.");
   static readonly CANNOT_BOOKMARK_MY_IDEA_ERROR = new ErrorCode(40013, HttpStatus.BAD_REQUEST, "본인의 아이디어는 북마크할 수 없습니다.");
   static readonly CANNOT_APPLY_MY_IDEA = new ErrorCode(40014, HttpStatus.BAD_REQUEST, "본인의 아이디어에는 지원할 수 없습니다.");
-  static readonly ALREADY_HAVE_TEAM_ERROR = new ErrorCode(40015, HttpStatus.BAD_REQUEST, "이미 팀이 존재합니다.");
   static readonly TOTAL_CAPACITY_ERROR = new ErrorCode(40016, HttpStatus.BAD_REQUEST, "팀원 수는 6명을 초과할 수 없습니다.");
   static readonly PM_CAPACITY_ERROR = new ErrorCode(40017, HttpStatus.BAD_REQUEST, "PM은 1명을 초과할 수 없습니다.");
   static readonly PD_CAPACITY_ERROR = new ErrorCode(40018, HttpStatus.BAD_REQUEST, "디자이너는 1명을 초과할 수 없습니다.");
@@ -74,6 +73,7 @@ export class ErrorCode {
   static readonly ALREADY_EXISTS_USER = new ErrorCode(40900, HttpStatus.CONFLICT, "중복된 아이디의 사용자가 존재합니다.");
   static readonly ALREADY_EXISTS_UNIV = new ErrorCode(40901, HttpStatus.CONFLICT, "이미 존재하는 유니브입니다.");
   static readonly ALREADY_SUBMITTED_IDEA = new ErrorCode(40902, HttpStatus.CONFLICT, "이미 아이디어를 등록한 유저입니다.");
+  static readonly ALREADY_HAVE_TEAM_ERROR = new ErrorCode(40903, HttpStatus.CONFLICT, "이미 팀이 존재합니다.");
 
   // Internal Server Error
   static readonly INTERNAL_SERVER_ERROR = new ErrorCode(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
