@@ -29,12 +29,12 @@ export class IdeaRepository {
     return entity ? IdeaMapper.toDomain(entity) : null;
   }
 
-  async findByUserId(userId: number, manager?: EntityManager): Promise<IdeaModel[]> {
+  async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<IdeaModel[]> {
     const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
 
     const entities = await repo.find(
       {
-        where: { provider: { id: userId } },
+        where: { provider: { id: userId }, generation },
         relations: ['provider', 'ideaSubject']
       }
     );

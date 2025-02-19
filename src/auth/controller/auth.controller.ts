@@ -3,7 +3,7 @@ import {
   Controller, Get,
   HttpCode,
   Patch,
-  Post,
+  Post, Query,
   Req,
   Res,
   UploadedFile,
@@ -133,9 +133,12 @@ export class AuthController {
    * 1.6 인증 정보 간단 조회
    */
   @Get('/auth/briefs')
-  async getAuthBriefs(@Req() req: Request): Promise<ResponseDto<any>> {
+  async getAuthBriefs(
+    @Req() req: Request,
+    @Query('generation') generation: number,
+  ): Promise<ResponseDto<any>> {
     const accessToken = CookieUtil.refineCookie(req, 'access_token');
-    const authBriefs = await this.readAuthBriefUseCase.execute(accessToken);
+    const authBriefs = await this.readAuthBriefUseCase.execute(accessToken, generation);
 
     return ResponseDto.ok(authBriefs);
   }
