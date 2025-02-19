@@ -39,7 +39,7 @@ export class IdeaRepository {
       }
     );
 
-    return IdeaMapper.toDomain(entity);
+    return entity ? IdeaMapper.toDomain(entity): null;
   }
 
   async findByUserIdAndIsBookmarked(userId: number, manager?: EntityManager): Promise<IdeaModel[]> {
