@@ -27,20 +27,32 @@ export class CreateIdeaService {
 
   async execute(userId:number, requestDto: CreateIdeaRequestDto): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
+
+      // 유저 조회
       const user = await this.userRepository.findById(userId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
+      // 아이디어 주제 조회
       const ideaSubject = await this.ideaSubjectRepository.findById(requestDto.ideaInfo.ideaSubjectId, manager);
       if(!ideaSubject){
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA_SUBJECT);
       }
 
-      if (await this.memberRepository.findByUserIdAndGeneration(userId, requestDto.ideaInfo.generation, manager)) {
+      // 사용자가 이미 해당 기수에 아이디어를 제출했는지 확인
+      const existedIdea = await this.ideaRepository.findByUserIdAndGeneration(userId, requestDto.ideaInfo.generation, manager);
+      if (existedIdea) {
         throw new CommonException(ErrorCode.ALREADY_SUBMITTED_IDEA);
       }
 
+      // 사용자가 이미 팀에 속해있는지 확인
+      const existedTeam = await this.memberRepository.findByUserIdAndGeneration(userId, requestDto.ideaInfo.generation, manager);
+      if (existedTeam) {
+        throw new CommonException(ErrorCode.ALREADY_HAVE_TEAM_ERROR);
+      }
+
+      // 아이디어 생성
       const idea = IdeaModel.createIdea(
         requestDto.ideaInfo.title,
         requestDto.ideaInfo.summary,
@@ -59,6 +71,7 @@ export class CreateIdeaService {
       )
       const createdIdea = await this.ideaRepository.save(idea, manager);
 
+      // 팀 생성
       const team = TeamModel.createTeam(
         null,
         null,
@@ -75,6 +88,7 @@ export class CreateIdeaService {
 
       const createdTeam = await this.teamRepository.save(team, manager);
 
+      // Member 생성
       const member = MemberModel.createMember(
         requestDto.ideaInfo.providerRole,
         user,
