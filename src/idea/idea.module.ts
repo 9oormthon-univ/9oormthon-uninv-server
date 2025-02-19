@@ -58,5 +58,8 @@ import { ReadRemainPreferenceBriefService } from './application/service/read-rem
     ApplyRepository,
     BookmarkRepository
   ],
+  exports: [
+    IdeaRepository
+  ]
 })
 export class IdeaModule {}
