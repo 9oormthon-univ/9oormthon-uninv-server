@@ -29,17 +29,17 @@ export class IdeaRepository {
     return entity ? IdeaMapper.toDomain(entity) : null;
   }
 
-  async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<IdeaModel[]> {
+  async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<IdeaModel | null> {
     const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
 
-    const entities = await repo.find(
+    const entity = await repo.findOne(
       {
         where: { provider: { id: userId }, generation },
         relations: ['provider', 'ideaSubject']
       }
     );
 
-    return IdeaMapper.toDomains(entities);
+    return IdeaMapper.toDomain(entity);
   }
 
   async findByUserIdAndIsBookmarked(userId: number, manager?: EntityManager): Promise<IdeaModel[]> {

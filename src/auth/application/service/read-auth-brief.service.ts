@@ -8,6 +8,7 @@ import { ESecurityRole } from '../../../core/enums/security-role.enum';
 import { ReadAuthBriefResponseDto } from '../dto/response/read-auth-brief.response.dto';
 import { UserRepository } from '../../../user/repository/user.repository';
 import { IdeaRepository } from '../../../idea/repository/idea.repository';
+import { ReadAuthBriefRequestDto } from '../dto/request/read-auth-brief.request.dto';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -20,7 +21,7 @@ export class ReadAuthBriefService {
   ) {
   }
 
-  async execute(accessToken: string, generation: number): Promise<any> {
+  async execute(accessToken: string, requestDto: ReadAuthBriefRequestDto): Promise<any> {
     return this.dataSource.transaction(async (manager) => {
 
       let payload: any;
@@ -44,7 +45,8 @@ export class ReadAuthBriefService {
 
       // 아이디어 제공자인지 확인
       let isProvider = false;
-      const idea = await this.ideaRepository.findByUserIdAndGeneration(userId, generation, manager);
+
+      const idea = await this.ideaRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
       if (idea) {
         isProvider = true;
       }
