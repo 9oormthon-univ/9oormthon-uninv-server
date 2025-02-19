@@ -50,6 +50,7 @@ export class ErrorCode {
   static readonly CLOSED_APPLY_ERROR = new ErrorCode(40021, HttpStatus.BAD_REQUEST, "지원이 마감된 파트입니다.");
   static readonly ALREADY_APPLIED_IDEA_ERROR = new ErrorCode(40022, HttpStatus.BAD_REQUEST, "이미 지원한 아이디어입니다.");
   static readonly NOT_IDEA_APPLY_PERIOD_ERROR = new ErrorCode(40023, HttpStatus.BAD_REQUEST, "아이디어 지원 기간이 아닙니다.");
+  static readonly DUPLICATED_PREFERENCE_ERROR = new ErrorCode(40024, HttpStatus.BAD_REQUEST, "이미 지원한 지망 순번입니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
