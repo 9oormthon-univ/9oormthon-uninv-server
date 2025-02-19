@@ -27,6 +27,7 @@ import { ReadAuthBriefService } from '../application/service/read-auth-brief.ser
 import { ReissueJwtService } from '../application/service/reissue-jwt.service';
 import { SignUpService } from '../application/service/sign-up.service';
 import { SignUpAdminService } from '../application/service/sign-up-admin.service';
+import { ReadAuthBriefRequestDto } from '../application/dto/request/read-auth-brief.request.dto';
 
 @Controller('/api/v1')
 export class AuthController {
@@ -135,10 +136,10 @@ export class AuthController {
   @Get('/auth/briefs')
   async getAuthBriefs(
     @Req() req: Request,
-    @Query('generation') generation: number,
+    @Query(new ValidationPipe({ transform: true })) requestDto: ReadAuthBriefRequestDto,
   ): Promise<ResponseDto<any>> {
     const accessToken = CookieUtil.refineCookie(req, 'access_token');
-    const authBriefs = await this.readAuthBriefUseCase.execute(accessToken, generation);
+    const authBriefs = await this.readAuthBriefUseCase.execute(accessToken, requestDto);
 
     return ResponseDto.ok(authBriefs);
   }
