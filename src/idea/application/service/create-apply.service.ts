@@ -55,6 +55,16 @@ export class CreateApplyService {
         throw new CommonException(ErrorCode.ALREADY_HAVE_TEAM_ERROR);
       }
 
+      // 사용자가 해당 팀빌딩 차수에서 이미 소진한 지망 순번으로 지원한 아이디어인지 확인
+      const duplicatedPreferenceApplies = await this.applyRepository.findByUserIdAndGenerationAndPhase(userId, idea.generation, requestDto.phase, manager);
+      duplicatedPreferenceApplies.map(
+        (apply) => {
+          if (apply.preference === requestDto.preference) {
+            throw new CommonException(ErrorCode.DUPLICATED_PREFERENCE_ERROR);
+          }
+        }
+      )
+
       // 사용자가 이미 지원한 아이디어인지 확인
       const existedApply = await this.applyRepository.findByUserIdAndIdeaId(userId, ideaId, manager);
       if (existedApply) {
