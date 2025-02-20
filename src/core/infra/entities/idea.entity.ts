@@ -62,6 +62,13 @@ export class IdeaEntity {
   beRequiredTechStacks: string[];
 
   /* ----------------------------- */
+  /* ---- One To Many Column ----- */
+  /* ----------------------------- */
+  @ManyToOne(() => IdeaSubjectEntity)
+  @JoinColumn({ name: 'idea_subject_id' })
+  ideaSubject: IdeaSubjectEntity;
+
+  /* ----------------------------- */
   /* ----- One To One Column ----- */
   /* ----------------------------- */
   @OneToOne(() => UserEntity)
@@ -70,10 +77,6 @@ export class IdeaEntity {
 
   @OneToOne(() => TeamEntity, (team) => team.idea)
   team: TeamEntity;
-
-  @OneToOne(() => IdeaSubjectEntity)
-  @JoinColumn({ name: 'idea_subject_id' })
-  ideaSubject: IdeaSubjectEntity;
 
   /* ----------------------------- */
   /* ---- One To Many Column ----- */
