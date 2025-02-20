@@ -52,7 +52,7 @@ POST {{host_url}}/api/v1/auth/reissue
 
 ### 1.6 인증 정보 간단 조회
 //@no-log
-GET {{host_url}}/api/v1/auth/briefs
+GET {{host_url}}/api/v1/auth/briefs?generation=4
 
 ### 1.7 비밀번호 재설정
 //@no-log
