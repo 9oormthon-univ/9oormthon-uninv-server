@@ -1,0 +1,3 @@
+### 0.1 현재 기간 조회
+// @no-log
+GET {{host_url}}/api/v1/system-settings/current-period
