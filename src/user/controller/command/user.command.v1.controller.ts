@@ -17,8 +17,7 @@ export class UserCommandV1Controller {
   @Put()
   @UseGuards(JwtAuthGuard)
   async updateUser(@Req() req, @Body(new ValidationPipe({ transform: true })) updateUsersDto: UpdateUserRequestDto): Promise<ResponseDto<any>> {
-    return ResponseDto.ok(
-      await this.updateUserUseCase.execute(req.user.id, updateUsersDto),
-    );
+    await this.updateUserUseCase.execute(req.user.id, updateUsersDto);
+    return ResponseDto.ok(null);
   }
 }

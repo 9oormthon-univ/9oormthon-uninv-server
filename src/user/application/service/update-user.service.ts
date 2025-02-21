@@ -23,12 +23,12 @@ export class UpdateUserService {
         throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
       }
 
-      user.updateUser(
+      const updatedUser = user.updateUser(
         requestDto.introduction,
         requestDto.stacks,
         requestDto.links
       );
-      await this.userRepository.save(user);
+      await this.userRepository.save(updatedUser, manager);
     });
   }
 }

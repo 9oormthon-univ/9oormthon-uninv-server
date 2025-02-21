@@ -5,7 +5,7 @@ import { UserRepository } from '../../repository/user.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class ReadUserDetailService {
+export class ReadMyUserDetailService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute (userId: number) {
