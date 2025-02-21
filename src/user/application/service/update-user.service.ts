@@ -24,6 +24,7 @@ export class UpdateUserService {
       }
 
       const updatedUser = user.updateUser(
+        requestDto.img_url,
         requestDto.introduction,
         requestDto.stacks,
         requestDto.links

@@ -1,7 +1,9 @@
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
-import { ReadMyUserDetailResponseDto } from '../dto/response/read-my-user-detail.response.dto';
+import { ReadUserDetailResponseDto } from '../dto/response/read-user-detail.response.dto';
 import { UserRepository } from '../../repository/user.repository';
+import { CommonException } from '../../../core/exceptions/common.exception';
+import { ErrorCode } from '../../../core/exceptions/error-code';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -10,6 +12,9 @@ export class ReadMyUserDetailService {
 
   async execute (userId: number) {
     const user = await this.userRepository.findByIdWithUniv(userId);
-    return ReadMyUserDetailResponseDto.from(user);
+    if (!user) {
+      throw new CommonException(ErrorCode.NOT_FOUND_USER);
+    }
+    return ReadUserDetailResponseDto.of(user, true);
   }
 }

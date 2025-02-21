@@ -25,6 +25,6 @@ export class UserQueryV1Controller {
   @Get(':userId/details')
   @UseGuards(JwtAuthGuard)
   async getUserDetail(@Req() req): Promise<ResponseDto<any>> {
-    return ResponseDto.ok(await this.readUserDetailUseCase.execute(req.params.userId));
+    return ResponseDto.ok(await this.readUserDetailUseCase.execute(req.user.id, req.params.userId));
   }
 }
