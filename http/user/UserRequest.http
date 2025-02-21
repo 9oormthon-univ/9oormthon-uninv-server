@@ -12,6 +12,7 @@ PUT {{host_url}}/api/v1/users
 Content-Type: application/json
 
 {
+    "img_url" : "https://giggle-inglo.s3.ap-northeast-2.amazonaws.com/companies/account_bcbcbc/company_img/04873c73-aff8-4e4f-811b-2251e6c0d75d",
     "introduction": "안녕하세요. 저는 개발자입니다.",
     "stacks": ["java", "spring"],
     "links": ["example.com"]

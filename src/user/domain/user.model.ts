@@ -71,6 +71,7 @@ export class UserModel {
   }
 
   public updateUser(
+    imgUrl: string,
     introduction: string,
     stacks: string[],
     links: string[]
@@ -79,7 +80,7 @@ export class UserModel {
       this.id,
       this.serialId,
       this.password,
-      this.imgUrl,
+      imgUrl,
       this.name,
       this.phoneNumber,
       introduction,
