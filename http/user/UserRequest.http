@@ -1,0 +1,18 @@
+### 2.1 내 정보 조회
+// @no-log
+GET {{host_url}}/api/v1/users/details
+
+### 2.2 유저 정보 조회
+// @no-log
+GET {{host_url}}/api/v1/users/4/details
+
+### 2.3 유저 정보 수정
+// @no-log
+PUT {{host_url}}/api/v1/users
+Content-Type: application/json
+
+{
+    "introduction": "안녕하세요. 저는 개발자입니다.",
+    "stacks": ["java", "spring"],
+    "links": ["example.com"]
+}

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ReadUserDetailService } from './application/service/read-user-detail.service';
+import { ReadMyUserDetailService } from './application/service/read-my-user-detail.service';
 import { UserEntity } from '../core/infra/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '../core/infra/database.module';
@@ -9,6 +9,7 @@ import { UserQueryV1Controller } from './controller/query/user.query.v1.controll
 import { UserCommandV1Controller } from './controller/command/user.command.v1.controller';
 import { UserRepository } from './repository/user.repository';
 import { UnivRepository } from './repository/univ.repository';
+import { ReadUserDetailService } from './application/service/read-user-detail.service';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UnivRepository } from './repository/univ.repository';
     TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [
+    ReadMyUserDetailService,
     ReadUserDetailService,
     UpdateUserService,
     UnivRepository,
