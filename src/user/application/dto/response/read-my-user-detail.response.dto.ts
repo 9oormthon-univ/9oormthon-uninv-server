@@ -12,7 +12,7 @@ export class ReadMyUserDetailResponseDto {
   constructor(name: string, univ: string, email: string, imgUrl: string, introduction: string, stacks: string[], links: string[]) {
     this.name = name;
     this.univ = univ;
-    this.email
+    this.email = email;
     this.imgUrl = imgUrl;
     this.introduction = introduction;
     this.stacks = stacks;
