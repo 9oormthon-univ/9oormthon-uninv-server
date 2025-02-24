@@ -23,7 +23,7 @@ export class ChangePasswordService {
     return this.dataSource.transaction(async (manager) => {
 
       // 유저 조회
-      const user = await this.userRepository.findByIdWithUniv(userId, manager);
+      const user = await this.userRepository.findById(userId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
       }

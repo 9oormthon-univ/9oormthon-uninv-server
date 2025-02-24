@@ -2,6 +2,8 @@ import { ESecurityRole } from '../../core/enums/security-role.enum';
 import { UnivModel } from './univ.model';
 import { CommonException } from '../../core/exceptions/common.exception';
 import { ErrorCode } from '../../core/exceptions/error-code';
+import { ELinkType } from '../../core/enums/link-type.enum';
+import { LinkModel } from './link.model';
 
 export class UserModel {
   constructor(
@@ -14,7 +16,7 @@ export class UserModel {
     public readonly introduction: string,
     public readonly generations: string[],
     public readonly stacks: string[],
-    public readonly links: string[],
+    public readonly links: LinkModel[],
     public readonly refreshToken: string | null,
     public readonly role: ESecurityRole,
     public readonly univ: UnivModel,
@@ -74,7 +76,7 @@ export class UserModel {
     imgUrl: string,
     introduction: string,
     stacks: string[],
-    links: string[]
+    links: LinkModel[],
   ) : UserModel {
     return new UserModel(
       this.id,

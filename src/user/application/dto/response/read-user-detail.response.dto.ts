@@ -1,4 +1,16 @@
 import { UserModel } from '../../../domain/user.model';
+import { ELinkType } from '../../../../core/enums/link-type.enum';
+import { LinkModel } from '../../../domain/link.model';
+
+export class LinkDto {
+  constructor(
+    public readonly type: ELinkType,
+    public readonly url: string
+  ) {}
+  static from(link: LinkModel) {
+    return new LinkDto(link.type, link.url);
+  }
+}
 
 export class ReadUserDetailResponseDto {
   name: string;
@@ -7,10 +19,10 @@ export class ReadUserDetailResponseDto {
   imgUrl: string;
   introduction: string;
   stacks: string[];
-  links: string[];
+  links: LinkDto[];
   is_me: boolean;
 
-  constructor(name: string, univ: string, email: string, imgUrl: string, introduction: string, stacks: string[], links: string[], is_me: boolean) {
+  constructor(name: string, univ: string, email: string, imgUrl: string, introduction: string, stacks: string[], links: LinkDto[], is_me: boolean) {
     this.name = name;
     this.univ = univ;
     this.email = email;
@@ -29,7 +41,7 @@ export class ReadUserDetailResponseDto {
       user.imgUrl,
       user.introduction,
       user.stacks,
-      user.links,
+      user.links.map(link => LinkDto.from(link)),
       is_me
     );
   }

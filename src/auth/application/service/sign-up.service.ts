@@ -28,7 +28,7 @@ export class SignUpService {
       const users: UserModel[] = [];
 
       // 어드민 조회
-      const admin = await this.userRepository.findByIdWithUniv(userId, manager);
+      const admin = await this.userRepository.findById(userId, manager);
 
       // 어드민 권한 검증
       admin.validateAdminRole();

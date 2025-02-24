@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UnivEntity } from './univ.entity';
 import { ESecurityRole } from '../../enums/security-role.enum';
+import { LinkEntity } from './link.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -44,9 +45,6 @@ export class UserEntity {
   @Column('simple-array', { name: 'stacks', nullable: true })
   stacks: string[];
 
-  @Column('simple-array', { name: 'links', nullable: true })
-  links: string[];
-
   @Column({ name: 'refresh_token', nullable: true })
   refreshToken: string | null;
 
@@ -64,7 +62,11 @@ export class UserEntity {
   @JoinColumn({ name: 'univ_id' })
   univ: UnivEntity;
 
-
+  /* ----------------------------- */
+  /* ---- One To Many Column ----- */
+  /* ----------------------------- */
+  @OneToMany(() => LinkEntity, (link) => link.user)
+  links: LinkEntity[];
 
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */

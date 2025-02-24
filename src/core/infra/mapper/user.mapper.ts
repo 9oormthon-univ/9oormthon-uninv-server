@@ -1,6 +1,7 @@
 import { UserEntity } from '../entities/user.entity';
 import { UserModel } from '../../../user/domain/user.model';
 import { UnivMapper } from './univ.mapper';
+import { LinkMapper } from './link.mapper';
 
 export class UserMapper {
   static toDomain(entity: UserEntity): UserModel {
@@ -14,7 +15,7 @@ export class UserMapper {
       entity.introduction,
       entity.generations,
       entity.stacks,
-      entity.links,
+      entity.links ? LinkMapper.toDomains(entity.links) : null,
       entity.refreshToken,
       entity.role,
       entity.univ ? UnivMapper.toDomain(entity.univ) : null,
