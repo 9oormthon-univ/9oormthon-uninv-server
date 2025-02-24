@@ -16,7 +16,7 @@ export class ReadUserDetailResponseDto {
   name: string;
   univ: string;
   email: string;
-  imgUrl: string;
+  img_url: string;
   introduction: string;
   stacks: string[];
   links: LinkDto[];
@@ -26,7 +26,7 @@ export class ReadUserDetailResponseDto {
     this.name = name;
     this.univ = univ;
     this.email = email;
-    this.imgUrl = imgUrl;
+    this.img_url = imgUrl;
     this.introduction = introduction;
     this.stacks = stacks;
     this.links = links;
@@ -40,8 +40,8 @@ export class ReadUserDetailResponseDto {
       user.serialId,
       user.imgUrl,
       user.introduction,
-      user.stacks,
-      user.links.map(link => LinkDto.from(link)),
+      user.stacks === undefined || user.stacks === null || user.stacks.length > 0 ? user.stacks : null,
+      user.links === undefined || user.links === null || user.links.length > 0 ? user.links.map(link => LinkDto.from(link)) : null,
       is_me
     );
   }
