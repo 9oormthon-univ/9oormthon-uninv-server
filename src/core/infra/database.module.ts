@@ -13,6 +13,7 @@ import { BookmarkEntity } from './entities/bookmark.entity';
 import { UnivEntity } from './entities/univ.entity';
 import { RecruitEntity } from './entities/recruit.entity';
 import { SystemSettingEntity } from './entities/system-setting.entity';
+import { LinkEntity } from './entities/link.entity';
 
 
 dotenv.config();
@@ -38,6 +39,7 @@ dotenv.config();
         TeamEntity,
         UnivEntity,
         UserEntity,
+        LinkEntity,
         SystemSettingEntity
       ],
       synchronize: true,
@@ -54,6 +56,7 @@ dotenv.config();
       TeamEntity,
       UnivEntity,
       UserEntity,
+      LinkEntity,
       SystemSettingEntity
     ]),
   ],

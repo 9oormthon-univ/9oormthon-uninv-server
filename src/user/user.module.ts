@@ -10,6 +10,7 @@ import { UserCommandV1Controller } from './controller/command/user.command.v1.co
 import { UserRepository } from './repository/user.repository';
 import { UnivRepository } from './repository/univ.repository';
 import { ReadUserDetailService } from './application/service/read-user-detail.service';
+import { LinkRepository } from './repository/link.repository';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { ReadUserDetailService } from './application/service/read-user-detail.se
     ReadUserDetailService,
     UpdateUserService,
     UnivRepository,
-    UserRepository
+    UserRepository,
+    LinkRepository,
   ],
   controllers: [UserQueryV1Controller, UserCommandV1Controller],
   exports: [UserRepository, UnivRepository],

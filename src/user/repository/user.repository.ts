@@ -17,13 +17,34 @@ export class UserRepository {
     return entity ? UserMapper.toDomain(entity) : null;
   }
 
+  async findByIdWithUnivAndLinks(id: number, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entity = await repo.findOne({
+      where: { id },
+      relations: ['univ', 'links'],
+    });
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
   async findByIdWithUniv(id: number, manager?: EntityManager): Promise<UserModel | null> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
 
     const entity = await repo.findOne(
       {
         where: { id },
-        relations: ['univ']
+        relations: ['univ'],
+      }
+    );
+    return entity ? UserMapper.toDomain(entity) : null;
+  }
+
+  async findByIdWithLinks(id: number, manager?: EntityManager): Promise<UserModel | null> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+
+    const entity = await repo.findOne(
+      {
+        where: { id },
+        relations: ['links'],
       }
     );
     return entity ? UserMapper.toDomain(entity) : null;
