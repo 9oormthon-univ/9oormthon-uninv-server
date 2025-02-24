@@ -51,10 +51,15 @@ export class TeamModel {
     const MAX_FE_CAPACITY = 3;
     const MAX_BE_CAPACITY = 3;
     const MAX_TOTAL_CAPACITY = 6;
+    const MIN_TOTAL_CAPACITY = 3;
 
     const totalCapacity = this.pmCapacity + this.pdCapacity + this.feCapacity + this.beCapacity;
     if (totalCapacity > MAX_TOTAL_CAPACITY) {
-      throw new CommonException(ErrorCode.TOTAL_CAPACITY_ERROR);
+      throw new CommonException(ErrorCode.MAX_TOTAL_CAPACITY_ERROR);
+    }
+
+    if (totalCapacity < MIN_TOTAL_CAPACITY) {
+      throw new CommonException(ErrorCode.MIN_TOTAL_CAPACITY_ERROR);
     }
 
     if (this.pmCapacity > MAX_PM_CAPACITY) {

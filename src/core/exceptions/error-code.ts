@@ -41,7 +41,7 @@ export class ErrorCode {
   static readonly INVALID_ADMIN_AUTH_CODE_ERROR = new ErrorCode(40012, HttpStatus.BAD_REQUEST, "관리자 인증 코드가 일치하지 않습니다.");
   static readonly CANNOT_BOOKMARK_MY_IDEA_ERROR = new ErrorCode(40013, HttpStatus.BAD_REQUEST, "본인의 아이디어는 북마크할 수 없습니다.");
   static readonly CANNOT_APPLY_MY_IDEA = new ErrorCode(40014, HttpStatus.BAD_REQUEST, "본인의 아이디어에는 지원할 수 없습니다.");
-  static readonly TOTAL_CAPACITY_ERROR = new ErrorCode(40016, HttpStatus.BAD_REQUEST, "팀원 수는 6명을 초과할 수 없습니다.");
+  static readonly MAX_TOTAL_CAPACITY_ERROR = new ErrorCode(40016, HttpStatus.BAD_REQUEST, "팀원 수는 6명을 초과할 수 없습니다.");
   static readonly PM_CAPACITY_ERROR = new ErrorCode(40017, HttpStatus.BAD_REQUEST, "PM은 1명을 초과할 수 없습니다.");
   static readonly PD_CAPACITY_ERROR = new ErrorCode(40018, HttpStatus.BAD_REQUEST, "디자이너는 1명을 초과할 수 없습니다.");
   static readonly FE_CAPACITY_ERROR = new ErrorCode(40019, HttpStatus.BAD_REQUEST, "프론트엔드는 3명을 초과할 수 없습니다.");
@@ -50,6 +50,7 @@ export class ErrorCode {
   static readonly ALREADY_APPLIED_IDEA_ERROR = new ErrorCode(40022, HttpStatus.BAD_REQUEST, "이미 지원한 아이디어입니다.");
   static readonly NOT_IDEA_APPLY_PERIOD_ERROR = new ErrorCode(40023, HttpStatus.BAD_REQUEST, "아이디어 지원 기간이 아닙니다.");
   static readonly DUPLICATED_PREFERENCE_ERROR = new ErrorCode(40024, HttpStatus.BAD_REQUEST, "이미 지원한 지망 순번입니다.");
+  static readonly MIN_TOTAL_CAPACITY_ERROR = new ErrorCode(40025, HttpStatus.BAD_REQUEST, "팀원 수는 3명 이상이어야 합니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
