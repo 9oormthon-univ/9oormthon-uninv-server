@@ -1,5 +1,7 @@
 import { UserModel } from '../../user/domain/user.model';
 import { IdeaSubjectModel } from './idea-subject.model';
+import { CommonException } from '../../core/exceptions/common.exception';
+import { ErrorCode } from '../../core/exceptions/error-code';
 
 export class IdeaModel {
   constructor(
@@ -55,5 +57,37 @@ export class IdeaModel {
       ideaSubject,
       new Date()
     );
+  }
+
+  public updateIdeaDefaultInfo(
+    title: string,
+    summary: string,
+    content: string,
+    ideaSubject: IdeaSubjectModel
+  ) : IdeaModel {
+    return new IdeaModel(
+      this.id,
+      title,
+      summary,
+      content,
+      this.generation,
+      this.pmRequirement,
+      this.pmRequiredTechStacks,
+      this.pdRequirement,
+      this.pdRequiredTechStacks,
+      this.feRequirement,
+      this.feRequiredTechStacks,
+      this.beRequirement,
+      this.beRequiredTechStacks,
+      this.provider,
+      ideaSubject,
+      this.createdAt
+    );
+  }
+
+  public validateIsProvider(userId: number): void {
+    if (this.provider.id !== userId) {
+      throw new CommonException(ErrorCode.NOT_PROVIDER_ERROR);
+    }
   }
 }

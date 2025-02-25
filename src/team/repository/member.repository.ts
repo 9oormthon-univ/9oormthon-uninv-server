@@ -14,7 +14,7 @@ export class MemberRepository {
         user: { id: userId },
         team: { generation: generation }
       },
-      relations: ['user']
+      relations: ['user', 'team', 'team.idea', 'team.idea.provider', 'team.idea.ideaSubject']
     });
     return member ? MemberMapper.toDomain(member) : undefined;
   }
