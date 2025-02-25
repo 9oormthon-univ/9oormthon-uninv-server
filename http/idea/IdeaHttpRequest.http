@@ -88,6 +88,19 @@ GET {{host_url}}/api/v1/users/ideas/9/details
 //@no-log
 GET {{host_url}}/api/v1/idea-subjects/briefs
 
-### 3.13 내 잔여 지망 간단 리스트 조회
+### 3.11 내 잔여 지망 간단 리스트 조회
 //@no-log
 GET {{host_url}}/api/v1/users/applies/briefs?generation=4&phase=1
+
+### 3.12 아이디어 기본 정보 수정
+//@no-log
+PUT {{host_url}}/api/v1/users/ideas/1/default-info
+Content-Type: application/json
+
+{
+  "idea_subject_id": 2,
+  "title": "수정된 아이디어 제목",
+  "summary": "수정된 아이디어 요약",
+  "content": "수정된 아이디어 내용",
+  "provider_role" : "BE"
+}

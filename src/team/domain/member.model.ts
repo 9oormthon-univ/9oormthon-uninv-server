@@ -24,4 +24,16 @@ export class MemberModel {
       new Date()
     );
   }
+
+  public changeRole(
+    role: ERole
+  ): MemberModel {
+    return new MemberModel(
+      this.id,
+      role,
+      this.user,
+      this.team,
+      this.createdAt
+    );
+  }
 }
