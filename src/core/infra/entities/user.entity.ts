@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UnivEntity } from './univ.entity';
 import { ESecurityRole } from '../../enums/security-role.enum';
 import { LinkEntity } from './link.entity';
@@ -56,9 +56,9 @@ export class UserEntity {
   role: ESecurityRole;
 
   /* ----------------------------- */
-  /* ----- One To One Column ----- */
+  /* ----- Many To One Column ---- */
   /* ----------------------------- */
-  @OneToOne(() => UnivEntity, { nullable: true })
+  @ManyToOne(() => UnivEntity, { nullable: true })
   @JoinColumn({ name: 'univ_id' })
   univ: UnivEntity;
 
