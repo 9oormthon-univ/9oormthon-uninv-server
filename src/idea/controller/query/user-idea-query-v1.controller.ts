@@ -20,6 +20,8 @@ import { ReadIdeaDetailService } from '../../application/service/read-idea-detai
 import { ReadRemainPreferenceBriefService } from '../../application/service/read-remain-preference-brief.service';
 import { ReadRemainPreferenceBriefRequestDto } from '../../application/dto/request/read-remain-preference-brief.request.dto';
 import { ReadRemainPreferenceBriefResponseDto } from '../../application/dto/response/read-remain-preference-brief.response.dto';
+import { ReadMyApplyOverviewService } from '../../application/service/read-my-apply-overview.service';
+import { ReadMyApplyOverviewRequestDto } from '../../application/dto/request/read-my-apply-overview.request.dto';
 
 @Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
@@ -29,9 +31,13 @@ export class UserIdeaQueryV1Controller {
     private readonly readIdeaOverviewUseCase: ReadIdeaOverviewService,
     private readonly readMyIdeaDetailUseCase: ReadMyIdeaDetailService,
     private readonly readIdeaDetailUseCase: ReadIdeaDetailService,
-    private readonly readRemainPreferenceBriefUseCase: ReadRemainPreferenceBriefService
+    private readonly readRemainPreferenceBriefUseCase: ReadRemainPreferenceBriefService,
+    private readonly readMyApplyOverviewUseCase: ReadMyApplyOverviewService,
   ) {}
 
+  /**
+   * 3.6 아이디어 요약 리스트 조회
+   */
   @Get('ideas/overviews')
   @UseGuards(JwtAuthGuard)
   async readIdeaOverview(
@@ -51,6 +57,9 @@ export class UserIdeaQueryV1Controller {
     );
   }
 
+  /**
+   * 3.7 내 아이디어 상세 조회
+   */
   @Get('ideas/details')
   @UseGuards(JwtAuthGuard)
   async readMyIdeaDetail(
@@ -63,6 +72,9 @@ export class UserIdeaQueryV1Controller {
     );
   }
 
+  /**
+   * 3.8 아이디어 상세 조회
+   */
   @Get('ideas/:id/details')
   @UseGuards(JwtAuthGuard)
   async readIdeaDetail(
@@ -77,6 +89,27 @@ export class UserIdeaQueryV1Controller {
     );
   }
 
+  /**
+   * 3.10 내 지원 정보 요약 리스트 조회
+   */
+  @Get('applies/overviews')
+  @UseGuards(JwtAuthGuard)
+  async readMyApplyOverview(
+    @Req() req,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadMyApplyOverviewRequestDto,
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(
+      await this.readMyApplyOverviewUseCase.execute(
+        req.user.id,
+        query.generation,
+        query.phase
+      )
+    );
+  }
+
+  /**
+   * 3.11 내 잔여 지망 간단 리스트 조회
+   */
   @Get('applies/briefs')
   @UseGuards(JwtAuthGuard)
   async readRemainPreferenceBrief(

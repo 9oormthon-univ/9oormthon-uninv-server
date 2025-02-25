@@ -4,7 +4,7 @@ GET {{host_url}}/api/v1/users/details
 
 ### 2.2 유저 정보 조회
 // @no-log
-GET {{host_url}}/api/v1/users/4/details
+GET {{host_url}}/api/v1/users/2/details
 
 ### 2.3 유저 정보 수정
 // @no-log

@@ -4,7 +4,7 @@ import { IdeaMapper } from './idea.mapper';
 import { MemberMapper } from './member.mapper';
 
 export class TeamMapper {
-  static toDomain(entity:TeamEntity, options?: { skipMembers?: boolean }): TeamModel {
+  static toDomain(entity:TeamEntity, options?: { skipMembers?: boolean, skipIdea: boolean }): TeamModel {
     return new TeamModel(
       entity.id,
       entity.name,
@@ -14,7 +14,10 @@ export class TeamMapper {
       entity.pdCapacity,
       entity.feCapacity,
       entity.beCapacity,
-      IdeaMapper.toDomain(entity.idea),
+      options?.skipIdea
+        ? null
+        : IdeaMapper.toDomain(entity.idea),
+      // IdeaMapper.toDomain(entity.idea),
       options?.skipMembers
         ? []
         : (entity.members ?? []).map(member => MemberMapper.toDomain(member, { skipTeam: true })),
@@ -32,7 +35,7 @@ export class TeamMapper {
     entity.pdCapacity = domain.pdCapacity;
     entity.feCapacity = domain.feCapacity;
     entity.beCapacity = domain.beCapacity;
-    entity.idea = IdeaMapper.toEntity(domain.idea);
+    entity.idea = domain.idea ? IdeaMapper.toEntity(domain.idea) : null;
     entity.createdAt = domain.createdAt;
     return entity;
   }

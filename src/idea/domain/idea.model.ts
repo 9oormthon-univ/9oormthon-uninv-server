@@ -2,6 +2,7 @@ import { UserModel } from '../../user/domain/user.model';
 import { IdeaSubjectModel } from './idea-subject.model';
 import { CommonException } from '../../core/exceptions/common.exception';
 import { ErrorCode } from '../../core/exceptions/error-code';
+import { TeamModel } from '../../team/domain/team.model';
 
 export class IdeaModel {
   constructor(
@@ -19,6 +20,7 @@ export class IdeaModel {
     public readonly beRequirement?: string,
     public readonly beRequiredTechStacks?: string[],
     public readonly provider?: UserModel,
+    public readonly team?: TeamModel,
     public readonly ideaSubject?: IdeaSubjectModel,
     public readonly createdAt?: Date
   ) {}
@@ -54,6 +56,7 @@ export class IdeaModel {
       beRequirements,
       beRequiredTechStacks,
       provider,
+      null,
       ideaSubject,
       new Date()
     );
@@ -88,6 +91,7 @@ export class IdeaModel {
       beRequirement,
       beRequiredTechStacks,
       this.provider,
+      this.team,
       ideaSubject,
       this.createdAt
     );

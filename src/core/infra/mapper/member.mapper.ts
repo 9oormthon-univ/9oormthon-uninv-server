@@ -12,7 +12,7 @@ export class MemberMapper {
       UserMapper.toDomain(entity.user),
       options?.skipTeam
         ? ({ id: entity.team.id } as TeamModel)
-        : TeamMapper.toDomain(entity.team, { skipMembers: true }),
+        : TeamMapper.toDomain(entity.team, { skipMembers: true, skipIdea: true }),
       entity.createdAt
     );
   }
@@ -22,7 +22,7 @@ export class MemberMapper {
     entity.id = domain.id;
     entity.role = domain.role;
     entity.user = UserMapper.toEntity(domain.user);
-    entity.team = TeamMapper.toEntity(domain.team);
+    entity.team = domain.team ? TeamMapper.toEntity(domain.team) : null;
     entity.createdAt = domain.createdAt;
     return entity;
   }

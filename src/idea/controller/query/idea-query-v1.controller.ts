@@ -13,6 +13,9 @@ export class IdeaQueryV1Controller {
     private readonly readIdeaSubjectBriefUseCase: ReadIdeaSubjectBriefService,
   ) {}
 
+  /**
+   * 3.9 아이디어 주제 간단 리스트 조회
+   */
   @Get('briefs')
   @UseGuards(JwtAuthGuard)
   async readIdeaSubjectBrief(): Promise<ResponseDto<any>> {

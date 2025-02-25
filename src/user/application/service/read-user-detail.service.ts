@@ -21,7 +21,7 @@ export class ReadUserDetailService {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
-      const user = await this.userRepository.findByIdWithUnivAndLinks(userId,manager);
+      const user = await this.userRepository.findByIdWithUnivAndLinks(targetUserId,manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }

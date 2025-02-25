@@ -2,6 +2,7 @@ import { DataSource, EntityManager } from 'typeorm';
 import { ApplyModel } from '../domain/apply.model';
 import { ApplyEntity } from '../../core/infra/entities/apply.entity';
 import { ApplyMapper } from '../../core/infra/mapper/apply.mapper';
+import { ERole } from '../../core/enums/role.enum';
 
 export class ApplyRepository {
   constructor(private readonly dataSource: DataSource) {}
@@ -51,7 +52,7 @@ export class ApplyRepository {
     const entities = await repo.find(
       {
         where: { user: { id: userId }, idea: { generation }, phase },
-        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject']
+        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject', 'idea.team']
       }
     );
 
@@ -69,6 +70,16 @@ export class ApplyRepository {
     );
 
     return entity ? ApplyMapper.toDomain(entity) : null;
+  }
+
+  async countByIdeaIdAndRole(ideaId: number, role: ERole, manager?: EntityManager): Promise<number> {
+    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
+
+    return repo.count(
+      {
+        where: { idea: { id: ideaId }, role }
+      }
+    );
   }
 
   async save(apply: ApplyModel, manager?: EntityManager): Promise<void> {

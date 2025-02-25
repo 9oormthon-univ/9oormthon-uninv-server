@@ -69,9 +69,9 @@ export class IdeaEntity {
   ideaSubject: IdeaSubjectEntity;
 
   /* ----------------------------- */
-  /* ----- One To One Column ----- */
+  /* ----- Many To One Column ---- */
   /* ----------------------------- */
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'provider_id' })
   provider: UserEntity;
 
