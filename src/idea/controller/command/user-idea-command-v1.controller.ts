@@ -18,8 +18,8 @@ import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { CreateApplyService } from '../../application/service/create-apply.service';
 import { CreateApplyRequestDto } from '../../application/dto/request/create-apply.request.dto';
 import { CreateOrDeleteBookmarkService } from '../../application/service/create-or-delete-bookmark.service';
-import { UpdateIdeaDefaultService } from '../../application/service/update-idea-default.service';
-import { UpdateIdeaDefaultRequestDto } from '../../application/dto/request/update-idea-default.request.dto';
+import { UpdateIdeaService } from '../../application/service/update-idea.service';
+import { UpdateIdeaRequestDto } from '../../application/dto/request/update-idea.request.dto';
 
 @Controller('/api/v1/users/ideas')
 @UseInterceptors(ResponseInterceptor)
@@ -29,7 +29,7 @@ export class UserIdeaCommandV1Controller {
     private readonly createIdeaUseCase: CreateIdeaService,
     private readonly createApplyUseCase: CreateApplyService,
     private readonly createOrDeleteBookmarkUseCase: CreateOrDeleteBookmarkService,
-    private readonly updateIdeaDefaultUseCase: UpdateIdeaDefaultService,
+    private readonly updateIdeaUseCase: UpdateIdeaService,
   ) {}
 
   /**
@@ -75,14 +75,14 @@ export class UserIdeaCommandV1Controller {
   /**
    * 3.12 아이디어 기본 정보 수정
    */
-  @Put(':id/default-info')
+  @Put(':id')
   @UseGuards(JwtAuthGuard)
   async updateDefaultInfo(
     @Req() req,
     @Param('id') id: number,
-    @Body(new ValidationPipe({ transform: true })) requestDto: UpdateIdeaDefaultRequestDto
+    @Body(new ValidationPipe({ transform: true })) requestDto: UpdateIdeaRequestDto
   ): Promise<ResponseDto<any>> {
-    await this.updateIdeaDefaultUseCase.execute(req.user.id, id, requestDto);
+    await this.updateIdeaUseCase.execute(req.user.id, id, requestDto);
     return ResponseDto.ok(null);
   }
 }

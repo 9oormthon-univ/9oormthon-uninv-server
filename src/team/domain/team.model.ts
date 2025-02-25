@@ -105,4 +105,25 @@ export class TeamModel {
         throw new CommonException(ErrorCode.INVALID_ROLE);
     }
   }
+
+  public updateCapacity(
+    pmCapacity: number,
+    pdCapacity: number,
+    feCapacity: number,
+    beCapacity: number
+  ): TeamModel {
+    return new TeamModel(
+      this.id,
+      this.name,
+      this.number,
+      this.generation,
+      pmCapacity,
+      pdCapacity,
+      feCapacity,
+      beCapacity,
+      this.idea,
+      this.members,
+      this.createdAt
+    );
+  }
 }
