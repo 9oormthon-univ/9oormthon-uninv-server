@@ -3,22 +3,24 @@ import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter
 import { IdeaRepository } from '../../repository/idea.repository';
 import { DataSource } from 'typeorm';
 import { MemberRepository } from '../../../team/repository/member.repository';
-import { UpdateIdeaDefaultRequestDto } from '../dto/request/update-idea-default.request.dto';
+import { UpdateIdeaRequestDto } from '../dto/request/update-idea.request.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { IdeaSubjectRepository } from '../../repository/idea-subject.repository';
+import { TeamRepository } from '../../../team/repository/team.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class UpdateIdeaDefaultService {
+export class UpdateIdeaService {
   constructor(
     private readonly ideaRepository: IdeaRepository,
     private readonly ideaSubjectRepository: IdeaSubjectRepository,
     private readonly memberRepository: MemberRepository,
+    private readonly teamRepository: TeamRepository,
     private readonly dataSource: DataSource
   ) {}
 
-  async execute(userId: number, ideaId: number, requestDto: UpdateIdeaDefaultRequestDto) : Promise<void> {
+  async execute(userId: number, ideaId: number, requestDto: UpdateIdeaRequestDto) : Promise<void> {
     return this.dataSource.transaction(async (manager) => {
 
       // 아이디어 조회
@@ -31,17 +33,25 @@ export class UpdateIdeaDefaultService {
       idea.validateIsProvider(userId);
 
       // request 에 포함된 아이디어 주제 조회
-      const ideaSubject = await this.ideaSubjectRepository.findById(requestDto.ideaSubjectId, manager);
+      const ideaSubject = await this.ideaSubjectRepository.findById(requestDto.ideaInfo.ideaSubjectId, manager);
       if (!ideaSubject) {
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA_SUBJECT);
       }
 
       // 아이디어 업데이트
       const updatedIdea = idea.updateIdeaDefaultInfo(
-        requestDto.title,
-        requestDto.summary,
-        requestDto.content,
-        ideaSubject
+        requestDto.ideaInfo.title,
+        requestDto.ideaInfo.summary,
+        requestDto.ideaInfo.content,
+        ideaSubject,
+        requestDto.requirements.pm.requirement,
+        requestDto.requirements.pm.requiredTechStacks,
+        requestDto.requirements.pd.requirement,
+        requestDto.requirements.pd.requiredTechStacks,
+        requestDto.requirements.fe.requirement,
+        requestDto.requirements.fe.requiredTechStacks,
+        requestDto.requirements.be.requirement,
+        requestDto.requirements.be.requiredTechStacks,
       )
       this.ideaRepository.save(updatedIdea, manager)
 
@@ -51,10 +61,25 @@ export class UpdateIdeaDefaultService {
         throw new CommonException(ErrorCode.NOT_FOUND_MEMBER);
       }
 
-      if(member.role !== requestDto.providerRole) {
-        const updatedMember = member.changeRole(requestDto.providerRole);
+      if(member.role !== requestDto.ideaInfo.providerRole) {
+        const updatedMember = member.changeRole(requestDto.ideaInfo.providerRole);
         this.memberRepository.save(updatedMember, manager);
       }
+
+      // 팀 조회
+      const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
+      if(!team) {
+        throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
+      }
+
+      // 각 직군별 capacity 업데이트
+      const updatedTeam = team.updateCapacity(
+        requestDto.requirements.pm.capacity,
+        requestDto.requirements.pd.capacity,
+        requestDto.requirements.fe.capacity,
+        requestDto.requirements.be.capacity
+      )
+      this.teamRepository.save(updatedTeam, manager);
     });
   }
 
