@@ -48,20 +48,25 @@ export class ReadAuthBriefService {
         throw new CommonException(ErrorCode.NOT_FOUND_LOGIN_USER);
       }
 
+      // 아이디어 제시자면 PROVIDER 반환
       const idea = await this.ideaRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
       if (idea) {
         return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.PROVIDER);
-      } else {
-        const member = await this.memberRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
-        if (member) {
-          return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.MEMBER);
-        } else {
-          const apply = await this.applyRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
-          if (apply) {
-            return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.APPLICANT);
-          }
-        }
       }
+
+      // 팀 멤버면 MEMBER 반환
+      const member = await this.memberRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
+      if (member) {
+        return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.MEMBER);
+      }
+
+      // 지원자면 APPLICANT 반환
+      const apply = await this.applyRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
+      if (apply) {
+        return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.APPLICANT);
+      }
+
+      // 그 외 NONE 반환
       return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.NONE);
     });
   }
