@@ -69,7 +69,7 @@ export class ApplyRepository {
       }
     );
 
-    return entities ? ApplyMapper.toDomains(entities) : null;
+    return entities.length !== 0 ? ApplyMapper.toDomains(entities) : null;
   }
 
   async findByUserIdAndIdeaId(userId: number, ideaId: number, manager?: EntityManager): Promise<ApplyModel | null> {
