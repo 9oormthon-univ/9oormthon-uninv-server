@@ -86,7 +86,7 @@ export class CreateIdeaService {
       // 팀원 수 시스템 유효성 검증
       team.validateSystemCapacityLimits();
 
-      const createdTeam = await this.teamRepository.save(team, manager);
+      const createdTeam = await this.teamRepository.saveAndReturn(team, manager);
 
       // Member 생성
       const member = MemberModel.createMember(

@@ -25,6 +25,7 @@ import { IdeaQueryV1Controller } from './controller/query/idea-query-v1.controll
 import { SystemSettingModule } from '../system-setting/system-setting.module';
 import { ReadRemainPreferenceBriefService } from './application/service/read-remain-preference-brief.service';
 import { UpdateIdeaService } from './application/service/update-idea.service';
+import { ReadMyApplyOverviewService } from './application/service/read-my-apply-overview.service';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { UpdateIdeaService } from './application/service/update-idea.service';
     ReadIdeaDetailService,
     ReadIdeaSubjectBriefService,
     ReadRemainPreferenceBriefService,
+    ReadMyApplyOverviewService,
     UpdateIdeaService,
     IdeaRepository,
     IdeaSubjectRepository,

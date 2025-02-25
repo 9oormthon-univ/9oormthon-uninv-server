@@ -2,12 +2,14 @@ import { IdeaEntity } from '../entities/idea.entity';
 import { IdeaModel } from '../../../idea/domain/idea.model';
 import { UserMapper } from './user.mapper';
 import { IdeaSubjectMapper } from './idea-subject.mapper';
+import { TeamMapper } from './team.mapper';
+import { TeamModel } from '../../../team/domain/team.model';
 
 export class IdeaMapper {
   /**
    * ORM 엔티티를 순수 도메인 모델로 변환
    */
-  static toDomain(entity: IdeaEntity): IdeaModel {
+  static toDomain(entity: IdeaEntity, options?: { skipTeam?: boolean }): IdeaModel {
     return new IdeaModel(
       entity.id,
       entity.title,
@@ -23,6 +25,10 @@ export class IdeaMapper {
       entity.beRequirement,
       entity.beRequiredTechStacks,
       UserMapper.toDomain(entity.provider),
+      entity.team ? options?.skipTeam
+      ? ({ id: entity.team.id } as TeamModel)
+      : TeamMapper.toDomain(entity.team, { skipMembers: true, skipIdea: true }) : null,
+      // entity.team ? TeamMapper.toDomain(entity.team) : null,
       IdeaSubjectMapper.toDomain(entity.ideaSubject),
       entity.createdAt
     );

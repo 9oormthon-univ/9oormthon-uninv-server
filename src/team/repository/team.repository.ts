@@ -16,9 +16,15 @@ export class TeamRepository {
     return entity ? TeamMapper.toDomain(entity) : undefined;
   }
 
-  async save(team: TeamModel, manager?: EntityManager): Promise<TeamModel> {
+  async saveAndReturn(team: TeamModel, manager?: EntityManager): Promise<TeamModel> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
 
     return TeamMapper.toDomain(await repo.save(TeamMapper.toEntity(team)));
+  }
+
+  async save(team: TeamModel, manager?: EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+
+    await repo.save(TeamMapper.toEntity(team));
   }
 }
