@@ -9,6 +9,9 @@ import { ReadAuthBriefResponseDto } from '../dto/response/read-auth-brief.respon
 import { UserRepository } from '../../../user/repository/user.repository';
 import { IdeaRepository } from '../../../idea/repository/idea.repository';
 import { ReadAuthBriefRequestDto } from '../dto/request/read-auth-brief.request.dto';
+import { MemberRepository } from '../../../team/repository/member.repository';
+import { EUserStatus } from '../../../core/enums/user-status.enum';
+import { ApplyRepository } from '../../../idea/repository/apply.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -17,6 +20,8 @@ export class ReadAuthBriefService {
     private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
     private readonly ideaRepository: IdeaRepository,
+    private readonly memberRepository: MemberRepository,
+    private readonly applyRepository: ApplyRepository,
     private readonly dataSource: DataSource,
   ) {
   }
@@ -43,15 +48,21 @@ export class ReadAuthBriefService {
         throw new CommonException(ErrorCode.NOT_FOUND_LOGIN_USER);
       }
 
-      // 아이디어 제공자인지 확인
-      let isProvider = false;
-
       const idea = await this.ideaRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
       if (idea) {
-        isProvider = true;
+        return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.PROVIDER);
+      } else {
+        const member = await this.memberRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
+        if (member) {
+          return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.MEMBER);
+        } else {
+          const apply = await this.applyRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
+          if (apply) {
+            return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.APPLICANT);
+          }
+        }
       }
-
-      return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, isProvider);
+      return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.NONE);
     });
   }
 }

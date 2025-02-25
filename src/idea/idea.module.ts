@@ -26,6 +26,7 @@ import { SystemSettingModule } from '../system-setting/system-setting.module';
 import { ReadRemainPreferenceBriefService } from './application/service/read-remain-preference-brief.service';
 import { UpdateIdeaService } from './application/service/update-idea.service';
 import { ReadMyApplyOverviewService } from './application/service/read-my-apply-overview.service';
+import { MemberRepository } from '../team/repository/member.repository';
 
 @Module({
   imports: [
@@ -63,7 +64,8 @@ import { ReadMyApplyOverviewService } from './application/service/read-my-apply-
     BookmarkRepository
   ],
   exports: [
-    IdeaRepository
+    IdeaRepository,
+    ApplyRepository
   ]
 })
 export class IdeaModule {}
