@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Param, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ResponseInterceptor } from '../../../core/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
@@ -28,7 +28,6 @@ export class UserQueryV1Controller {
     @Req() req,
     @Param('userId') userId: number
   ): Promise<ResponseDto<any>> {
-    Logger.log("!!!!!!!!!여기!!!!!!!!!!!!!!!!!!!!");
     return ResponseDto.ok(await this.readUserDetailUseCase.execute(req.user.id, userId));
   }
 }

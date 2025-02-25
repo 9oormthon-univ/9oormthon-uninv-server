@@ -93,8 +93,6 @@ export class AuthController {
 
   /**
    * 1.4 회원가입 일괄처리
-   * @param req
-   * @param file
    */
   @Post('/auth/sign-up')
   @UseInterceptors(FileInterceptor('file'))

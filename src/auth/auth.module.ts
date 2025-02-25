@@ -15,11 +15,13 @@ import { SignUpService } from './application/service/sign-up.service';
 import { SignUpAdminService } from './application/service/sign-up-admin.service';
 import { ChangePasswordService } from './application/service/change-password.service';
 import { IdeaModule } from '../idea/idea.module';
+import { TeamModule } from '../team/team.module';
 
 @Module({
   imports: [
     UserModule,
     IdeaModule,
+    TeamModule,
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
