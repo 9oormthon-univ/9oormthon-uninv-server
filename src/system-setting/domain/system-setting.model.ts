@@ -60,6 +60,26 @@ export class SystemSettingModel {
       throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
     }
   }
+
+  public validateDeleteApplyPeriod(phase: number): void {
+    if (this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING || this.getWhichPeriod() !== EPeriod.PHASE2_TEAM_BUILDING || this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING) {
+      throw new CommonException(ErrorCode.NOT_APPLY_DELETE_PERIOD_ERROR);
+    }
+
+    if (this.getWhichPeriod() !== EPeriod.fromPhase(phase)) {
+      throw new CommonException(ErrorCode.NOT_APPLY_DELETE_PERIOD_ERROR);
+    }
+  }
+
+  public validateAcceptOrRejectApplyPeriod(phase: number): void {
+    if (this.getWhichPeriod() !== EPeriod.PHASE1_CONFIRMATION || this.getWhichPeriod() !== EPeriod.PHASE2_CONFIRMATION || this.getWhichPeriod() !== EPeriod.PHASE3_CONFIRMATION) {
+      throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
+    }
+
+    if (this.getWhichPeriod() !== EPeriod.fromPhase(phase)) {
+      throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
+    }
+  }
 }
 
 

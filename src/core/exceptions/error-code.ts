@@ -56,6 +56,10 @@ export class ErrorCode {
   static readonly NOT_PROVIDER_ERROR = new ErrorCode(40026, HttpStatus.BAD_REQUEST, "아이디어의 제시자가 아닙니다.");
   static readonly NOT_MATCH_IDEA_ERROR = new ErrorCode(40027, HttpStatus.BAD_REQUEST, "해당 아이디어의 제시자와 일치하는 유저가 아닙니다.");
   static readonly APPLY_STATUS_ERROR = new ErrorCode(40028, HttpStatus.BAD_REQUEST, "지원 상태가 올바르지 않습니다.");
+  static readonly NOT_MATCH_USER_ERROR = new ErrorCode(40029, HttpStatus.BAD_REQUEST, "해당 유저와 일치하는 지원 정보가 아닙니다.");
+  static readonly NOT_APPLY_DELETE_PERIOD_ERROR = new ErrorCode(40030, HttpStatus.BAD_REQUEST, "지원 취소 기간이 아닙니다.");
+  static readonly NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR = new ErrorCode(40031, HttpStatus.BAD_REQUEST, "지원 수락 또는 거절 기간이 아닙니다.");
+  static readonly NOT_IDEA_VIEWS_PERIOD_ERROR = new ErrorCode(40032, HttpStatus.BAD_REQUEST, "아이디어 조회 기간이 아닙니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
