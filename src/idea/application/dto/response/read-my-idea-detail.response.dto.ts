@@ -71,25 +71,54 @@ export class RoleRequirementDto {
   max_count: number;
   required_tech_stacks?: string[];
   current_members: CurrentMemberDto[];
+  ratio: string;
 
-  constructor(requirement: string | null, current_count: number, max_count: number, requiredTechStacks: string[], currentMembers: CurrentMemberDto[]) {
+  constructor(requirement: string | null, current_count: number, max_count: number, requiredTechStacks: string[], currentMembers: CurrentMemberDto[], ratio: string) {
     this.requirement = requirement;
     this.current_count = current_count;
     this.max_count = max_count;
     this.required_tech_stacks = requiredTechStacks;
     this.current_members = currentMembers;
+    this.ratio = ratio;
   }
 
   static of(idea: IdeaModel, team: TeamModel, role: ERole) : RoleRequirementDto {
     switch (role) {
       case ERole.PM:
-        return new RoleRequirementDto(idea.pmRequirement, team.members.filter((member) => member.role === ERole.PM).length, team.pmCapacity, idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(
+          idea.pmRequirement,
+          team.members.filter((member) => member.role === ERole.PM).length,
+          team.pmCapacity,
+          idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member.user)),
+          team.members.filter((member) => member.role === ERole.PM).length / team.pmCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.PM).length / team.pmCapacity).toFixed(2).toString() : '0'
+        );
       case ERole.PD:
-        return new RoleRequirementDto(idea.pdRequirement, team.members.filter((member) => member.role === ERole.PD).length, team.pdCapacity, idea.pdRequiredTechStacks, team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(
+          idea.pdRequirement,
+          team.members.filter((member) => member.role === ERole.PD).length,
+          team.pdCapacity,
+          idea.pdRequiredTechStacks,
+          team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member.user)),
+          team.members.filter((member) => member.role === ERole.PD).length / team.pdCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.PD).length / team.pdCapacity).toFixed(2).toString() : '0'
+        );
       case ERole.FE:
-        return new RoleRequirementDto(idea.feRequirement, team.members.filter((member) => member.role === ERole.FE).length, team.feCapacity, idea.feRequiredTechStacks, team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(
+          idea.feRequirement,
+          team.members.filter((member) => member.role === ERole.FE).length,
+          team.feCapacity,
+          idea.feRequiredTechStacks,
+          team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member.user)),
+          team.members.filter((member) => member.role === ERole.FE).length / team.feCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.FE).length / team.feCapacity).toFixed(2).toString() : '0'
+        );
       case ERole.BE:
-        return new RoleRequirementDto(idea.beRequirement, team.members.filter((member) => member.role === ERole.BE).length, team.beCapacity, idea.beRequiredTechStacks, team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member.user)));
+        return new RoleRequirementDto(
+          idea.beRequirement,
+          team.members.filter((member) => member.role === ERole.BE).length,
+          team.beCapacity,
+          idea.beRequiredTechStacks,
+          team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member.user)),
+          team.members.filter((member) => member.role === ERole.BE).length / team.beCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.BE).length / team.beCapacity).toFixed(2).toString() : '0'
+        );
       default:
         throw new CommonException(ErrorCode.NOT_FOUND_ENUM);
     }
