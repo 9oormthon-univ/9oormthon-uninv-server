@@ -1,0 +1,115 @@
+import { UserModel } from '../../../../user/domain/user.model';
+import { TeamModel } from '../../../domain/team.model';
+import { MemberModel } from '../../../domain/member.model';
+
+export class MemberDto {
+  id: number;
+  name: string;
+  img_url: string;
+
+  constructor(id: number, name: string, img_url: string) {
+    this.id = id;
+    this.name = name;
+    this.img_url = img_url;
+  }
+
+  static from(member: MemberModel): MemberDto {
+    return new MemberDto(member.user.id, member.user.name, member.user.imgUrl);
+  }
+}
+
+export class BEInfoDto {
+  max_count: number;
+  current_count: number;
+  members: MemberDto[];
+
+  constructor(max_count: number, current_count: number, members: MemberDto[]) {
+    this.max_count = max_count;
+    this.current_count = current_count;
+    this.members = members;
+  }
+
+  static from(team: TeamModel): BEInfoDto {
+    return new BEInfoDto(team.beCapacity, team.members.filter(member => member.role === 'BE').length, team.members.filter(member => member.role === 'BE').map(MemberDto.from));
+  }
+}
+
+export class FEInfoDto {
+  max_count: number;
+  current_count: number;
+  members: MemberDto[];
+
+  constructor(max_count: number, current_count: number, members: MemberDto[]) {
+    this.max_count = max_count;
+    this.current_count = current_count;
+    this.members = members;
+  }
+
+  static from(team: TeamModel): FEInfoDto {
+    return new FEInfoDto(team.feCapacity, team.members.filter(member => member.role === 'FE').length, team.members.filter(member => member.role === 'FE').map(MemberDto.from));
+  }
+}
+
+export class PDInfoDto {
+  max_count: number;
+  current_count: number;
+  members: MemberDto[];
+
+  constructor(max_count: number, current_count: number, members: MemberDto[]) {
+    this.max_count = max_count;
+    this.current_count = current_count;
+    this.members = members;
+  }
+
+  static from(team: TeamModel): PDInfoDto {
+    return new PDInfoDto(team.pdCapacity, team.members.filter(member => member.role === 'PD').length, team.members.filter(member => member.role === 'PD').map(MemberDto.from));
+  }
+}
+
+export class PMInfoDto {
+  max_count: number;
+  current_count: number;
+  members: MemberDto[];
+
+  constructor(max_count: number, current_count: number, members: MemberDto[]) {
+    this.max_count = max_count;
+    this.current_count = current_count;
+    this.members = members;
+  }
+
+  static from(team: TeamModel): PMInfoDto {
+    return new PMInfoDto(team.pmCapacity, team.members.filter(member => member.role === 'PM').length, team.members.filter(member => member.role === 'PM').map(MemberDto.from));
+  }
+}
+
+export class RoleDto {
+  be: BEInfoDto;
+  fe: FEInfoDto;
+  pd: PDInfoDto;
+  pm: PMInfoDto;
+
+  constructor(be: BEInfoDto, fe: FEInfoDto, pd: PDInfoDto, pm: PMInfoDto) {
+    this.be = be;
+    this.fe = fe;
+    this.pd = pd;
+    this.pm = pm;
+  }
+
+  static of(be: BEInfoDto, fe: FEInfoDto, pd: PDInfoDto, pm: PMInfoDto): RoleDto {
+    return new RoleDto(be, fe, pd, pm);
+  }
+}
+
+export class ReadTeamDetailResponseDto {
+  name: string;
+  role: RoleDto;
+
+  constructor(name: string, role: RoleDto) {
+    this.name = name;
+    this.role = role;
+  }
+
+  static from(team: TeamModel): ReadTeamDetailResponseDto {
+    return new ReadTeamDetailResponseDto(team.name, RoleDto.of(BEInfoDto.from(team), FEInfoDto.from(team), PDInfoDto.from(team), PMInfoDto.from(team)));
+  }
+}
