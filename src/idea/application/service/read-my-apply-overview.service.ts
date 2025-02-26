@@ -28,7 +28,8 @@ export class ReadMyApplyOverviewService {
             return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.BE, manager) / apply.idea.team.beCapacity).toFixed(2).toString());
         }
       });
-      return ReadMyApplyOverviewResponseDto.of(await Promise.all(applyDtoList));
+      const result = await Promise.all(applyDtoList);
+      return ReadMyApplyOverviewResponseDto.of(result.length !== 0 ? result : null);
     });
   }
 }
