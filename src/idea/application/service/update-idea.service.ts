@@ -55,17 +55,6 @@ export class UpdateIdeaService {
       )
       this.ideaRepository.save(updatedIdea, manager)
 
-      // 아이디어 제시자의 역할이 바뀌었다면, member 도 수정
-      const member = await this.memberRepository.findByUserIdAndGeneration(userId, idea.generation, manager);
-      if(!member) {
-        throw new CommonException(ErrorCode.NOT_FOUND_MEMBER);
-      }
-
-      if(member.role !== requestDto.ideaInfo.providerRole) {
-        const updatedMember = member.changeRole(requestDto.ideaInfo.providerRole);
-        this.memberRepository.save(updatedMember, manager);
-      }
-
       // 팀 조회
       const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
       if(!team) {
@@ -80,6 +69,19 @@ export class UpdateIdeaService {
         requestDto.requirements.be.capacity
       )
       this.teamRepository.save(updatedTeam, manager);
+
+      // 아이디어 제시자의 역할이 바뀌었다면, member 도 수정
+      const member = await this.memberRepository.findByUserIdAndGeneration(userId, idea.generation, manager);
+      if(!member) {
+        throw new CommonException(ErrorCode.NOT_FOUND_MEMBER);
+      }
+
+      if(member.role !== requestDto.ideaInfo.providerRole) {
+        // 바꾸려는 직군에 빈 자리가 있는지 확인
+        updatedTeam.validateTeamCapacityLimits(requestDto.ideaInfo.providerRole);
+        const updatedMember = member.changeRole(requestDto.ideaInfo.providerRole);
+        this.memberRepository.save(updatedMember, manager);
+      }
     });
   }
 
