@@ -7,39 +7,13 @@ import { ERole } from '../../core/enums/role.enum';
 export class ApplyRepository {
   constructor(private readonly dataSource: DataSource) {}
 
-  async findAllByUserId(userId: number, manager?: EntityManager): Promise<ApplyModel[]> {
-    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
-
-    const entities = await repo.find(
-      {
-        where: { user: { id: userId } },
-        relations: ['provider', 'ideaSubject']
-      }
-    );
-
-    return ApplyMapper.toDomains(entities);
-  }
-
-  async findAllByIdeaId(ideaId: number, manager?: EntityManager): Promise<ApplyModel[]> {
-    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
-
-    const entities = await repo.find(
-      {
-        where: { idea: { id: ideaId } },
-        relations: ['provider', 'ideaSubject']
-      }
-    );
-
-    return ApplyMapper.toDomains(entities);
-  }
-
   async findById(id: number, manager?: EntityManager): Promise<ApplyModel | null> {
     const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
 
     const entity = await repo.findOne(
       {
         where: { id },
-        relations: ['provider', 'ideaSubject']
+        relations: ['user', 'idea.provider', 'idea.ideaSubject']
       }
     );
 

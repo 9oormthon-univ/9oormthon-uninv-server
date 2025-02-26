@@ -25,6 +25,7 @@ export class ErrorCode {
   static readonly NOT_FOUND_IDEA_SUBJECT = new ErrorCode(40409, HttpStatus.NOT_FOUND, "해당 아이디어 주제를 찾을 수 없습니다.");
   static readonly NOT_FOUND_SYSTEM_SETTING = new ErrorCode(40410, HttpStatus.NOT_FOUND, "시스템 설정을 찾을 수 없습니다.");
   static readonly NOT_FOUND_MEMBER = new ErrorCode(40411, HttpStatus.NOT_FOUND, "해당 멤버를 찾을 수 없습니다.");
+  static readonly NOT_FOUND_APPLY = new ErrorCode(40412, HttpStatus.NOT_FOUND, "해당 지원 정보를 찾을 수 없습니다.");
 
   // Invalid Argument Error
   static readonly MISSING_REQUEST_PARAMETER = new ErrorCode(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다.");
@@ -53,6 +54,8 @@ export class ErrorCode {
   static readonly DUPLICATED_PREFERENCE_ERROR = new ErrorCode(40024, HttpStatus.BAD_REQUEST, "이미 지원한 지망 순번입니다.");
   static readonly MIN_TOTAL_CAPACITY_ERROR = new ErrorCode(40025, HttpStatus.BAD_REQUEST, "팀원 수는 3명 이상이어야 합니다.");
   static readonly NOT_PROVIDER_ERROR = new ErrorCode(40026, HttpStatus.BAD_REQUEST, "아이디어의 제시자가 아닙니다.");
+  static readonly NOT_MATCH_IDEA_ERROR = new ErrorCode(40027, HttpStatus.BAD_REQUEST, "해당 아이디어의 제시자와 일치하는 유저가 아닙니다.");
+  static readonly APPLY_STATUS_ERROR = new ErrorCode(40028, HttpStatus.BAD_REQUEST, "지원 상태가 올바르지 않습니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
