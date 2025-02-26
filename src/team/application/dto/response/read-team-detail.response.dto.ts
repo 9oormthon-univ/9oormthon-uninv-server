@@ -30,7 +30,7 @@ export class BEInfoDto {
   }
 
   static from(team: TeamModel): BEInfoDto {
-    return new BEInfoDto(team.beCapacity, team.members.filter(member => member.role === 'BE').length, team.members.filter(member => member.role === 'BE').map(MemberDto.from));
+    return new BEInfoDto(team.beCapacity, team.members.filter(member => member.role === 'BE').length, team.members.filter(member => member.role === 'BE').length !== 0 ? team.members.filter(member => member.role === 'BE').map(MemberDto.from): null);
   }
 }
 
@@ -46,7 +46,7 @@ export class FEInfoDto {
   }
 
   static from(team: TeamModel): FEInfoDto {
-    return new FEInfoDto(team.feCapacity, team.members.filter(member => member.role === 'FE').length, team.members.filter(member => member.role === 'FE').map(MemberDto.from));
+    return new FEInfoDto(team.feCapacity, team.members.filter(member => member.role === 'FE').length, team.members.filter(member => member.role === 'FE').length !== 0 ? team.members.filter(member => member.role === 'FE').map(MemberDto.from) : null);
   }
 }
 
@@ -62,7 +62,7 @@ export class PDInfoDto {
   }
 
   static from(team: TeamModel): PDInfoDto {
-    return new PDInfoDto(team.pdCapacity, team.members.filter(member => member.role === 'PD').length, team.members.filter(member => member.role === 'PD').map(MemberDto.from));
+    return new PDInfoDto(team.pdCapacity, team.members.filter(member => member.role === 'PD').length, team.members.filter(member => member.role === 'PD').length !== 0 ? team.members.filter(member => member.role === 'PD').map(MemberDto.from) : null);
   }
 }
 
@@ -78,7 +78,7 @@ export class PMInfoDto {
   }
 
   static from(team: TeamModel): PMInfoDto {
-    return new PMInfoDto(team.pmCapacity, team.members.filter(member => member.role === 'PM').length, team.members.filter(member => member.role === 'PM').map(MemberDto.from));
+    return new PMInfoDto(team.pmCapacity, team.members.filter(member => member.role === 'PM').length, team.members.filter(member => member.role === 'PM').length !== 0 ? team.members.filter(member => member.role === 'PM').map(MemberDto.from) : null);
   }
 }
 
