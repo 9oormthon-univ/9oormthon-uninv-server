@@ -1,3 +1,3 @@
 ### 4.1 팀 정보 조회
 // @no-log
-GET {{host_url}}/api/v1/users/teams/1/details
+GET {{host_url}}/api/v1/users/teams/details?generation=4
