@@ -6,8 +6,9 @@ import { TeamRepository } from './repository/team.repository';
 import { MemberEntity } from '../core/infra/entities/member.entity';
 import { MemberRepository } from './repository/member.repository';
 import { ProjectEntity } from '../core/infra/entities/project.entity';
-import { TeamQueryV1Controller } from './controller/query/team-query-v1.controller';
+import { UserTeamQueryV1Controller } from './controller/query/user-team-query-v1.controller';
 import { TeamCommandV1Controller } from './controller/command/team-command-v1.controller';
+import { ReadTeamDetailService } from './application/service/read-team-detail.service';
 
 @Module({
   imports: [
@@ -20,10 +21,11 @@ import { TeamCommandV1Controller } from './controller/command/team-command-v1.co
       ]
     )
   ],
-  controllers: [TeamQueryV1Controller, TeamCommandV1Controller],
+  controllers: [UserTeamQueryV1Controller, TeamCommandV1Controller],
   providers: [
     TeamRepository,
-    MemberRepository
+    MemberRepository,
+    ReadTeamDetailService
   ],
   exports: [TeamRepository, MemberRepository]
 })
