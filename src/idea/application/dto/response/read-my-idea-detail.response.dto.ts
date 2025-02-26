@@ -9,15 +9,17 @@ export class ProviderInfoDto {
   id: number;
   name: string;
   univ: string;
+  is_provider: boolean;
 
-  constructor(id: number, name: string, univ: string) {
+  constructor(id: number, name: string, univ: string, isProvider: boolean) {
     this.id = id;
     this.name = name;
     this.univ = univ;
+    this.is_provider = isProvider;
   }
 
-  static from(model: UserModel): ProviderInfoDto {
-    return new ProviderInfoDto(model.id, model.name, model.univ.name);
+  static of(model: UserModel, isProvider: boolean): ProviderInfoDto {
+    return new ProviderInfoDto(model.id, model.name, model.univ.name, isProvider);
   }
 }
 
@@ -121,21 +123,18 @@ export class ReadMyIdeaDetailResponseDto {
   provider_info: ProviderInfoDto;
   idea_info: IdeaInfoDto;
   requirements: RequirementsDto;
-  is_provider: boolean;
 
-  constructor(providerInfo: ProviderInfoDto, ideaInfo: IdeaInfoDto, requirements: RequirementsDto, isProvider: boolean) {
+  constructor(providerInfo: ProviderInfoDto, ideaInfo: IdeaInfoDto, requirements: RequirementsDto) {
     this.provider_info = providerInfo;
     this.idea_info = ideaInfo;
     this.requirements = requirements;
-    this.is_provider = isProvider;
   }
 
   static of(user: UserModel, idea: IdeaModel, team: TeamModel, isActive: boolean, isBookmarked: boolean): ReadMyIdeaDetailResponseDto {
     return new ReadMyIdeaDetailResponseDto(
-      ProviderInfoDto.from(idea.provider),
+      ProviderInfoDto.of(idea.provider, user.id === idea.provider.id),
       IdeaInfoDto.of(idea, isBookmarked, isActive),
-      RequirementsDto.of(idea, team),
-      user.id === idea.provider.id
+      RequirementsDto.of(idea, team)
     );
   }
 }
