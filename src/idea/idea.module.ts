@@ -27,6 +27,7 @@ import { ReadRemainPreferenceBriefService } from './application/service/read-rem
 import { UpdateIdeaService } from './application/service/update-idea.service';
 import { ReadMyApplyOverviewService } from './application/service/read-my-apply-overview.service';
 import { MemberRepository } from '../team/repository/member.repository';
+import { ReadTeamApplyOverviewService } from './application/service/read-team-apply-overview.service';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { MemberRepository } from '../team/repository/member.repository';
     ReadRemainPreferenceBriefService,
     ReadMyApplyOverviewService,
     UpdateIdeaService,
+    ReadTeamApplyOverviewService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,

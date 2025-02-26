@@ -102,14 +102,16 @@ export class RoleDto {
 
 export class ReadTeamDetailResponseDto {
   name: string;
+  number: number;
   role: RoleDto;
 
-  constructor(name: string, role: RoleDto) {
+  constructor(name: string, number: number, role: RoleDto) {
     this.name = name;
+    this.number = number;
     this.role = role;
   }
 
   static from(team: TeamModel): ReadTeamDetailResponseDto {
-    return new ReadTeamDetailResponseDto(team.name, RoleDto.of(BEInfoDto.from(team), FEInfoDto.from(team), PDInfoDto.from(team), PMInfoDto.from(team)));
+    return new ReadTeamDetailResponseDto(team.name, team.number, RoleDto.of(BEInfoDto.from(team), FEInfoDto.from(team), PDInfoDto.from(team), PMInfoDto.from(team)));
   }
 }
