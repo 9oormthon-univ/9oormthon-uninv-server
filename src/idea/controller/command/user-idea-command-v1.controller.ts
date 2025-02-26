@@ -1,7 +1,7 @@
 import {
   Body,
   Controller,
-  Param,
+  Param, Patch,
   Post, Put,
   Req,
   UseFilters,
@@ -20,8 +20,10 @@ import { CreateApplyRequestDto } from '../../application/dto/request/create-appl
 import { CreateOrDeleteBookmarkService } from '../../application/service/create-or-delete-bookmark.service';
 import { UpdateIdeaService } from '../../application/service/update-idea.service';
 import { UpdateIdeaRequestDto } from '../../application/dto/request/update-idea.request.dto';
+import { AcceptApplyService } from '../../application/service/accept-apply.service';
+import { RejectApplyService } from '../../application/service/reject-apply.service';
 
-@Controller('/api/v1/users/ideas')
+@Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
 @UseFilters(HttpExceptionFilter)
 export class UserIdeaCommandV1Controller {
@@ -30,12 +32,14 @@ export class UserIdeaCommandV1Controller {
     private readonly createApplyUseCase: CreateApplyService,
     private readonly createOrDeleteBookmarkUseCase: CreateOrDeleteBookmarkService,
     private readonly updateIdeaUseCase: UpdateIdeaService,
+    private readonly acceptApplyUseCase: AcceptApplyService,
+    private readonly rejectApplyUseCase: RejectApplyService,
   ) {}
 
   /**
    * 3.1 아이디어 생성
    */
-  @Post()
+  @Post('ideas')
   @UseGuards(JwtAuthGuard)
   async createIdea(
     @Req() req,
@@ -48,7 +52,7 @@ export class UserIdeaCommandV1Controller {
   /**
    * 3.4 아이디어 지원
    */
-  @Post(':id/applies')
+  @Post('ideas/:id/applies')
   @UseGuards(JwtAuthGuard)
   async createApply(
     @Req() req,
@@ -62,7 +66,7 @@ export class UserIdeaCommandV1Controller {
   /**
    * 3.5 북마크 토글(생성 or 삭제)
    */
-  @Post(':id/bookmarks')
+  @Post('ideas/:id/bookmarks')
   @UseGuards(JwtAuthGuard)
   async createOrDeleteBookmark(
     @Req() req,
@@ -73,9 +77,9 @@ export class UserIdeaCommandV1Controller {
   }
 
   /**
-   * 3.12 아이디어 기본 정보 수정
+   * 3.13 아이디어 수정
    */
-  @Put(':id')
+  @Put('ideas/:id')
   @UseGuards(JwtAuthGuard)
   async updateDefaultInfo(
     @Req() req,
@@ -83,6 +87,32 @@ export class UserIdeaCommandV1Controller {
     @Body(new ValidationPipe({ transform: true })) requestDto: UpdateIdeaRequestDto
   ): Promise<ResponseDto<any>> {
     await this.updateIdeaUseCase.execute(req.user.id, id, requestDto);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 3.14 지원 수락
+   */
+  @Patch('applies/:id/accept')
+  @UseGuards(JwtAuthGuard)
+  async acceptApply(
+    @Req() req,
+    @Param('id') id: number
+  ): Promise<ResponseDto<any>> {
+    await this.acceptApplyUseCase.execute(req.user.id, id);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 3.15 지원 거절
+   */
+  @Patch('applies/:id/reject')
+  @UseGuards(JwtAuthGuard)
+  async rejectApply(
+    @Req() req,
+    @Param('id') id: number
+  ): Promise<ResponseDto<any>> {
+    await this.rejectApplyUseCase.execute(req.user.id, id);
     return ResponseDto.ok(null);
   }
 }

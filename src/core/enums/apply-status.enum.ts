@@ -1,6 +1,6 @@
 export enum EApplyStatus {
   WAITING = 'WAITING',
-  APPROVED = 'APPROVED',
+  ACCEPTED = 'ACCEPTED',
   REJECTED = 'REJECTED',
   CANCELED = 'CANCELED'
 }

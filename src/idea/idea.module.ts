@@ -28,6 +28,8 @@ import { UpdateIdeaService } from './application/service/update-idea.service';
 import { ReadMyApplyOverviewService } from './application/service/read-my-apply-overview.service';
 import { MemberRepository } from '../team/repository/member.repository';
 import { ReadTeamApplyOverviewService } from './application/service/read-team-apply-overview.service';
+import { AcceptApplyService } from './application/service/accept-apply.service';
+import { RejectApplyService } from './application/service/reject-apply.service';
 
 @Module({
   imports: [
@@ -60,6 +62,8 @@ import { ReadTeamApplyOverviewService } from './application/service/read-team-ap
     ReadMyApplyOverviewService,
     UpdateIdeaService,
     ReadTeamApplyOverviewService,
+    AcceptApplyService,
+    RejectApplyService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,

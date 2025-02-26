@@ -2,6 +2,8 @@ import { EApplyStatus } from '../../core/enums/apply-status.enum';
 import { ERole } from '../../core/enums/role.enum';
 import { UserModel } from '../../user/domain/user.model';
 import { IdeaModel } from './idea.model';
+import { CommonException } from '../../core/exceptions/common.exception';
+import { ErrorCode } from '../../core/exceptions/error-code';
 
 export class ApplyModel {
   constructor(
@@ -35,6 +37,40 @@ export class ApplyModel {
       user,
       idea,
       new Date()
+    );
+  }
+
+  public accept(): ApplyModel {
+    if (this.status !== EApplyStatus.WAITING) {
+      throw new CommonException(ErrorCode.APPLY_STATUS_ERROR);
+    }
+    return new ApplyModel(
+      this.id,
+      this.phase,
+      EApplyStatus.ACCEPTED,
+      this.preference,
+      this.motivation,
+      this.role,
+      this.user,
+      this.idea,
+      this.createdAt
+    );
+  }
+
+  public reject(): ApplyModel {
+    if (this.status !== EApplyStatus.WAITING) {
+      throw new CommonException(ErrorCode.APPLY_STATUS_ERROR);
+    }
+    return new ApplyModel(
+      this.id,
+      this.phase,
+      EApplyStatus.REJECTED,
+      this.preference,
+      this.motivation,
+      this.role,
+      this.user,
+      this.idea,
+      this.createdAt
     );
   }
 }
