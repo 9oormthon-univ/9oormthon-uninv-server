@@ -23,9 +23,7 @@ export class ReadCurrentPeriodService {
       }
 
       // 현재 기간 반환
-      return ReadCurrentPeriodResponseDto.of(
-        systemSetting.getWhichPeriod()
-      );
+      return ReadCurrentPeriodResponseDto.from(systemSetting);
     });
   }
 }

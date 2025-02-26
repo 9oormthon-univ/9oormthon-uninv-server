@@ -8,6 +8,8 @@ import { ReadIdeaDetailResponseDto } from '../dto/response/read-idea-detail.resp
 import { ReadMyIdeaDetailResponseDto } from '../dto/response/read-my-idea-detail.response.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
+import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
+import { EPeriod } from '../../../core/enums/period.enum';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -16,11 +18,23 @@ export class ReadIdeaDetailService {
     private readonly ideaRepository: IdeaRepository,
     private readonly teamRepository: TeamRepository,
     private readonly userRepository: UserRepository,
+    private readonly systemSettingRepository: SystemSettingRepository,
     private readonly dataSource: DataSource
   ) {}
 
   async execute(userId: number, ideaId: number): Promise<ReadIdeaDetailResponseDto> {
     return this.dataSource.transaction(async (manager) => {
+
+      // 시스템 설정 조회
+      const systemSetting = await this.systemSettingRepository.findFirst(manager);
+      if (!systemSetting) {
+        throw new CommonException(ErrorCode.NOT_FOUND_SYSTEM_SETTING);
+      }
+
+      // 아이디어 조회 기간인지 확인
+      if (systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION) {
+        throw new CommonException(ErrorCode.NOT_IDEA_VIEWS_PERIOD_ERROR);
+      }
 
       // 유저 조회
       const user = await this.userRepository.findByIdWithUniv(userId, manager);

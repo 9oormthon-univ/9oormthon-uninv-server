@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Param, Patch,
   Post, Put,
   Req,
@@ -22,6 +22,7 @@ import { UpdateIdeaService } from '../../application/service/update-idea.service
 import { UpdateIdeaRequestDto } from '../../application/dto/request/update-idea.request.dto';
 import { AcceptApplyService } from '../../application/service/accept-apply.service';
 import { RejectApplyService } from '../../application/service/reject-apply.service';
+import { CancelApplyService } from '../../application/service/cancel-apply.service';
 
 @Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
@@ -34,6 +35,7 @@ export class UserIdeaCommandV1Controller {
     private readonly updateIdeaUseCase: UpdateIdeaService,
     private readonly acceptApplyUseCase: AcceptApplyService,
     private readonly rejectApplyUseCase: RejectApplyService,
+    private readonly cancelApplyUseCase: CancelApplyService,
   ) {}
 
   /**
@@ -113,6 +115,19 @@ export class UserIdeaCommandV1Controller {
     @Param('id') id: number
   ): Promise<ResponseDto<any>> {
     await this.rejectApplyUseCase.execute(req.user.id, id);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 3.16 지원 삭제(지원 취소)
+   */
+  @Delete('applies/:id')
+  @UseGuards(JwtAuthGuard)
+  async cancelApply(
+    @Req() req,
+    @Param('id') id: number
+  ): Promise<ResponseDto<any>> {
+    await this.cancelApplyUseCase.execute(req.user.id, id);
     return ResponseDto.ok(null);
   }
 }

@@ -139,8 +139,12 @@ Content-Type: application/json
 
 ### 3.14 지원 수락
 //@no-log
-PATCH {{host_url}}/api/v1/users/applies/2/accept
+PATCH {{host_url}}/api/v1/users/applies/3/accept
 
 ### 3.15 지원 거절
 //@no-log
-PATCH {{host_url}}/api/v1/users/applies/2/reject
+PATCH {{host_url}}/api/v1/users/applies/3/reject
+
+### 3.17 지원 삭제(지원 취소)
+//@no-log
+DELETE {{host_url}}/api/v1/users/applies/3

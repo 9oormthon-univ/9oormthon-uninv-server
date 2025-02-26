@@ -30,6 +30,7 @@ import { MemberRepository } from '../team/repository/member.repository';
 import { ReadTeamApplyOverviewService } from './application/service/read-team-apply-overview.service';
 import { AcceptApplyService } from './application/service/accept-apply.service';
 import { RejectApplyService } from './application/service/reject-apply.service';
+import { CancelApplyService } from './application/service/cancel-apply.service';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { RejectApplyService } from './application/service/reject-apply.service';
     ReadTeamApplyOverviewService,
     AcceptApplyService,
     RejectApplyService,
+    CancelApplyService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,
