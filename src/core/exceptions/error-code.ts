@@ -52,7 +52,7 @@ export class ErrorCode {
   static readonly NOT_IDEA_APPLY_PERIOD_ERROR = new ErrorCode(40023, HttpStatus.BAD_REQUEST, "아이디어 지원 기간이 아닙니다.");
   static readonly DUPLICATED_PREFERENCE_ERROR = new ErrorCode(40024, HttpStatus.BAD_REQUEST, "이미 지원한 지망 순번입니다.");
   static readonly MIN_TOTAL_CAPACITY_ERROR = new ErrorCode(40025, HttpStatus.BAD_REQUEST, "팀원 수는 3명 이상이어야 합니다.");
-  static readonly NOT_PROVIDER_ERROR = new ErrorCode(40026, HttpStatus.BAD_REQUEST, "본 아이디어의 제시자가 아닙니다.");
+  static readonly NOT_PROVIDER_ERROR = new ErrorCode(40026, HttpStatus.BAD_REQUEST, "아이디어의 제시자가 아닙니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");

@@ -82,7 +82,7 @@ GET {{host_url}}/api/v1/users/ideas/details
 
 ### 3.8 아이디어 상세 조회
 //@no-log
-GET {{host_url}}/api/v1/users/ideas/5/details
+GET {{host_url}}/api/v1/users/ideas/1/details
 
 ### 3.9 아이디어 주제 간단 리스트 조회
 //@no-log
@@ -96,7 +96,11 @@ GET {{host_url}}/api/v1/users/applies/overviews?generation=4&phase=1
 //@no-log
 GET {{host_url}}/api/v1/users/applies/briefs?generation=4&phase=1
 
-### 3.12 아이디어 수정
+### 3.12 아이디어에 대한 지원 현황 리스트 조회
+//@no-log
+GET {{host_url}}/api/v1/users/teams/applies/overviews?generation=4&phase=1
+
+### 3.13 아이디어 수정
 //@no-log
 PUT {{host_url}}/api/v1/users/ideas/1
 Content-Type: application/json

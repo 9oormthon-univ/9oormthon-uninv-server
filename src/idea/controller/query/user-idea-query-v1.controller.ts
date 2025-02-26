@@ -22,6 +22,9 @@ import { ReadRemainPreferenceBriefRequestDto } from '../../application/dto/reque
 import { ReadRemainPreferenceBriefResponseDto } from '../../application/dto/response/read-remain-preference-brief.response.dto';
 import { ReadMyApplyOverviewService } from '../../application/service/read-my-apply-overview.service';
 import { ReadMyApplyOverviewRequestDto } from '../../application/dto/request/read-my-apply-overview.request.dto';
+import { ReadTeamApplyOverviewRequestDto } from '../../application/dto/request/read-team-apply-overview.request.dto';
+import { ReadTeamApplyOverviewService } from '../../application/service/read-team-apply-overview.service';
+import { ReadTeamApplyOverviewResponseDto } from '../../application/dto/response/read-team-apply-overview.response.dto';
 
 @Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
@@ -33,6 +36,7 @@ export class UserIdeaQueryV1Controller {
     private readonly readIdeaDetailUseCase: ReadIdeaDetailService,
     private readonly readRemainPreferenceBriefUseCase: ReadRemainPreferenceBriefService,
     private readonly readMyApplyOverviewUseCase: ReadMyApplyOverviewService,
+    private readonly readTeamApplyOverviewUseCase: ReadTeamApplyOverviewService
   ) {}
 
   /**
@@ -122,5 +126,17 @@ export class UserIdeaQueryV1Controller {
         query
       )
     );
+  }
+
+  /**
+   * 3.12 아이디어에 대한 지원 현황 리스트 조회
+   */
+  @Get('teams/applies/overviews')
+  @UseGuards(JwtAuthGuard)
+  async readTeamApplyOverview(
+    @Req() req,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadTeamApplyOverviewRequestDto,
+  ): Promise<ResponseDto<ReadTeamApplyOverviewResponseDto>> {
+    return ResponseDto.ok(await this.readTeamApplyOverviewUseCase.execute(req.user.id, query.generation, query.phase));
   }
 }
