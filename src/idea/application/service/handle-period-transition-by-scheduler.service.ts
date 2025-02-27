@@ -45,17 +45,17 @@ export class HandlePeriodTransitionBySchedulerService {
 
       // Phase1ConfirmationEnd의 하루 뒤인 경우
       if (isDayAfter(systemSetting.phase1ConfirmationEnd)) {
-        await this.processConfirmationTransition(4, 1, manager);
+        await this.processConfirmationTransition(Number(process.env.GENERATION), 1, manager);
       }
 
       // Phase2ConfirmationEnd의 하루 뒤인 경우
       if (isDayAfter(systemSetting.phase2ConfirmationEnd)) {
-        await this.processConfirmationTransition(4, 2, manager);
+        await this.processConfirmationTransition(Number(process.env.GENERATION), 2, manager);
       }
 
       // Phase3ConfirmationEnd의 하루 뒤인 경우
       if (isDayAfter(systemSetting.phase3ConfirmationEnd)) {
-        await this.processConfirmationTransition(4, 3, manager);
+        await this.processConfirmationTransition(Number(process.env.GENERATION), 3, manager);
       }
 
       this.logger.log('------------기간 전환 처리 완료. 로직 처리 이후, ' + systemSetting.getWhichPeriod() + '로 변경됨. ------------');
