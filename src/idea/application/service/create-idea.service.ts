@@ -73,7 +73,7 @@ export class CreateIdeaService {
 
       // 팀 생성
       const team = TeamModel.createTeam(
-        null,
+        '팀 이름',
         null,
         idea.generation,
         requestDto.requirements.pm.capacity,
