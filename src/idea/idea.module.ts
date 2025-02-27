@@ -26,14 +26,18 @@ import { SystemSettingModule } from '../system-setting/system-setting.module';
 import { ReadRemainPreferenceBriefService } from './application/service/read-remain-preference-brief.service';
 import { UpdateIdeaService } from './application/service/update-idea.service';
 import { ReadMyApplyOverviewService } from './application/service/read-my-apply-overview.service';
-import { MemberRepository } from '../team/repository/member.repository';
 import { ReadTeamApplyOverviewService } from './application/service/read-team-apply-overview.service';
 import { AcceptApplyService } from './application/service/accept-apply.service';
 import { RejectApplyService } from './application/service/reject-apply.service';
 import { CancelApplyService } from './application/service/cancel-apply.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import {
+  HandlePeriodTransitionBySchedulerService
+} from './application/service/handle-period-transition-by-scheduler.service';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     DatabaseModule,
     TypeOrmModule.forFeature(
       [IdeaEntity]
@@ -50,6 +54,7 @@ import { CancelApplyService } from './application/service/cancel-apply.service';
     IdeaQueryV1Controller
   ],
   providers: [
+    HandlePeriodTransitionBySchedulerService,
     CreateIdeaService,
     CreateIdeaSubjectService,
     UpdateIdeaSubjectIsActiveService,

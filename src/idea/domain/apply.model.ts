@@ -73,4 +73,38 @@ export class ApplyModel {
       this.createdAt
     );
   }
+
+  public confirm(): ApplyModel {
+    if (this.status !== EApplyStatus.ACCEPTED) {
+      throw new CommonException(ErrorCode.APPLY_STATUS_ERROR);
+    }
+    return new ApplyModel(
+      this.id,
+      this.phase,
+      EApplyStatus.CONFIRMED,
+      this.preference,
+      this.motivation,
+      this.role,
+      this.user,
+      this.idea,
+      this.createdAt
+    );
+  }
+
+  public acceptedNotJoined(): ApplyModel {
+    if (this.status !== EApplyStatus.ACCEPTED) {
+      throw new CommonException(ErrorCode.APPLY_STATUS_ERROR);
+    }
+    return new ApplyModel(
+      this.id,
+      this.phase,
+      EApplyStatus.ACCEPTED_NOT_JOINED,
+      this.preference,
+      this.motivation,
+      this.role,
+      this.user,
+      this.idea,
+      this.createdAt
+    );
+  }
 }
