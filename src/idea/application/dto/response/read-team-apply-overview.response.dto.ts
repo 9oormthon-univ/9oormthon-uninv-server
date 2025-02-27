@@ -3,27 +3,41 @@ import { EApplyStatus } from '../../../../core/enums/apply-status.enum';
 import { ApplyModel } from '../../../domain/apply.model';
 import { UserModel } from '../../../../user/domain/user.model';
 
+export class UserDto {
+  id: number;
+  name: string;
+  univ: string;
+
+  constructor(id: number, name: string, univ: string) {
+    this.id = id;
+    this.name = name;
+    this.univ = univ;
+  }
+
+  static of(user: UserModel): UserDto {
+    return new UserDto(user.id, user.name, user.univ.name);
+  }
+}
+
 export class ApplyOverviewDto {
   id: number;
   preference: number;
   motivation: string;
-  name: string;
   role: ERole;
   status: EApplyStatus;
-  univ: string;
+  user: UserDto;
 
-  constructor(id: number, preference: number, motivation: string, name: string, role: ERole, status: EApplyStatus, univ: string) {
+  constructor(id: number, preference: number, motivation: string, role: ERole, status: EApplyStatus, user: UserDto) {
     this.id = id;
     this.preference = preference;
     this.motivation = motivation;
-    this.name = name;
     this.role = role;
     this.status = status;
-    this.univ = univ;
+    this.user = user;
   }
 
   static of(apply: ApplyModel): ApplyOverviewDto {
-    return new ApplyOverviewDto(apply.id, apply.preference, apply.motivation, apply.user.name, apply.role, apply.status, apply.user.univ.name);
+    return new ApplyOverviewDto(apply.id, apply.preference, apply.motivation, apply.role, apply.status, UserDto.of(apply.user));
   }
 }
 
