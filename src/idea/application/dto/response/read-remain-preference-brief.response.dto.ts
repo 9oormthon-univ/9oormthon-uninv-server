@@ -10,6 +10,10 @@ export class PreferenceDto {
   }
 
   static of (models: ApplyModel[], maxPreferencesPerUser: number): PreferenceDto[] {
+    if (models.length === 0) {
+      return Array.from({ length: maxPreferencesPerUser }, (_, i) => i + 1).map(preference => new PreferenceDto(preference, true));
+    }
+
     const preferences = Array.from({ length: maxPreferencesPerUser }, (_, i) => i + 1);
     return preferences.map(preference => {
       const isActive = models.some(model => !(model.preference === preference));
