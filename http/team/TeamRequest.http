@@ -1,3 +1,13 @@
 ### 4.1 팀 정보 조회
 // @no-log
 GET {{host_url}}/api/v1/users/teams/details?generation=4
+
+### 4.2 팀 정보 수정
+// @no-log
+PATCH {{host_url}}/api/v1/users/teams
+Content-Type: application/json
+
+{
+    "generation": 4,
+    "name": "팀이름"
+}

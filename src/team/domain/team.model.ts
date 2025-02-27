@@ -44,6 +44,24 @@ export class TeamModel {
     );
   }
 
+  public updateName(
+    name: string
+  ) : TeamModel {
+    return new TeamModel(
+      this.id,
+      name,
+      this.number,
+      this.generation,
+      this.pmCapacity,
+      this.pdCapacity,
+      this.feCapacity,
+      this.beCapacity,
+      this.idea,
+      this.members,
+      this.createdAt
+    );
+  }
+
   public validateSystemCapacityLimits(): void {
 
     const MAX_PM_CAPACITY = 1;
