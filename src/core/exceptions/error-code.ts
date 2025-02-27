@@ -60,6 +60,10 @@ export class ErrorCode {
   static readonly NOT_APPLY_DELETE_PERIOD_ERROR = new ErrorCode(40030, HttpStatus.BAD_REQUEST, "지원 취소 기간이 아닙니다.");
   static readonly NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR = new ErrorCode(40031, HttpStatus.BAD_REQUEST, "지원 수락 또는 거절 기간이 아닙니다.");
   static readonly NOT_IDEA_VIEWS_PERIOD_ERROR = new ErrorCode(40032, HttpStatus.BAD_REQUEST, "아이디어 조회 기간이 아닙니다.");
+  static readonly INVALID_START_TIME_ERROR = new ErrorCode(40033, HttpStatus.BAD_REQUEST, "시작 시각은 00시 00분 00초여야 합니다.");
+  static readonly INVALID_END_TIME_ERROR = new ErrorCode(40034, HttpStatus.BAD_REQUEST, "종료 시각은 23시 59분 59초여야 합니다.");
+  static readonly NON_CONSECUTIVE_PERIOD_ERROR = new ErrorCode(40035, HttpStatus.BAD_REQUEST, "종료 시각과 다음 시작 시각이 연속적이어야 합니다.");
+  static readonly INVALID_DATE_ORDER_ERROR = new ErrorCode(40036, HttpStatus.BAD_REQUEST, "날짜 순서가 올바르지 않습니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
