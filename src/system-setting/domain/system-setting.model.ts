@@ -200,7 +200,7 @@ export class SystemSettingModel {
   }
 
   public validateDeleteApplyPeriod(phase: number): void {
-    if (this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING || this.getWhichPeriod() !== EPeriod.PHASE2_TEAM_BUILDING || this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING) {
+    if (this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING && this.getWhichPeriod() !== EPeriod.PHASE2_TEAM_BUILDING && this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING) {
       throw new CommonException(ErrorCode.NOT_APPLY_DELETE_PERIOD_ERROR);
     }
 
