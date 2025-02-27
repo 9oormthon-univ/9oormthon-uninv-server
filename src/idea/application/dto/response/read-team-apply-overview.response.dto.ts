@@ -42,13 +42,18 @@ export class ApplyOverviewDto {
 }
 
 export class ReadTeamApplyOverviewResponseDto {
+  counts: number;
   applies: ApplyOverviewDto[];
 
-  constructor(applies: ApplyOverviewDto[]) {
+  constructor(counts: number, applies: ApplyOverviewDto[]) {
+    this.counts = counts;
     this.applies = applies;
   }
 
   static from(applies: ApplyModel[]): ReadTeamApplyOverviewResponseDto {
-    return new ReadTeamApplyOverviewResponseDto(applies !== null && applies.length !== 0 ? applies.map(apply => ApplyOverviewDto.of(apply)) : null);
+    return new ReadTeamApplyOverviewResponseDto(
+      applies !== null && applies.length !== 0 ? applies.length : 0,
+      applies !== null && applies.length !== 0 ? applies.map(apply => ApplyOverviewDto.of(apply)) : null
+    );
   }
 }

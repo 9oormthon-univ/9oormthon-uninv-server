@@ -5,11 +5,11 @@ import { TeamRepository } from '../../../team/repository/team.repository';
 import { UserRepository } from '../../../user/repository/user.repository';
 import { DataSource } from 'typeorm';
 import { ReadIdeaDetailResponseDto } from '../dto/response/read-idea-detail.response.dto';
-import { ReadMyIdeaDetailResponseDto } from '../dto/response/read-my-idea-detail.response.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
 import { EPeriod } from '../../../core/enums/period.enum';
+import { ApplyRepository } from '../../repository/apply.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -18,6 +18,7 @@ export class ReadIdeaDetailService {
     private readonly ideaRepository: IdeaRepository,
     private readonly teamRepository: TeamRepository,
     private readonly userRepository: UserRepository,
+    private readonly applyRepository: ApplyRepository,
     private readonly systemSettingRepository: SystemSettingRepository,
     private readonly dataSource: DataSource
   ) {}
@@ -54,7 +55,15 @@ export class ReadIdeaDetailService {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
 
-      return ReadMyIdeaDetailResponseDto.of(user, idea, team, isActive, isBookmarked);
+      // 팀빌딩 기간이라면 지원기간 표시
+      if (!(systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION || systemSetting.getWhichPeriod() === EPeriod.NONE)) {
+        const apply = await this.applyRepository.findByTeamIdAndGenerationAndPhase(team.id, team.generation, EPeriod.fromPeriod(systemSetting.getWhichPeriod()), manager);
+
+        return ReadIdeaDetailResponseDto.of(user, idea, team, isActive, isBookmarked, apply);
+      }
+
+      // 팀빌딩 기간이 아니라면 지원정보 불러오지 않음
+      return ReadIdeaDetailResponseDto.of(user, idea, team, isActive, isBookmarked, null);
     });
   }
 }

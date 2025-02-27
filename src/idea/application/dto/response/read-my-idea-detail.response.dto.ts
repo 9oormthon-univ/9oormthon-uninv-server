@@ -4,6 +4,7 @@ import { ERole } from '../../../../core/enums/role.enum';
 import { TeamModel } from '../../../../team/domain/team.model';
 import { CommonException } from '../../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../../core/exceptions/error-code';
+import { ApplyModel } from '../../../domain/apply.model';
 
 export class ProviderInfoDto {
   id: number;
@@ -82,7 +83,7 @@ export class RoleRequirementDto {
     this.ratio = ratio;
   }
 
-  static of(idea: IdeaModel, team: TeamModel, role: ERole) : RoleRequirementDto {
+  static of(idea: IdeaModel, team: TeamModel, role: ERole, applies: ApplyModel[]) : RoleRequirementDto {
     switch (role) {
       case ERole.PM:
         return new RoleRequirementDto(
@@ -90,7 +91,7 @@ export class RoleRequirementDto {
           team.members.filter((member) => member.role === ERole.PM).length,
           team.pmCapacity,
           idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member.user)),
-          team.members.filter((member) => member.role === ERole.PM).length / team.pmCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.PM).length / team.pmCapacity).toFixed(2).toString() : '0'
+          team.pmCapacity !== 0 && applies !== null && applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity).toFixed(2).toString() + ':1' : '-'
         );
       case ERole.PD:
         return new RoleRequirementDto(
@@ -99,7 +100,7 @@ export class RoleRequirementDto {
           team.pdCapacity,
           idea.pdRequiredTechStacks,
           team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member.user)),
-          team.members.filter((member) => member.role === ERole.PD).length / team.pdCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.PD).length / team.pdCapacity).toFixed(2).toString() : '0'
+          team.pdCapacity !== 0 && applies !== null && applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity).toFixed(2).toString() + ':1' : '-'
         );
       case ERole.FE:
         return new RoleRequirementDto(
@@ -108,7 +109,7 @@ export class RoleRequirementDto {
           team.feCapacity,
           idea.feRequiredTechStacks,
           team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member.user)),
-          team.members.filter((member) => member.role === ERole.FE).length / team.feCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.FE).length / team.feCapacity).toFixed(2).toString() : '0'
+          team.feCapacity !== 0 && applies !== null && applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity).toFixed(2).toString() + ':1' : '-'
         );
       case ERole.BE:
         return new RoleRequirementDto(
@@ -117,7 +118,7 @@ export class RoleRequirementDto {
           team.beCapacity,
           idea.beRequiredTechStacks,
           team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member.user)),
-          team.members.filter((member) => member.role === ERole.BE).length / team.beCapacity !== 0 ? (team.members.filter((member) => member.role === ERole.BE).length / team.beCapacity).toFixed(2).toString() : '0'
+          team.beCapacity !== 0 && applies !== null && applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity).toFixed(2).toString() + ':1' : '-'
         );
       default:
         throw new CommonException(ErrorCode.NOT_FOUND_ENUM);
@@ -138,12 +139,12 @@ export class RequirementsDto {
     this.be = be;
   }
 
-  static of(idea: IdeaModel, team: TeamModel): RequirementsDto {
+  static of(idea: IdeaModel, team: TeamModel, applies: ApplyModel[]): RequirementsDto {
     return new RequirementsDto(
-      RoleRequirementDto.of(idea, team, ERole.PM),
-      RoleRequirementDto.of(idea, team, ERole.PD),
-      RoleRequirementDto.of(idea, team, ERole.FE),
-      RoleRequirementDto.of(idea, team, ERole.BE),
+      RoleRequirementDto.of(idea, team, ERole.PM, applies),
+      RoleRequirementDto.of(idea, team, ERole.PD, applies),
+      RoleRequirementDto.of(idea, team, ERole.FE, applies),
+      RoleRequirementDto.of(idea, team, ERole.BE, applies),
     );
   }
 }
@@ -159,11 +160,11 @@ export class ReadMyIdeaDetailResponseDto {
     this.requirements = requirements;
   }
 
-  static of(user: UserModel, idea: IdeaModel, team: TeamModel, isActive: boolean, isBookmarked: boolean): ReadMyIdeaDetailResponseDto {
+  static of(user: UserModel, idea: IdeaModel, team: TeamModel, isActive: boolean, isBookmarked: boolean, applies: ApplyModel[]): ReadMyIdeaDetailResponseDto {
     return new ReadMyIdeaDetailResponseDto(
       ProviderInfoDto.of(idea.provider, user.id === idea.provider.id),
       IdeaInfoDto.of(idea, isBookmarked, isActive),
-      RequirementsDto.of(idea, team)
+      RequirementsDto.of(idea, team, applies)
     );
   }
 }

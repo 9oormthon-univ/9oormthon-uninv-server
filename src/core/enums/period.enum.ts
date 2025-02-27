@@ -26,3 +26,24 @@ export namespace EPeriod {
     }
   }
 }
+
+export namespace EPeriod {
+  export function fromPeriod(period: EPeriod): number {
+    switch (period) {
+      case EPeriod.PHASE1_TEAM_BUILDING:
+        return 1;
+      case EPeriod.PHASE1_CONFIRMATION:
+        return 1;
+      case EPeriod.PHASE2_TEAM_BUILDING:
+        return 2;
+      case EPeriod.PHASE2_CONFIRMATION:
+        return 2;
+      case EPeriod.PHASE3_TEAM_BUILDING:
+        return 3;
+      case EPeriod.PHASE3_CONFIRMATION:
+        return 3;
+      default:
+        throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
+    }
+  }
+}
