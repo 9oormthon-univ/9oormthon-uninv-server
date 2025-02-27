@@ -1,3 +1,25 @@
 ### 0.1 현재 기간 조회
 // @no-log
 GET {{host_url}}/api/v1/system-settings/current-period
+
+### 0.2 기간 정보 수정
+// @no-log
+PUT {{host_url}}/api/v1/admins/system-settings
+Content-Type: application/json
+
+{
+  "idea_submission_start" : "2021-09-01T00:00:00",
+  "idea_submission_end" : "2021-09-30T23:59:59",
+  "phase1_team_building_start": "2021-10-01T00:00:00",
+  "phase1_team_building_end" : "2021-10-31T23:59:59",
+  "phase1_confirmation_start": "2021-11-01T00:00:00",
+  "phase1_confirmation_end" : "2021-11-30T23:59:59",
+  "phase2_team_building_start": "2021-12-01T00:00:00",
+  "phase2_team_building_end" : "2021-12-31T23:59:59",
+  "phase2_confirmation_start": "2022-01-01T00:00:00",
+  "phase2_confirmation_end" : "2022-01-31T23:59:59",
+  "phase3_team_building_start": "2022-02-01T00:00:00",
+  "phase3_team_building_end" : "2022-02-28T23:59:59",
+  "phase3_confirmation_start": "2022-03-01T00:00:00",
+  "phase3_confirmation_end" : "2022-03-31T23:59:59"
+}

@@ -25,6 +25,144 @@ export class SystemSettingModel {
     public readonly updatedAt: Date
   ) {}
 
+  public updateDates(
+    ideaSubmissionStart: Date,
+    ideaSubmissionEnd: Date,
+    phase1TeamBuildingStart: Date,
+    phase1TeamBuildingEnd: Date,
+    phase1ConfirmationStart: Date,
+    phase1ConfirmationEnd: Date,
+    phase2TeamBuildingStart: Date,
+    phase2TeamBuildingEnd: Date,
+    phase2ConfirmationStart: Date,
+    phase2ConfirmationEnd: Date,
+    phase3TeamBuildingStart: Date,
+    phase3TeamBuildingEnd: Date,
+    phase3ConfirmationStart: Date,
+    phase3ConfirmationEnd: Date
+  ): SystemSettingModel {
+    // 1. start 날짜는 반드시 00:00:00이어야 함.
+    const checkStartTime = (date: Date) => {
+      if (date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0) {
+        throw new CommonException(ErrorCode.INVALID_START_TIME_ERROR);
+      }
+    };
+
+    // 2. end 날짜는 반드시 23:59:59이어야 함.
+    const checkEndTime = (date: Date) => {
+      if (date.getHours() !== 23 || date.getMinutes() !== 59 || date.getSeconds() !== 59) {
+        throw new CommonException(ErrorCode.INVALID_END_TIME_ERROR);
+      }
+    };
+
+    // 3. 이전 end와 다음 start가 연속(1초 차이)인지 검사
+    const checkConsecutive = (prevEnd: Date, nextStart: Date) => {
+      if (nextStart.getTime() - prevEnd.getTime() !== 1000) {
+        throw new CommonException(
+          ErrorCode.NON_CONSECUTIVE_PERIOD_ERROR
+        );
+      }
+    };
+
+    // 4. 전체 기간 순서가 올바른지 검사
+    const checkOrder = (dates: Date[]) => {
+      for (let i = 0; i < dates.length - 1; i++) {
+        if (dates[i].getTime() >= dates[i + 1].getTime()) {
+          throw new CommonException(
+            ErrorCode.INVALID_DATE_ORDER_ERROR
+          );
+        }
+      }
+    };
+
+    // 각 start, end 필드에 대해 시간 체크
+    Logger.log("ideaSubmissionStart: " + ideaSubmissionStart);
+    checkStartTime(ideaSubmissionStart);
+    checkEndTime(ideaSubmissionEnd);
+
+    checkStartTime(phase1TeamBuildingStart);
+    checkEndTime(phase1TeamBuildingEnd);
+
+    checkStartTime(phase1ConfirmationStart);
+    checkEndTime(phase1ConfirmationEnd);
+
+    checkStartTime(phase2TeamBuildingStart);
+    checkEndTime(phase2TeamBuildingEnd);
+
+    checkStartTime(phase2ConfirmationStart);
+    checkEndTime(phase2ConfirmationEnd);
+
+    checkStartTime(phase3TeamBuildingStart);
+    checkEndTime(phase3TeamBuildingEnd);
+
+    checkStartTime(phase3ConfirmationStart);
+    checkEndTime(phase3ConfirmationEnd);
+
+    // 연속성 검사 (각 기간의 end와 다음 기간의 start가 정확히 1초 차이인지)
+    checkConsecutive(ideaSubmissionEnd, phase1TeamBuildingStart);
+    checkConsecutive(phase1TeamBuildingEnd, phase1ConfirmationStart);
+    checkConsecutive(phase1ConfirmationEnd, phase2TeamBuildingStart);
+    checkConsecutive(phase2TeamBuildingEnd, phase2ConfirmationStart);
+    checkConsecutive(phase2ConfirmationEnd, phase3TeamBuildingStart);
+    checkConsecutive(phase3TeamBuildingEnd, phase3ConfirmationStart);
+
+    // 전체 기간 순서 검사
+    const dates = [
+      ideaSubmissionStart,
+      ideaSubmissionEnd,
+      phase1TeamBuildingStart,
+      phase1TeamBuildingEnd,
+      phase1ConfirmationStart,
+      phase1ConfirmationEnd,
+      phase2TeamBuildingStart,
+      phase2TeamBuildingEnd,
+      phase2ConfirmationStart,
+      phase2ConfirmationEnd,
+      phase3TeamBuildingStart,
+      phase3TeamBuildingEnd,
+      phase3ConfirmationStart,
+      phase3ConfirmationEnd,
+    ];
+    const names = [
+      'ideaSubmissionStart',
+      'ideaSubmissionEnd',
+      'phase1TeamBuildingStart',
+      'phase1TeamBuildingEnd',
+      'phase1ConfirmationStart',
+      'phase1ConfirmationEnd',
+      'phase2TeamBuildingStart',
+      'phase2TeamBuildingEnd',
+      'phase2ConfirmationStart',
+      'phase2ConfirmationEnd',
+      'phase3TeamBuildingStart',
+      'phase3TeamBuildingEnd',
+      'phase3ConfirmationStart',
+      'phase3ConfirmationEnd',
+    ];
+    checkOrder(dates);
+
+    return new SystemSettingModel(
+      this.id,
+      ideaSubmissionStart,
+      ideaSubmissionEnd,
+      phase1TeamBuildingStart,
+      phase1TeamBuildingEnd,
+      phase1ConfirmationStart,
+      phase1ConfirmationEnd,
+      phase2TeamBuildingStart,
+      phase2TeamBuildingEnd,
+      phase2ConfirmationStart,
+      phase2ConfirmationEnd,
+      phase3TeamBuildingStart,
+      phase3TeamBuildingEnd,
+      phase3ConfirmationStart,
+      phase3ConfirmationEnd,
+      this.maxPreferencesPerUser,
+      this.createdAt,
+      new Date()
+    );
+  }
+
   public getWhichPeriod(): EPeriod {
     const now = new Date();
     Logger.log("현재 시간은!!!!!!!!!! : " + now);

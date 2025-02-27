@@ -13,4 +13,10 @@ export class SystemSettingRepository {
 
     return SystemSettingMapper.toDomain(entities[0]);
   }
+
+  async save(systemSetting: SystemSettingModel, manager?: EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(SystemSettingEntity) : this.dataSource.getRepository(SystemSettingEntity);
+
+    await repo.save(SystemSettingMapper.toEntity(systemSetting));
+  }
 }
