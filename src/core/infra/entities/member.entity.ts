@@ -30,7 +30,7 @@ export class MemberEntity {
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @ManyToOne(() => TeamEntity, { nullable: false })
+  @ManyToOne(() => TeamEntity, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'team_id' })
   team: TeamEntity;
 

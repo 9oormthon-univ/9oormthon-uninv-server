@@ -34,6 +34,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import {
   HandlePeriodTransitionBySchedulerService
 } from './application/service/handle-period-transition-by-scheduler.service';
+import { DeleteIdeaService } from './application/service/delete-idea.service';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import {
     AcceptApplyService,
     RejectApplyService,
     CancelApplyService,
+    DeleteIdeaService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,

@@ -37,7 +37,7 @@ export class TeamEntity {
   /* ----------------------------- */
   /* ----- One To One Column ----- */
   /* ----------------------------- */
-  @OneToOne(() => IdeaEntity)
+  @OneToOne(() => IdeaEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'idea_id' })
   idea: IdeaEntity;
 

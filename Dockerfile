@@ -1,5 +1,5 @@
 # Stage 1: Build the NestJS application
-FROM node:18 AS builder
+FROM node:23 AS builder
 WORKDIR /app
 
 COPY package*.json ./
@@ -9,7 +9,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Setup the production environment
-FROM node:18 AS runner
+FROM node:23 AS runner
 WORKDIR /app
 
 # ✅ builder 스테이지의 node_modules 그대로 복사
