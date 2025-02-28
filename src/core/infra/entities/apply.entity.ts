@@ -43,7 +43,7 @@ export class ApplyEntity {
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @ManyToOne(() => IdeaEntity)
+  @ManyToOne(() => IdeaEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'idea_id' })
   idea: IdeaEntity;
 

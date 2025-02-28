@@ -5,8 +5,6 @@ import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './core/filters/http-exception.filter';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { ValidationException } from './core/exceptions/common.exception';
-import * as crypto from 'crypto';
-globalThis.crypto = crypto.webcrypto as unknown as Crypto;
 
 dotenv.config();
 async function bootstrap() {

@@ -23,6 +23,7 @@ import { UpdateIdeaRequestDto } from '../../application/dto/request/update-idea.
 import { AcceptApplyService } from '../../application/service/accept-apply.service';
 import { RejectApplyService } from '../../application/service/reject-apply.service';
 import { CancelApplyService } from '../../application/service/cancel-apply.service';
+import { DeleteIdeaService } from '../../application/service/delete-idea.service';
 
 @Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
@@ -35,6 +36,7 @@ export class UserIdeaCommandV1Controller {
     private readonly updateIdeaUseCase: UpdateIdeaService,
     private readonly acceptApplyUseCase: AcceptApplyService,
     private readonly rejectApplyUseCase: RejectApplyService,
+    private readonly deleteIdeaUseCase: DeleteIdeaService,
     private readonly cancelApplyUseCase: CancelApplyService,
   ) {}
 
@@ -119,7 +121,20 @@ export class UserIdeaCommandV1Controller {
   }
 
   /**
-   * 3.16 지원 삭제(지원 취소)
+   * 3.16 아이디어 삭제
+   */
+  @Delete('ideas/:id')
+  @UseGuards(JwtAuthGuard)
+  async deleteIdea(
+    @Req() req,
+    @Param('id') id: number
+  ): Promise<ResponseDto<any>> {
+    await this.deleteIdeaUseCase.execute(req.user.id, id);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 3.17 지원 삭제(지원 취소)
    */
   @Delete('applies/:id')
   @UseGuards(JwtAuthGuard)
