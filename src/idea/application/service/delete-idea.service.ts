@@ -24,7 +24,8 @@ export class DeleteIdeaService {
       }
 
       // 아이디어 삭제 기간인지 확인
-      systemSetting.validateDeleteIdeaPeriod();
+      // systemSetting.validateDeleteIdeaPeriod();
+
 
       // 아이디어 조회
       const idea = await this.ideaRepository.findById(ideaId, manager);
