@@ -68,6 +68,10 @@ export class UpdateIdeaService {
         requestDto.requirements.fe.capacity,
         requestDto.requirements.be.capacity
       )
+
+      // 팀원 수 시스템 유효성 검증
+      updatedTeam.validateSystemCapacityLimits();
+
       this.teamRepository.save(updatedTeam, manager);
 
       // 아이디어 제시자의 역할이 바뀌었다면, member 도 수정
