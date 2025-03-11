@@ -192,9 +192,9 @@ export class SystemSettingModel {
         (this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING) &&
         (this.getWhichPeriod() !== EPeriod.PHASE2_TEAM_BUILDING) &&
         (this.getWhichPeriod() !== EPeriod.PHASE3_TEAM_BUILDING)
-      ) || this.getWhichPeriod() !== EPeriod.fromPhase(phase)
+      ) || this.getWhichPeriod() !== EPeriod.teamBuildingFromPhase(phase)
     ) {
-      Logger.log("에러 발생. getWhichPeriod() : " + this.getWhichPeriod() + " fromPhase(phase) : " + EPeriod.fromPhase(phase));
+      Logger.log("에러 발생. getWhichPeriod() : " + this.getWhichPeriod() + " fromPhase(phase) : " + EPeriod.teamBuildingFromPhase(phase));
       throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
     }
   }
@@ -204,7 +204,7 @@ export class SystemSettingModel {
       throw new CommonException(ErrorCode.NOT_APPLY_DELETE_PERIOD_ERROR);
     }
 
-    if (this.getWhichPeriod() !== EPeriod.fromPhase(phase)) {
+    if (this.getWhichPeriod() !== EPeriod.teamBuildingFromPhase(phase)) {
       throw new CommonException(ErrorCode.NOT_APPLY_DELETE_PERIOD_ERROR);
     }
   }
@@ -218,12 +218,10 @@ export class SystemSettingModel {
   public validateAcceptOrRejectApplyPeriod(phase: number): void {
     Logger.log("현재 기간은!!!!!!!!!! : " + this.getWhichPeriod());
     if (this.getWhichPeriod() !== EPeriod.PHASE1_CONFIRMATION && this.getWhichPeriod() !== EPeriod.PHASE2_CONFIRMATION && this.getWhichPeriod() !== EPeriod.PHASE3_CONFIRMATION) {
-      Logger.log("위에서 에러 발생. getWhichPeriod() : " + this.getWhichPeriod() + " fromPhase(phase) : " + EPeriod.fromPhase(phase));
       throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
     }
 
-    if (this.getWhichPeriod() !== EPeriod.fromPhase(phase)) {
-      Logger.log("아래에서 에러 발생. getWhichPeriod() : " + this.getWhichPeriod() + " fromPhase(phase) : " + EPeriod.fromPhase(phase));
+    if (this.getWhichPeriod() !== EPeriod.confirmationFromPhase(phase)) {
       throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
     }
   }

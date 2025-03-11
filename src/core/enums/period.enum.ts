@@ -13,7 +13,7 @@ export enum EPeriod {
 }
 
 export namespace EPeriod {
-  export function fromPhase(phase: number): EPeriod {
+  export function teamBuildingFromPhase(phase: number): EPeriod {
     switch (phase) {
       case 1:
         return EPeriod.PHASE1_TEAM_BUILDING;
@@ -23,6 +23,21 @@ export namespace EPeriod {
         return EPeriod.PHASE3_TEAM_BUILDING;
       default:
         throw new CommonException(ErrorCode.NOT_IDEA_APPLY_PERIOD_ERROR);
+    }
+  }
+}
+
+export namespace EPeriod {
+  export function confirmationFromPhase(phase: number): EPeriod {
+    switch (phase) {
+      case 1:
+        return EPeriod.PHASE1_CONFIRMATION;
+      case 2:
+        return EPeriod.PHASE2_CONFIRMATION;
+      case 3:
+        return EPeriod.PHASE3_CONFIRMATION;
+      default:
+        throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
     }
   }
 }
