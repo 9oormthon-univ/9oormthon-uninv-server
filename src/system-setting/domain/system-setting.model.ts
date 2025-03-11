@@ -216,7 +216,7 @@ export class SystemSettingModel {
   }
 
   public validateAcceptOrRejectApplyPeriod(phase: number): void {
-    if (this.getWhichPeriod() !== EPeriod.PHASE1_CONFIRMATION || this.getWhichPeriod() !== EPeriod.PHASE2_CONFIRMATION || this.getWhichPeriod() !== EPeriod.PHASE3_CONFIRMATION) {
+    if (this.getWhichPeriod() !== EPeriod.PHASE1_CONFIRMATION && this.getWhichPeriod() !== EPeriod.PHASE2_CONFIRMATION && this.getWhichPeriod() !== EPeriod.PHASE3_CONFIRMATION) {
       throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
     }
 
