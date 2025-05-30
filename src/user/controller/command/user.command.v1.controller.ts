@@ -37,7 +37,7 @@ export class UserCommandV1Controller {
   @Post('admins/univs')
   @UseGuards(JwtAuthGuard)
   async createUniv(@Req() req, @Body(new ValidationPipe({ transform: true })) createUnivDto: CreateUnivRequestDto): Promise<ResponseDto<any>> {
-    await this.createUnivUseCase.execute(createUnivDto);
+    await this.createUnivUseCase.execute(req.user.userId, createUnivDto);
     return ResponseDto.created(null);
   }
 }
