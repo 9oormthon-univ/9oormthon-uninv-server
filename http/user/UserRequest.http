@@ -71,3 +71,7 @@ Content-Type: application/json
   "instagram_url": "https://www.instagram.com/goorm/",
   "leader_id": 2
 }
+
+### 6.5 어드민 유니브 삭제
+// @no-log
+DELETE {{host_url}}/api/v1/admins/univs/4
