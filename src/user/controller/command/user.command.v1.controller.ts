@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Param,
   Post,
   Put,
   Req,
@@ -17,6 +17,8 @@ import { UpdateUserRequestDto } from '../../application/dto/request/update-user.
 import { UpdateUserService } from '../../application/service/update-user.service';
 import { CreateUnivRequestDto } from '../../application/dto/request/create-univ.request.dto';
 import { CreateUnivService } from '../../application/service/create-univ-service';
+import { UpdateUnivService } from '../../application/service/update-univ.service';
+import { UpdateUnivRequestDto } from '../../application/dto/request/update-univ.request.dto';
 
 @Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
@@ -24,7 +26,8 @@ import { CreateUnivService } from '../../application/service/create-univ-service
 export class UserCommandV1Controller {
   constructor(
     private readonly updateUserUseCase: UpdateUserService,
-    private readonly createUnivUseCase: CreateUnivService
+    private readonly createUnivUseCase: CreateUnivService,
+    private readonly updateUnivUseCase: UpdateUnivService
   ) {}
 
   @Put('users')
@@ -40,4 +43,16 @@ export class UserCommandV1Controller {
     await this.createUnivUseCase.execute(req.user.userId, createUnivDto);
     return ResponseDto.created(null);
   }
+
+  @Put('admins/univs/:univId(\\d+)')
+  @UseGuards(JwtAuthGuard)
+  async updateUniv(
+    @Req() req,
+    @Body(new ValidationPipe({ transform: true })) updateUnivDto: UpdateUnivRequestDto,
+    @Param('univId') univId: number
+  ): Promise<ResponseDto<any>> {
+    await this.updateUnivUseCase.execute(req.user.userId, univId, updateUnivDto);
+    return ResponseDto.ok(null);
+  }
+
 }

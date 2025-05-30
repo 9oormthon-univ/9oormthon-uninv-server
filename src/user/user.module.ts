@@ -14,6 +14,7 @@ import { LinkRepository } from './repository/link.repository';
 import { CreateUnivService } from './application/service/create-univ-service';
 import { ReadUnivBriefService } from './application/service/read-univ-brief.service';
 import { ReadUnivDetailService } from './application/service/read-univ-detail.service';
+import { UpdateUnivService } from './application/service/update-univ.service';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ReadUnivDetailService } from './application/service/read-univ-detail.se
     CreateUnivService,
     ReadUnivBriefService,
     ReadUnivDetailService,
+    UpdateUnivService,
     UnivRepository,
     UserRepository,
     LinkRepository,
