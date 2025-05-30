@@ -38,6 +38,14 @@ export class UnivRepository {
     return entities ? UnivMapper.toDomains(entities) : [];
   }
 
+  async findAllByGeneration(generation: number, manager?: EntityManager): Promise<UnivModel[]> {
+    const repo = manager ? manager.getRepository(UnivEntity) : this.dataSource.getRepository(UnivEntity);
+    const entities = await repo.find({
+      where: { generation },
+    });
+    return entities ? UnivMapper.toDomains(entities) : [];
+  }
+
   async save(univ: UnivModel, manager?: EntityManager): Promise<void> {
     const repo = manager ? manager.getRepository(UnivEntity) : this.dataSource.getRepository(UnivEntity);
     const entity = UnivMapper.toEntity(univ);
