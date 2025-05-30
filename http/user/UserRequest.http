@@ -56,3 +56,7 @@ Content-Type: application/json
 ### 6.2 어드민 유니브 간단 리스트 조회
 // @no-log
 GET {{host_url}}/api/v1/admins/univs/briefs?generation=4
+
+### 6.3 어드민 유니브 상세 조회
+// @no-log
+GET {{host_url}}/api/v1/admins/univs/1/details

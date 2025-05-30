@@ -17,6 +17,7 @@ import { ReadMyUserDetailService } from '../../application/service/read-my-user-
 import { ReadUserDetailService } from '../../application/service/read-user-detail.service';
 import { ReadUnivBriefService } from '../../application/service/read-univ-brief.service';
 import { ReadUnivBriefRequestDto } from '../../application/dto/request/read-univ-brief.request.dto';
+import { ReadUnivDetailService } from '../../application/service/read-univ-detail.service';
 
 @Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
@@ -25,8 +26,8 @@ export class UserQueryV1Controller {
   constructor(
     private readonly readMyUserDetailUseCase: ReadMyUserDetailService,
     private readonly readUserDetailUseCase: ReadUserDetailService,
-    private readonly readUnivBriefsUseCase: ReadUnivBriefService
-
+    private readonly readUnivBriefsUseCase: ReadUnivBriefService,
+    private readonly readUnivDetailUseCase: ReadUnivDetailService,
   ) {}
 
   @Get('users/details')
@@ -52,4 +53,14 @@ export class UserQueryV1Controller {
   ): Promise<ResponseDto<any>> {
     return ResponseDto.ok(await this.readUnivBriefsUseCase.execute(req.user.id, query.generation));
   }
+
+  @Get('admins/univs/:univId(\\d+)/details')
+  @UseGuards(JwtAuthGuard)
+  async getUnivDetail(
+    @Req() req,
+    @Param('univId') univId: number
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.readUnivDetailUseCase.execute(req.user.id, univId));
+  }
+
 }
