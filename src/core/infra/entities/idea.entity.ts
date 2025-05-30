@@ -62,15 +62,12 @@ export class IdeaEntity {
   beRequiredTechStacks: string[];
 
   /* ----------------------------- */
-  /* ---- One To Many Column ----- */
+  /* ----- Many To One Column ---- */
   /* ----------------------------- */
   @ManyToOne(() => IdeaSubjectEntity)
   @JoinColumn({ name: 'idea_subject_id' })
   ideaSubject: IdeaSubjectEntity;
 
-  /* ----------------------------- */
-  /* ----- Many To One Column ---- */
-  /* ----------------------------- */
   @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'provider_id' })
   provider: UserEntity;

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { UserEntity } from './user.entity';
 
 @Entity('univs')
 export class UnivEntity {
@@ -17,8 +18,15 @@ export class UnivEntity {
   @Column({ name: 'instagram_url', nullable: true })
   instagramUrl: string;
 
-  @Column({ name: 'img_url', nullable: false })
-  imgUrl: string;
+  @Column({ name: 'generation', nullable: false})
+  generation: number;
+
+  /* ----------------------------- */
+  /* ---- Many To One Column ----- */
+  /* ----------------------------- */
+  @ManyToOne(() => UserEntity, { nullable: true })
+  @JoinColumn({ name: 'leader_id' })
+  leader: UserEntity;
 
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Like } from 'typeorm';
 import { UnivEntity } from '../../core/infra/entities/univ.entity';
 import { UnivMapper } from '../../core/infra/mapper/univ.mapper';
+import { UnivModel } from '../domain/univ.model';
 
 @Injectable()
 export class UnivRepository {
@@ -17,7 +18,7 @@ export class UnivRepository {
     return entity ? UnivMapper.toDomain(entity) : null;
   }
 
-  async findByName(name: string, manager?: EntityManager): Promise<UnivEntity | null> {
+  async findByName(name: string, manager?: EntityManager): Promise<UnivModel | null> {
     const repo = manager ? manager.getRepository(UnivEntity) : this.dataSource.getRepository(UnivEntity);
     const entity = await repo.findOne(
       {
@@ -37,7 +38,7 @@ export class UnivRepository {
     return entities ? UnivMapper.toDomains(entities) : [];
   }
 
-  async save(univ: UnivEntity, manager?: EntityManager): Promise<void> {
+  async save(univ: UnivModel, manager?: EntityManager): Promise<void> {
     const repo = manager ? manager.getRepository(UnivEntity) : this.dataSource.getRepository(UnivEntity);
     const entity = UnivMapper.toEntity(univ);
     await repo.save(entity);

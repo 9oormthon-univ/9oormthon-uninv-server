@@ -1,5 +1,6 @@
 import { UnivEntity } from '../entities/univ.entity';
 import { UnivModel } from '../../../user/domain/univ.model';
+import { UserMapper } from './user.mapper';
 
 export class UnivMapper {
   static toDomain(entity: UnivEntity): UnivModel {
@@ -7,7 +8,8 @@ export class UnivMapper {
       id: entity.id,
       name: entity.name,
       instagramUrl: entity.instagramUrl,
-      imgUrl: entity.imgUrl,
+      generation: entity.generation,
+      leader: entity.leader ? UserMapper.toDomain(entity.leader) : null,
       createdAt: entity.createdAt,
     };
   }
@@ -21,7 +23,8 @@ export class UnivMapper {
     entity.id = domain.id;
     entity.name = domain.name;
     entity.instagramUrl = domain.instagramUrl;
-    entity.imgUrl = domain.imgUrl;
+    entity.generation = domain.generation;
+    entity.leader = domain.leader ? UserMapper.toEntity(domain.leader) : null;
     entity.createdAt = domain.createdAt;
     return entity;
   }

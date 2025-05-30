@@ -41,3 +41,14 @@ Content-Type: application/json
     }
   ]
 }
+
+### 6.1 어드민 유니브 생성
+// @no-log
+POST {{host_url}}/api/v1/admins/univs
+Content-Type: application/json
+
+{
+  "name": "테스트 유니브",
+  "instagram_url": "https://www.instagram.com/dongguk/",
+  "generation": 4
+}
