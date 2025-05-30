@@ -50,6 +50,19 @@ export class UserRepository {
     return entity ? UserMapper.toDomain(entity) : null;
   }
 
+  async findAllByUnivId(
+    univId: number,
+    manager?: EntityManager
+  ): Promise<UserModel[]> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+    const entities = await repo.find({
+      where: { univ: { id: univId } },
+      relations: ['univ'],
+    });
+    return entities.map((entity) => UserMapper.toDomain(entity));
+  }
+
+
   async findByPhoneNumberAndUniv(
     phoneNumber: string,
     univId: number,

@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller, Param,
+  Controller, Delete, Param,
   Post,
   Put,
   Req,
@@ -19,6 +19,7 @@ import { CreateUnivRequestDto } from '../../application/dto/request/create-univ.
 import { CreateUnivService } from '../../application/service/create-univ-service';
 import { UpdateUnivService } from '../../application/service/update-univ.service';
 import { UpdateUnivRequestDto } from '../../application/dto/request/update-univ.request.dto';
+import { DeleteUnivService } from '../../application/service/delete-univ.service';
 
 @Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
@@ -27,7 +28,8 @@ export class UserCommandV1Controller {
   constructor(
     private readonly updateUserUseCase: UpdateUserService,
     private readonly createUnivUseCase: CreateUnivService,
-    private readonly updateUnivUseCase: UpdateUnivService
+    private readonly updateUnivUseCase: UpdateUnivService,
+    private readonly deleteUnivUseCase: DeleteUnivService
   ) {}
 
   @Put('users')
@@ -52,6 +54,16 @@ export class UserCommandV1Controller {
     @Param('univId') univId: number
   ): Promise<ResponseDto<any>> {
     await this.updateUnivUseCase.execute(req.user.userId, univId, updateUnivDto);
+    return ResponseDto.ok(null);
+  }
+
+  @Delete('admins/univs/:univId(\\d+)')
+  @UseGuards(JwtAuthGuard)
+  async deleteUniv(
+    @Req() req,
+    @Param('univId') univId: number
+  ): Promise<ResponseDto<any>> {
+    await this.deleteUnivUseCase.execute(req.user.userId, univId);
     return ResponseDto.ok(null);
   }
 
