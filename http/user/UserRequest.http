@@ -60,3 +60,14 @@ GET {{host_url}}/api/v1/admins/univs/briefs?generation=4
 ### 6.3 어드민 유니브 상세 조회
 // @no-log
 GET {{host_url}}/api/v1/admins/univs/1/details
+
+### 6.4 어드민 유니브 수정
+// @no-log
+PUT {{host_url}}/api/v1/admins/univs/1
+Content-Type: application/json
+
+{
+  "name": "구름대학교",
+  "instagram_url": "https://www.instagram.com/goorm/",
+  "leader_id": 2
+}

@@ -65,6 +65,7 @@ export class ErrorCode {
   static readonly NON_CONSECUTIVE_PERIOD_ERROR = new ErrorCode(40035, HttpStatus.BAD_REQUEST, "종료 시각과 다음 시작 시각이 연속적이어야 합니다.");
   static readonly INVALID_DATE_ORDER_ERROR = new ErrorCode(40036, HttpStatus.BAD_REQUEST, "날짜 순서가 올바르지 않습니다.");
   static readonly NOT_IDEA_DELETE_PERIOD_ERROR = new ErrorCode(40037, HttpStatus.BAD_REQUEST, "아이디어 삭제 기간이 아닙니다.");
+  static readonly UNIV_LEADER_NOT_MATCH = new ErrorCode(40038, HttpStatus.BAD_REQUEST, "해당 유저의 대학 명과 선택한 대학 명이 일치하지 않습니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");

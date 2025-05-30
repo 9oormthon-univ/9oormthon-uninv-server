@@ -24,4 +24,20 @@ export class UnivModel {
       new Date()
     );
   }
+
+  static updateUniv(
+    univ: UnivModel,
+    name: string,
+    instagramUrl: string | null,
+    leader: UserModel
+  ) : UnivModel {
+    return new UnivModel(
+      univ.id,
+      name,
+      instagramUrl,
+      univ.generation,
+      leader,
+      univ.createdAt
+    );
+  }
 }
