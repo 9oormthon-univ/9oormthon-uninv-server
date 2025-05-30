@@ -6,7 +6,7 @@ import { ResponseDto } from '../../../core/dto/response.dto';
 import { ReadMyUserDetailService } from '../../application/service/read-my-user-detail.service';
 import { ReadUserDetailService } from '../../application/service/read-user-detail.service';
 
-@Controller('/api/v1/users')
+@Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
 @UseFilters(HttpExceptionFilter)
 export class UserQueryV1Controller {
@@ -16,13 +16,13 @@ export class UserQueryV1Controller {
 
   ) {}
 
-  @Get('details')
+  @Get('users/details')
   @UseGuards(JwtAuthGuard)
   async getUserInfo(@Req() req): Promise<ResponseDto<any>> {
     return ResponseDto.ok(await this.readMyUserDetailUseCase.execute(req.user.id));
   }
 
-  @Get(':userId(\\d+)/details')
+  @Get('users/:userId(\\d+)/details')
   @UseGuards(JwtAuthGuard)
   async getUserDetail(
     @Req() req,

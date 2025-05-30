@@ -1,4 +1,5 @@
-export enum ELinkType {
+export enum
+ELinkType {
   GITHUB = 'GITHUB',
   NOTION = 'NOTION',
   LINKEDIN = 'LINKEDIN',
