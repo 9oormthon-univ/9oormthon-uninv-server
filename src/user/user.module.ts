@@ -13,6 +13,7 @@ import { ReadUserDetailService } from './application/service/read-user-detail.se
 import { LinkRepository } from './repository/link.repository';
 import { CreateUnivService } from './application/service/create-univ-service';
 import { ReadUnivBriefService } from './application/service/read-univ-brief.service';
+import { ReadUnivDetailService } from './application/service/read-univ-detail.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ReadUnivBriefService } from './application/service/read-univ-brief.serv
     UpdateUserService,
     CreateUnivService,
     ReadUnivBriefService,
+    ReadUnivDetailService,
     UnivRepository,
     UserRepository,
     LinkRepository,

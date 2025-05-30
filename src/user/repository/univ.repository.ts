@@ -8,11 +8,22 @@ import { UnivModel } from '../domain/univ.model';
 export class UnivRepository {
   constructor(private readonly dataSource: DataSource) {}
 
-  async findById (id: number, manager?: EntityManager): Promise<UnivEntity | null> {
+  async findById (id: number, manager?: EntityManager): Promise<UnivModel | null> {
     const repo = manager ? manager.getRepository(UnivEntity) : this.dataSource.getRepository(UnivEntity);
     const entity = await repo.findOne(
       {
         where: { id },
+      }
+    );
+    return entity ? UnivMapper.toDomain(entity) : null;
+  }
+
+  async findByIdWithLeader(id: number, manager?: EntityManager): Promise<UnivModel | null> {
+    const repo = manager ? manager.getRepository(UnivEntity) : this.dataSource.getRepository(UnivEntity);
+    const entity = await repo.findOne(
+      {
+        where: { id },
+        relations: ['leader'],
       }
     );
     return entity ? UnivMapper.toDomain(entity) : null;
