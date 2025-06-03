@@ -1,18 +1,32 @@
 import { ELinkType } from '../../../../core/enums/link-type.enum';
+import { IsNotEmpty, IsOptional } from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class LinkDto {
-  constructor(
-    public readonly type: ELinkType,
-    public readonly url: string
-  ) {}
+  @IsNotEmpty({ message: 'type은 필수 값입니다.' })
+  @Expose({ name: 'type' })
+  type: ELinkType;
+
+  @IsNotEmpty({ message: 'url은 필수 값입니다.' })
+  @Expose({ name: 'url' })
+  url: string;
 }
 
 
 export class UpdateUserRequestDto {
-  constructor(
-    public readonly img_url: string,
-    public readonly introduction: string,
-    public readonly stacks: string[],
-    public readonly links: LinkDto[],
-  ) {}
+  @IsNotEmpty({ message: 'img_url은 필수 값입니다.' })
+  @Expose({ name: 'img_url' })
+  imgUrl: string;
+
+  @IsNotEmpty({ message: 'introduction은 필수 값입니다.' })
+  @Expose({ name: 'introduction' })
+  introduction: string;
+
+  @IsOptional()
+  @Expose({ name: 'stacks' })
+  stacks: string[];
+
+  @IsOptional()
+  @Expose({ name: 'links' })
+  links: LinkDto[];
 }

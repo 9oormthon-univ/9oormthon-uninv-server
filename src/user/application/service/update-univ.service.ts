@@ -35,11 +35,11 @@ export class UpdateUnivService {
       }
 
       let leader;
-      if (!requestDto.leader_id) {
+      if (!requestDto.leaderId) {
         leader = null;
       } else {
         // 리더 조회
-        leader = await this.userRepository.findByIdWithUniv(requestDto.leader_id, manager);
+        leader = await this.userRepository.findByIdWithUniv(requestDto.leaderId, manager);
         if (!leader) {
           throw new CommonException(ErrorCode.NOT_FOUND_USER);
         }
@@ -53,7 +53,7 @@ export class UpdateUnivService {
       const updatedUniv = UnivModel.updateUniv(
         univ,
         requestDto.name,
-        requestDto.instagram_url,
+        requestDto.instagramUrl,
         leader
       )
       await this.univRepository.save(updatedUniv, manager);

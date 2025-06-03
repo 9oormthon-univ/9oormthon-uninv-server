@@ -152,3 +152,17 @@ DELETE {{host_url}}/api/v1/users/ideas/1
 ### 3.17 지원 삭제(지원 취소)
 //@no-log
 DELETE {{host_url}}/api/v1/users/applies/3
+
+### 4.1 (어드민) 팀 추가하기
+//@no-log
+POST {{host_url}}/api/v1/admins/teams
+Content-Type: application/json
+
+{
+  "generation": 4,
+  "name": "테스트팀",
+  "pm_capacity": 0,
+  "pd_capacity": 1,
+  "fe_capacity": 1,
+  "be_capacity": 4
+}

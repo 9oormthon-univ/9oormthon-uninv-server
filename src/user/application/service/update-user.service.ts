@@ -53,7 +53,7 @@ export class UpdateUserService {
       }
 
       const updatedUser = user.updateUser(
-        requestDto.img_url,
+        requestDto.imgUrl,
         requestDto.introduction,
         requestDto.stacks,
         links

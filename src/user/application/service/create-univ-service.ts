@@ -32,7 +32,7 @@ export class CreateUnivService {
 
       const univ = UnivModel.createUniv(
         requestDto.name,
-        requestDto.instagram_url,
+        requestDto.instagramUrl,
         requestDto.generation
       );
 
