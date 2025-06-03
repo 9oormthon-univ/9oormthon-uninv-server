@@ -10,6 +10,10 @@ GET {{host_url}}/api/v1/users/2/details
 // @no-log
 GET {{host_url}}/api/v1/admins/users/briefs?generation=4&univ-id=1
 
+### 2.4 어드민 유저 요약 리스트 조회
+// @no-log
+GET {{host_url}}/api/v1/admins/users/overviews?page=1&size=10&generation=4&univ-id=1&search=은
+
 ### 2.6 유저 정보 수정
 // @no-log
 PUT {{host_url}}/api/v1/users

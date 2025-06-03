@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityManager, Like } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { UserModel } from '../domain/user.model';
 import { UserEntity } from '../../core/infra/entities/user.entity';
 import { UserMapper } from '../../core/infra/mapper/user.mapper';
 import { ESecurityRole } from '../../core/enums/security-role.enum';
+import { UserOverviewDto } from '../application/dto/response/read-user-overview.response.dto';
 
 @Injectable()
 export class UserRepository {
@@ -141,6 +142,64 @@ export class UserRepository {
       relations: ['univ'],
     });
     return entity ? UserMapper.toDomain(entity) : null;
+  }
+  async findUserOverview(
+    page: number,
+    size: number,
+    generation: number,
+    univId: number | undefined,
+    search: string | undefined,
+    manager?: EntityManager
+  ): Promise<{ users: UserOverviewDto[]; totalItems: number }> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+
+    const qb = repo.createQueryBuilder('user')
+      .leftJoinAndSelect('user.univ', 'univ')
+      .andWhere('FIND_IN_SET(:generation, user.generations)', { generation: generation.toString() })
+      .andWhere('user.role = :role', { role: ESecurityRole.USER });
+
+    if (univId) {
+      qb.andWhere('univ.id = :univId', { univId });
+    }
+
+    if (search) {
+      qb.andWhere('user.name LIKE :search OR user.phoneNumber LIKE :search', { search: `%${search}%` });
+    }
+
+    qb.addSelect(subQuery => {
+      return subQuery
+        .select('COUNT(1)')
+        .from('members', 'member')
+        .innerJoin('teams', 'team', 'member.team_id = team.id')
+        .where('member.user_id = user.id')
+        .andWhere('team.generation = :generation', { generation });
+    }, 'team_building_count');
+
+
+    // 정렬 및 페이지네이션
+    qb.orderBy('user.name', 'ASC')
+      .skip((page - 1) * size)
+      .take(size)
+      .distinct(true);
+
+    const totalItems = await qb.getCount();
+    const { entities, raw } = await qb.getRawAndEntities();
+
+    const users: UserOverviewDto[] = entities.map((user, index) => {
+      const rawRow = raw[index];
+      return {
+        id: user.id,
+        role: user.role,
+        name: user.name,
+        email: user.serialId,
+        team_building: Number(rawRow['team_building_count']) > 0,
+        generations: user.generations && user.generations.length > 0
+          ? user.generations.map(g => `${g}기`).join(', ')
+          : ''
+      };
+    });
+
+    return { users, totalItems };
   }
 
   async save(user: UserModel, manager?: EntityManager): Promise<void> {
