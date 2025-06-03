@@ -22,6 +22,8 @@ import { ReadUserBriefService } from '../../application/service/read-user-brief.
 import { ReadUserBriefRequestDto } from '../../application/dto/request/read-user-brief.request.dto';
 import { ReadUserOverviewService } from '../../application/service/read-user-overview.service';
 import { ReadUserOverviewQueryDto } from '../../application/dto/request/read-user-overview.request.dto';
+import { ReadAdminUserDetailService } from '../../application/service/read-admin-user-detail.service';
+import { ReadAdminUserDetailRequestDto } from '../../application/dto/request/read-admin-user-detail.request.dto';
 
 @Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
@@ -32,6 +34,7 @@ export class UserQueryV1Controller {
     private readonly readUserDetailUseCase: ReadUserDetailService,
     private readonly readUserBriefUseCase: ReadUserBriefService,
     private readonly readUserOverviewUseCase: ReadUserOverviewService,
+    private readonly readAdminUserDetailUseCase: ReadAdminUserDetailService,
     private readonly readUnivBriefsUseCase: ReadUnivBriefService,
     private readonly readUnivDetailUseCase: ReadUnivDetailService,
   ) {}
@@ -67,6 +70,16 @@ export class UserQueryV1Controller {
     @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadUserOverviewQueryDto
   ) : Promise<ResponseDto<any>> {
     return ResponseDto.ok(await this.readUserOverviewUseCase.execute(query.page, query.size, req.user.id, query.generation, query.univId, query.search));
+  }
+
+  @Get('admins/users/:userId(\\d+)/details')
+  @UseGuards(JwtAuthGuard)
+  async getAdminUserDetail(
+    @Req() req,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadAdminUserDetailRequestDto,
+    @Param('userId') userId: number
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.readAdminUserDetailUseCase.execute(req.user.id, userId, query.generation));
   }
 
   @Get('admins/univs/briefs')

@@ -18,6 +18,8 @@ import { UpdateUnivService } from './application/service/update-univ.service';
 import { DeleteUnivService } from './application/service/delete-univ.service';
 import { ReadUserBriefService } from './application/service/read-user-brief.service';
 import { ReadUserOverviewService } from './application/service/read-user-overview.service';
+import { ReadAdminUserDetailService } from './application/service/read-admin-user-detail.service';
+import { MemberRepository } from '../team/repository/member.repository';
 
 @Module({
   imports: [
@@ -38,8 +40,10 @@ import { ReadUserOverviewService } from './application/service/read-user-overvie
     DeleteUnivService,
     ReadUserBriefService,
     ReadUserOverviewService,
+    ReadAdminUserDetailService,
     UnivRepository,
     UserRepository,
+    MemberRepository,
     LinkRepository,
   ],
   controllers: [UserQueryV1Controller, UserCommandV1Controller],
