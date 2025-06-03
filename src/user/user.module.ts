@@ -20,6 +20,7 @@ import { ReadUserBriefService } from './application/service/read-user-brief.serv
 import { ReadUserOverviewService } from './application/service/read-user-overview.service';
 import { ReadAdminUserDetailService } from './application/service/read-admin-user-detail.service';
 import { MemberRepository } from '../team/repository/member.repository';
+import { UpdateAdminUserService } from './application/service/update-admin-user-service';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { MemberRepository } from '../team/repository/member.repository';
     ReadMyUserDetailService,
     ReadUserDetailService,
     UpdateUserService,
+    UpdateAdminUserService,
     CreateUnivService,
     ReadUnivBriefService,
     ReadUnivDetailService,

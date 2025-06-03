@@ -54,6 +54,20 @@ Content-Type: application/json
   ]
 }
 
+### 2.7 어드민 유저 수정
+// @no-log
+PUT {{host_url}}/api/v1/admins/users/4
+Content-Type: application/json
+
+{
+  "name": "장동겸",
+  "univ_id": 1,
+  "email": "jangelliot0404@dgu.ac.kr",
+  "phone_number": "01056175155",
+  "generation": [2,3,4]
+}
+
+
 ### 6.1 어드민 유니브 생성
 // @no-log
 POST {{host_url}}/api/v1/admins/univs
