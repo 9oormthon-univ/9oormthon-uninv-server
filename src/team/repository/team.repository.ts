@@ -7,6 +7,14 @@ import { IdeaModel } from '../../idea/domain/idea.model';
 export class TeamRepository {
   constructor(private readonly dataSource: DataSource) {}
 
+  async findById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+    const entity = await repo.findOne({
+      where: { id },
+    });
+    return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: true }) : undefined;
+  }
+
   async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<TeamModel | undefined> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
     const entity = await repo.findOne({

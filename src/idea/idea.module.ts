@@ -36,6 +36,7 @@ import {
 } from './application/service/handle-period-transition-by-scheduler.service';
 import { DeleteIdeaService } from './application/service/delete-idea.service';
 import { CreateTeamService } from './application/service/create-team.service';
+import { CreateMemberService } from './application/service/create-member.service';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { CreateTeamService } from './application/service/create-team.service';
     CancelApplyService,
     DeleteIdeaService,
     CreateTeamService,
+    CreateMemberService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,
