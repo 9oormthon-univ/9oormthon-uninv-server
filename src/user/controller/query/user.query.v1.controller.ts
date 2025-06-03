@@ -20,6 +20,8 @@ import { ReadUnivBriefRequestDto } from '../../application/dto/request/read-univ
 import { ReadUnivDetailService } from '../../application/service/read-univ-detail.service';
 import { ReadUserBriefService } from '../../application/service/read-user-brief.service';
 import { ReadUserBriefRequestDto } from '../../application/dto/request/read-user-brief.request.dto';
+import { ReadUserOverviewService } from '../../application/service/read-user-overview.service';
+import { ReadUserOverviewQueryDto } from '../../application/dto/request/read-user-overview.request.dto';
 
 @Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
@@ -28,7 +30,8 @@ export class UserQueryV1Controller {
   constructor(
     private readonly readMyUserDetailUseCase: ReadMyUserDetailService,
     private readonly readUserDetailUseCase: ReadUserDetailService,
-    private readonly readUserBriefsUseCase: ReadUserBriefService,
+    private readonly readUserBriefUseCase: ReadUserBriefService,
+    private readonly readUserOverviewUseCase: ReadUserOverviewService,
     private readonly readUnivBriefsUseCase: ReadUnivBriefService,
     private readonly readUnivDetailUseCase: ReadUnivDetailService,
   ) {}
@@ -54,7 +57,16 @@ export class UserQueryV1Controller {
     @Req() req,
     @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadUserBriefRequestDto
   ): Promise<ResponseDto<any>> {
-    return ResponseDto.ok(await this.readUserBriefsUseCase.execute(req.user.id, query.univId, query.search, query.generation));
+    return ResponseDto.ok(await this.readUserBriefUseCase.execute(req.user.id, query.univId, query.search, query.generation));
+  }
+
+  @Get('admins/users/overviews')
+  @UseGuards(JwtAuthGuard)
+  async getUserOverviews(
+    @Req() req,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadUserOverviewQueryDto
+  ) : Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.readUserOverviewUseCase.execute(query.page, query.size, req.user.id, query.generation, query.univId, query.search));
   }
 
   @Get('admins/univs/briefs')
