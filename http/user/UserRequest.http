@@ -14,6 +14,10 @@ GET {{host_url}}/api/v1/admins/users/briefs?generation=4&univ-id=1
 // @no-log
 GET {{host_url}}/api/v1/admins/users/overviews?page=1&size=10&generation=4&univ-id=1&search=은
 
+### 2.5 어드민 유저 상세 조회
+// @no-log
+GET {{host_url}}/api/v1/admins/users/4/details?generation=4
+
 ### 2.6 유저 정보 수정
 // @no-log
 PUT {{host_url}}/api/v1/users
