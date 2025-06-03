@@ -6,7 +6,11 @@ GET {{host_url}}/api/v1/users/details
 // @no-log
 GET {{host_url}}/api/v1/users/2/details
 
-### 2.3 유저 정보 수정
+### 2.3 어드민 유저 간단 리스트 조회
+// @no-log
+GET {{host_url}}/api/v1/admins/users/briefs?generation=4&univ-id=1
+
+### 2.6 유저 정보 수정
 // @no-log
 PUT {{host_url}}/api/v1/users
 Content-Type: application/json
