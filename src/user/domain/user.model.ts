@@ -96,6 +96,31 @@ export class UserModel {
     );
   }
 
+  public updateUserByAdmin(
+    name: string,
+    univ: UnivModel,
+    email: string,
+    phoneNumber: string,
+    generations: string[],
+  ) : UserModel {
+    return new UserModel(
+      this.id,
+      email,
+      this.password,
+      this.imgUrl,
+      name,
+      phoneNumber,
+      this.introduction,
+      generations,
+      this.stacks,
+      this.links,
+      this.refreshToken,
+      this.role,
+      univ,
+      this.createdAt
+    );
+  }
+
   public updatePassword(password: string): UserModel {
     return new UserModel(
       this.id,
