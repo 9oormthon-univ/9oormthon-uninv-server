@@ -16,6 +16,7 @@ import { ReadUnivBriefService } from './application/service/read-univ-brief.serv
 import { ReadUnivDetailService } from './application/service/read-univ-detail.service';
 import { UpdateUnivService } from './application/service/update-univ.service';
 import { DeleteUnivService } from './application/service/delete-univ.service';
+import { ReadUserBriefService } from './application/service/read-user-brief.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DeleteUnivService } from './application/service/delete-univ.service';
     ReadUnivDetailService,
     UpdateUnivService,
     DeleteUnivService,
+    ReadUserBriefService,
     UnivRepository,
     UserRepository,
     LinkRepository,

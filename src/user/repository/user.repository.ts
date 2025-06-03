@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityManager } from 'typeorm';
+import { DataSource, EntityManager, Like } from 'typeorm';
 import { UserModel } from '../domain/user.model';
 import { UserEntity } from '../../core/infra/entities/user.entity';
 import { UserMapper } from '../../core/infra/mapper/user.mapper';
@@ -7,7 +7,8 @@ import { ESecurityRole } from '../../core/enums/security-role.enum';
 
 @Injectable()
 export class UserRepository {
-  constructor(private readonly dataSource: DataSource) {}
+  constructor(private readonly dataSource: DataSource) {
+  }
 
   async findById(id: number, manager?: EntityManager): Promise<UserModel | null> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
@@ -33,7 +34,7 @@ export class UserRepository {
       {
         where: { id },
         relations: ['univ'],
-      }
+      },
     );
     return entity ? UserMapper.toDomain(entity) : null;
   }
@@ -45,14 +46,14 @@ export class UserRepository {
       {
         where: { id },
         relations: ['links'],
-      }
+      },
     );
     return entity ? UserMapper.toDomain(entity) : null;
   }
 
   async findAllByUnivId(
     univId: number,
-    manager?: EntityManager
+    manager?: EntityManager,
   ): Promise<UserModel[]> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
     const entities = await repo.find({
@@ -62,11 +63,35 @@ export class UserRepository {
     return entities.map((entity) => UserMapper.toDomain(entity));
   }
 
+  async findAllByUnivIdAndSearchAndGeneration(
+    univId: number,
+    search: string,
+    generation: number,
+    manager?: EntityManager,
+  ): Promise<UserModel[]> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+
+    const qb = repo.createQueryBuilder('user')
+      .leftJoinAndSelect('user.univ', 'univ')
+      .where('univ.id = :univId', { univId });
+
+    if (search) {
+      qb.andWhere('user.name LIKE :search OR user.phoneNumber LIKE :search', { search: `%${search}%` });
+    }
+
+    if (generation !== undefined && generation !== null) {
+      qb.andWhere('FIND_IN_SET(:generation, user.generations)', { generation: generation.toString() });
+    }
+
+    const entities = await qb.getMany();
+    return entities.map((entity) => UserMapper.toDomain(entity));
+  }
+
 
   async findByPhoneNumberAndUniv(
     phoneNumber: string,
     univId: number,
-    manager?: EntityManager
+    manager?: EntityManager,
   ): Promise<UserModel | null> {
 
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
@@ -108,7 +133,7 @@ export class UserRepository {
     id: number,
     refreshToken: string,
     role: ESecurityRole,
-    manager?: EntityManager
+    manager?: EntityManager,
   ): Promise<UserModel | null> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
     const entity = await repo.findOne({
@@ -118,19 +143,19 @@ export class UserRepository {
     return entity ? UserMapper.toDomain(entity) : null;
   }
 
-  async save(user: UserModel, manager? : EntityManager): Promise<void> {
+  async save(user: UserModel, manager?: EntityManager): Promise<void> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
     const entity = UserMapper.toEntity(user);
     await repo.save(entity);
   }
 
-  async saveAll(users: UserModel[], manager? : EntityManager): Promise<void> {
+  async saveAll(users: UserModel[], manager?: EntityManager): Promise<void> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
     const entities = users.map((user) => UserMapper.toEntity(user));
     await repo.save(entities);
   }
 
-  async delete(id: number, manager? : EntityManager): Promise<void> {
+  async delete(id: number, manager?: EntityManager): Promise<void> {
 
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
 

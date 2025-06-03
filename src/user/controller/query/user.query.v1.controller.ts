@@ -18,6 +18,8 @@ import { ReadUserDetailService } from '../../application/service/read-user-detai
 import { ReadUnivBriefService } from '../../application/service/read-univ-brief.service';
 import { ReadUnivBriefRequestDto } from '../../application/dto/request/read-univ-brief.request.dto';
 import { ReadUnivDetailService } from '../../application/service/read-univ-detail.service';
+import { ReadUserBriefService } from '../../application/service/read-user-brief.service';
+import { ReadUserBriefRequestDto } from '../../application/dto/request/read-user-brief.request.dto';
 
 @Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
@@ -26,6 +28,7 @@ export class UserQueryV1Controller {
   constructor(
     private readonly readMyUserDetailUseCase: ReadMyUserDetailService,
     private readonly readUserDetailUseCase: ReadUserDetailService,
+    private readonly readUserBriefsUseCase: ReadUserBriefService,
     private readonly readUnivBriefsUseCase: ReadUnivBriefService,
     private readonly readUnivDetailUseCase: ReadUnivDetailService,
   ) {}
@@ -43,6 +46,15 @@ export class UserQueryV1Controller {
     @Param('userId') userId: number
   ): Promise<ResponseDto<any>> {
     return ResponseDto.ok(await this.readUserDetailUseCase.execute(req.user.id, userId));
+  }
+
+  @Get('admins/users/briefs')
+  @UseGuards(JwtAuthGuard)
+  async getUserBriefs(
+    @Req() req,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadUserBriefRequestDto
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.readUserBriefsUseCase.execute(req.user.id, query.univId, query.search, query.generation));
   }
 
   @Get('admins/univs/briefs')
