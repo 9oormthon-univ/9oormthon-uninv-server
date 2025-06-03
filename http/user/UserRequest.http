@@ -67,6 +67,9 @@ Content-Type: application/json
   "generation": [2,3,4]
 }
 
+### 2.8 어드민 유저 삭제
+// @no-log
+DELETE {{host_url}}/api/v1/admins/users/5
 
 ### 6.1 어드민 유니브 생성
 // @no-log

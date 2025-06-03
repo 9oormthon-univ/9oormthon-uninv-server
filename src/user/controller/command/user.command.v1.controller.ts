@@ -22,6 +22,7 @@ import { UpdateUnivRequestDto } from '../../application/dto/request/update-univ.
 import { DeleteUnivService } from '../../application/service/delete-univ.service';
 import { UpdateAdminUserService } from '../../application/service/update-admin-user-service';
 import { UpdateAdminUserRequestDto } from '../../application/dto/request/update-admin-user.request.dto';
+import { DeleteUserService } from '../../application/service/delete-user.service';
 
 @Controller('/api/v1')
 @UseInterceptors(ResponseInterceptor)
@@ -30,9 +31,10 @@ export class UserCommandV1Controller {
   constructor(
     private readonly updateUserUseCase: UpdateUserService,
     private readonly updateAdminUserUseCase: UpdateAdminUserService,
+    private readonly deleteUserUseCase: DeleteUserService,
     private readonly createUnivUseCase: CreateUnivService,
     private readonly updateUnivUseCase: UpdateUnivService,
-    private readonly deleteUnivUseCase: DeleteUnivService
+    private readonly deleteUnivUseCase: DeleteUnivService,
   ) {}
 
   @Put('users')
@@ -50,6 +52,16 @@ export class UserCommandV1Controller {
     @Param('userId') userId: number
   ): Promise<ResponseDto<any>> {
     await this.updateAdminUserUseCase.execute(req.user.userId, userId, updateAdminUserDto);
+    return ResponseDto.ok(null);
+  }
+
+  @Delete('admins/users/:userId(\\d+)')
+  @UseGuards(JwtAuthGuard)
+  async deleteUser(
+    @Req() req,
+    @Param('userId') userId: number
+  ): Promise<ResponseDto<any>> {
+    await this.deleteUserUseCase.execute(req.user.userId, userId);
     return ResponseDto.ok(null);
   }
 

@@ -21,6 +21,7 @@ import { ReadUserOverviewService } from './application/service/read-user-overvie
 import { ReadAdminUserDetailService } from './application/service/read-admin-user-detail.service';
 import { MemberRepository } from '../team/repository/member.repository';
 import { UpdateAdminUserService } from './application/service/update-admin-user-service';
+import { DeleteUserService } from './application/service/delete-user.service';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { UpdateAdminUserService } from './application/service/update-admin-user-
     ReadUserDetailService,
     UpdateUserService,
     UpdateAdminUserService,
+    DeleteUserService,
     CreateUnivService,
     ReadUnivBriefService,
     ReadUnivDetailService,
