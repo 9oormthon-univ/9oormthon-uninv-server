@@ -166,3 +166,13 @@ Content-Type: application/json
   "fe_capacity": 1,
   "be_capacity": 4
 }
+
+### 4.2 (어드민) 특정 팀에 멤버 추가
+//@no-log
+POST {{host_url}}/api/v1/admins/teams/3/members
+Content-Type: application/json
+
+{
+  "role" : "BE",
+  "user_id": 2
+}

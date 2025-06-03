@@ -5,8 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '../core/infra/database.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UpdateUserService } from './application/service/update-user.service';
-import { UserQueryV1Controller } from './controller/query/user-query-v1.controller';
-import { UserCommandV1Controller } from './controller/command/user-command-v1.controller';
 import { UserRepository } from './repository/user.repository';
 import { UnivRepository } from './repository/univ.repository';
 import { ReadUserDetailService } from './application/service/read-user-detail.service';
@@ -22,6 +20,8 @@ import { ReadAdminUserDetailService } from './application/service/read-admin-use
 import { MemberRepository } from '../team/repository/member.repository';
 import { UpdateAdminUserService } from './application/service/update-admin-user-service';
 import { DeleteUserService } from './application/service/delete-user.service';
+import { UserQueryV1Controller } from './controller/query/user-query-v1.controller';
+import { UserCommandV1Controller } from './controller/command/user-command-v1.controller';
 
 @Module({
   imports: [

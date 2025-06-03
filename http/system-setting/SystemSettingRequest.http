@@ -9,10 +9,10 @@ Content-Type: application/json
 
 {
   "idea_submission_start" : "2025-02-24T00:00:00",
-  "idea_submission_end" : "2025-06-02T23:59:59",
-  "phase1_team_building_start": "2025-06-03T00:00:00",
-  "phase1_team_building_end" : "2025-06-08T23:59:59",
-  "phase1_confirmation_start": "2025-06-09T00:00:00",
+  "idea_submission_end" : "2025-06-01T23:59:59",
+  "phase1_team_building_start": "2025-06-02T00:00:00",
+  "phase1_team_building_end" : "2025-06-02T23:59:59",
+  "phase1_confirmation_start": "2025-06-03T00:00:00",
   "phase1_confirmation_end" : "2025-06-14T23:59:59",
   "phase2_team_building_start": "2025-06-15T00:00:00",
   "phase2_team_building_end" : "2025-06-18T23:59:59",
