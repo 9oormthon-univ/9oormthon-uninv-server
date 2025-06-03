@@ -33,7 +33,7 @@ export class UpdateAdminUserService {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
 
-      const univ = await this.univRepository.findById(requestDto.univ_id, manager);
+      const univ = await this.univRepository.findById(requestDto.univId, manager);
       if (!univ) {
         throw new CommonException(ErrorCode.NOT_FOUND_UNIV);
       }
@@ -51,7 +51,7 @@ export class UpdateAdminUserService {
         requestDto.name,
         univ,
         requestDto.email,
-        requestDto.phone_number,
+        requestDto.phoneNumber,
         requestDto.generation.map(String)
       );
       await this.userRepository.save(updatedUser, manager);
