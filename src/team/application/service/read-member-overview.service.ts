@@ -38,6 +38,7 @@ export class ReadMemberOverviewService {
         (member) => {
           return {
             id: member.id,
+            user_id: member.user.id,
             name: member.user.name,
             role: member.role,
             univ: member.user.univ.name,

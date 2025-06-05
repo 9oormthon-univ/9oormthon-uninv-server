@@ -2,6 +2,7 @@ import { ERole } from '../../../../core/enums/role.enum';
 
 export class MemberOverviewDto {
   id: number;
+  user_id: number;
   name: string;
   role: ERole;
   univ: string;
@@ -9,6 +10,7 @@ export class MemberOverviewDto {
 
   constructor(
     id: number,
+    user_id: number,
     name: string,
     role: ERole,
     univ: string,
