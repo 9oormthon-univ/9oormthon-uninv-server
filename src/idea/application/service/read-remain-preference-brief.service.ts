@@ -1,4 +1,4 @@
-import { ReadRemainPreferenceBriefRequestDto } from '../dto/request/read-remain-preference-brief.request.dto';
+import { ReadRemainPreferenceBriefQueryDto } from '../dto/request/read-remain-preference-brief.query.dto';
 import { ReadRemainPreferenceBriefResponseDto } from '../dto/response/read-remain-preference-brief.response.dto';
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
@@ -20,7 +20,7 @@ export class ReadRemainPreferenceBriefService {
   ) {}
 
 
-  async execute(userId: number, requestDto: ReadRemainPreferenceBriefRequestDto): Promise<ReadRemainPreferenceBriefResponseDto> {
+  async execute(userId: number, requestDto: ReadRemainPreferenceBriefQueryDto): Promise<ReadRemainPreferenceBriefResponseDto> {
     return this.dataSource.transaction(async (manager) => {
 
       // 유저 조회

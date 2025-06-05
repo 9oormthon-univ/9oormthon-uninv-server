@@ -12,7 +12,6 @@ import { CreateIdeaSubjectService } from './application/service/create-idea-subj
 import { ApplyRepository } from './repository/apply.repository';
 import { BookmarkRepository } from './repository/bookmark.repository';
 import { AdminIdeaCommandV1Controller } from './controller/command/admin-idea-command-v1.controller';
-import { AdminIdeaQueryV1Controller } from './controller/query/admin-idea-query-v1.controller';
 import { UpdateIdeaSubjectIsActiveService } from './application/service/update-idea-subject-is-active.service';
 import { CreateApplyService } from './application/service/create-apply.service';
 import { CreateOrDeleteBookmarkService } from './application/service/create-or-delete-bookmark.service';
@@ -32,11 +31,9 @@ import { RejectApplyService } from './application/service/reject-apply.service';
 import { CancelApplyService } from './application/service/cancel-apply.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import {
-  HandlePeriodTransitionBySchedulerService
+  HandlePeriodTransitionBySchedulerService,
 } from './application/service/handle-period-transition-by-scheduler.service';
 import { DeleteIdeaService } from './application/service/delete-idea.service';
-import { CreateTeamService } from './application/service/create-team.service';
-import { CreateMemberService } from './application/service/create-member.service';
 
 @Module({
   imports: [
@@ -53,7 +50,6 @@ import { CreateMemberService } from './application/service/create-member.service
     UserIdeaCommandV1Controller,
     UserIdeaQueryV1Controller,
     AdminIdeaCommandV1Controller,
-    AdminIdeaQueryV1Controller,
     IdeaQueryV1Controller
   ],
   providers: [
@@ -75,8 +71,6 @@ import { CreateMemberService } from './application/service/create-member.service
     RejectApplyService,
     CancelApplyService,
     DeleteIdeaService,
-    CreateTeamService,
-    CreateMemberService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,

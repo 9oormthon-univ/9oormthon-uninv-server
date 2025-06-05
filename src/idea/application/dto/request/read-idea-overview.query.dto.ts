@@ -1,4 +1,3 @@
-// src/idea/dto/query/read-idea-overview-query.dto.ts
 import { IsNotEmpty, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 import { Expose, Type, Transform } from 'class-transformer';
 

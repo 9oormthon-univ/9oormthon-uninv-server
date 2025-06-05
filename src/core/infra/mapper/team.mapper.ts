@@ -2,6 +2,7 @@ import { TeamEntity } from '../entities/team.entity';
 import { TeamModel } from '../../../team/domain/team.model';
 import { IdeaMapper } from './idea.mapper';
 import { MemberMapper } from './member.mapper';
+import { ProjectMapper } from './project.mapper';
 
 export class TeamMapper {
   static toDomain(entity:TeamEntity, options?: { skipMembers?: boolean, skipIdea: boolean }): TeamModel {
@@ -14,9 +15,11 @@ export class TeamMapper {
       entity.pdCapacity,
       entity.feCapacity,
       entity.beCapacity,
+      entity.status,
       options?.skipIdea
         ? null
         : IdeaMapper.toDomain(entity.idea),
+      entity.project ? ProjectMapper.toDomain(entity.project) : null,
       options?.skipMembers
         ? []
         : (entity.members ?? []).map(member => MemberMapper.toDomain(member, { skipTeam: true })),
@@ -34,7 +37,9 @@ export class TeamMapper {
     entity.pdCapacity = domain.pdCapacity;
     entity.feCapacity = domain.feCapacity;
     entity.beCapacity = domain.beCapacity;
+    entity.status = domain.status;
     entity.idea = domain.idea ? IdeaMapper.toEntity(domain.idea) : null;
+    entity.project = domain.project ? ProjectMapper.toEntity(domain.project) : null;
     entity.createdAt = domain.createdAt;
     return entity;
   }

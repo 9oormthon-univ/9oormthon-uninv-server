@@ -10,6 +10,12 @@ import { UserTeamQueryV1Controller } from './controller/query/user-team-query-v1
 import { UserTeamCommandV1Controller } from './controller/command/user-team-command-v1.controller';
 import { ReadTeamDetailService } from './application/service/read-team-detail.service';
 import { UpdateTeamService } from './application/service/update-team.service';
+import { ReadTeamOverviewService } from './application/service/read-team-overview.service';
+import { UserModule } from '../user/user.module';
+import { AdminTeamQueryV1Controller } from './controller/query/admin-team-query-v1.controller';
+import { AdminTeamCommandV1Controller } from './controller/command/admin-team-command-v1.controller';
+import { CreateTeamService } from './application/service/create-team.service';
+import { CreateMemberService } from './application/service/create-member.service';
 
 @Module({
   imports: [
@@ -20,13 +26,17 @@ import { UpdateTeamService } from './application/service/update-team.service';
         MemberEntity,
         ProjectEntity,
       ]
-    )
+    ),
+    UserModule,
   ],
-  controllers: [UserTeamQueryV1Controller, UserTeamCommandV1Controller],
+  controllers: [UserTeamQueryV1Controller, UserTeamCommandV1Controller, AdminTeamQueryV1Controller, AdminTeamCommandV1Controller],
   providers: [
     TeamRepository,
     MemberRepository,
+    CreateTeamService,
+    CreateMemberService,
     ReadTeamDetailService,
+    ReadTeamOverviewService,
     UpdateTeamService
   ],
   exports: [TeamRepository, MemberRepository]
