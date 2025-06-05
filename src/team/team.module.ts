@@ -16,6 +16,7 @@ import { AdminTeamQueryV1Controller } from './controller/query/admin-team-query-
 import { AdminTeamCommandV1Controller } from './controller/command/admin-team-command-v1.controller';
 import { CreateTeamService } from './application/service/create-team.service';
 import { CreateMemberService } from './application/service/create-member.service';
+import { ReadMemberOverviewService } from './application/service/read-member-overview.service';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CreateMemberService } from './application/service/create-member.service
     CreateMemberService,
     ReadTeamDetailService,
     ReadTeamOverviewService,
+    ReadMemberOverviewService,
     UpdateTeamService
   ],
   exports: [TeamRepository, MemberRepository]
