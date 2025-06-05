@@ -1,4 +1,3 @@
-import { UserModel } from '../../../../user/domain/user.model';
 import { TeamModel } from '../../../domain/team.model';
 import { MemberModel } from '../../../domain/member.model';
 
