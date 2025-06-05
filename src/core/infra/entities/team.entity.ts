@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IdeaEntity } from './idea.entity';
 import { MemberEntity } from './member.entity';
+import { ProjectEntity } from './project.entity';
+import { ETeamStatus } from '../../enums/team-status.enum';
 
 @Entity('teams')
 export class TeamEntity {
@@ -34,12 +36,18 @@ export class TeamEntity {
   @Column({ name: 'be_capacity', nullable: false })
   beCapacity: number;
 
+  @Column({ name: 'status', type: 'enum', enum: ETeamStatus, nullable: false })
+  status: ETeamStatus;
+
   /* ----------------------------- */
   /* ----- One To One Column ----- */
   /* ----------------------------- */
   @OneToOne(() => IdeaEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'idea_id' })
   idea: IdeaEntity;
+
+  @OneToOne(() => ProjectEntity, (project) => project.team)
+  project: ProjectEntity;
 
   @OneToMany(() => MemberEntity, (member) => member.team)
   members: MemberEntity[];

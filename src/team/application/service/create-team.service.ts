@@ -1,12 +1,13 @@
 import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { UserRepository } from '../../../user/repository/user.repository';
-import { TeamRepository } from '../../../team/repository/team.repository';
+import { TeamRepository } from '../../repository/team.repository';
 import { DataSource } from 'typeorm';
 import { CreateTeamRequestDto } from '../dto/request/create-team.request.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
-import { TeamModel } from '../../../team/domain/team.model';
+import { TeamModel } from '../../domain/team.model';
+import { ETeamStatus } from '../../../core/enums/team-status.enum';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -38,6 +39,8 @@ export class CreateTeamService {
         requestDto.pdCapacity,
         requestDto.feCapacity,
         requestDto.beCapacity,
+        ETeamStatus.RECRUITING,
+        null,
         null
       )
 

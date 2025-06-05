@@ -9,6 +9,9 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import { EApplyStatus } from '../../../core/enums/apply-status.enum';
 import { ApplyModel } from '../../domain/apply.model';
 import { MemberModel } from '../../../team/domain/member.model';
+import { TeamRepository } from '../../../team/repository/team.repository';
+import { ETeamStatus } from '../../../core/enums/team-status.enum';
+import { TeamModel } from '../../../team/domain/team.model';
 
 @Injectable()
 export class HandlePeriodTransitionBySchedulerService {
@@ -18,6 +21,7 @@ export class HandlePeriodTransitionBySchedulerService {
     private readonly systemSettingRepository: SystemSettingRepository,
     private readonly applyRepository: ApplyRepository,
     private readonly memberRepository: MemberRepository,
+    private readonly teamRepository: TeamRepository,
     private readonly dataSource: DataSource,
   ) {
   }
@@ -73,6 +77,7 @@ export class HandlePeriodTransitionBySchedulerService {
    *    - 동일 사용자가 단 1건이라면 해당 Apply의 상태를 CONFIRMED로 업데이트하고 member를 생성
    */
   private async processConfirmationTransition(generation: number, phase: number, manager: EntityManager): Promise<void> {
+
     this.logger.log(`generation: ${generation}, phase: ${phase}에 대한 기간 전환 처리 시작`);
 
     // 1. 해당 generation, phase에 해당하는 Apply들을 조회
@@ -124,6 +129,12 @@ export class HandlePeriodTransitionBySchedulerService {
       );
 
       await this.memberRepository.save(member, manager);
+
+      // 인원이 최대 인원 수 이상을 갖춘 팀의 경우, 팀 상태를 END로 변경
+      if (confirmedApply.idea.team.members.length >= TeamModel.MAX_TOTAL_CAPACITY) {
+        confirmedApply.idea.team.updateStatus(ETeamStatus.END);
+      }
+      await this.teamRepository.save(confirmedApply.idea.team, manager);
 
       // 동일 사용자에 대해 두 번째 이후의 Apply는 ACCEPTED_NOT_JOINED로 업데이트
       for (let i = 1; i < userApplies.length; i++) {

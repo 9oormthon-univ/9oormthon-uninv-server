@@ -2,12 +2,14 @@ import { Injectable, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { UserRepository } from '../../../user/repository/user.repository';
 import { DataSource } from 'typeorm';
-import { MemberRepository } from '../../../team/repository/member.repository';
+import { MemberRepository } from '../../repository/member.repository';
 import { CreateMemberRequestDto } from '../dto/request/create-member.request.dto';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
-import { TeamRepository } from '../../../team/repository/team.repository';
-import { MemberModel } from '../../../team/domain/member.model';
+import { TeamRepository } from '../../repository/team.repository';
+import { MemberModel } from '../../domain/member.model';
+import { TeamModel } from '../../domain/team.model';
+import { ETeamStatus } from '../../../core/enums/team-status.enum';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -31,7 +33,7 @@ export class CreateMemberService {
       // 어드민 권한 검증
       admin.validateAdminRole();
 
-      const team = await this.teamRepository.findById(teamId, manager);
+      const team = await this.teamRepository.findWithMembersById(teamId, manager);
       if (!team) {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
@@ -44,6 +46,12 @@ export class CreateMemberService {
       const existedMember = await this.memberRepository.findByUserIdAndGeneration(user.id, team.generation, manager);
       if (existedMember) {
         throw new CommonException(ErrorCode.ALREADY_HAVE_TEAM_ERROR);
+      }
+
+      // 인원이 최대 인원 수 이상을 갖춘 팀의 경우, 팀 상태를 END로 변경
+      if (team.members.length + 1 >= TeamModel.MAX_TOTAL_CAPACITY) {
+        team.updateStatus(ETeamStatus.END);
+        await this.teamRepository.save(team, manager);
       }
 
       // 멤버 생성

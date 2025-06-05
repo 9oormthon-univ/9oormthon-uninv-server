@@ -12,6 +12,7 @@ import { TeamRepository } from '../../../team/repository/team.repository';
 import { TeamModel } from '../../../team/domain/team.model';
 import { MemberRepository } from '../../../team/repository/member.repository';
 import { MemberModel } from '../../../team/domain/member.model';
+import { ETeamStatus } from '../../../core/enums/team-status.enum';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -80,7 +81,9 @@ export class CreateIdeaService {
         requestDto.requirements.pd.capacity,
         requestDto.requirements.fe.capacity,
         requestDto.requirements.be.capacity,
-        createdIdea
+        ETeamStatus.RECRUITING,
+        createdIdea,
+        null
       );
 
       // 팀원 수 시스템 유효성 검증

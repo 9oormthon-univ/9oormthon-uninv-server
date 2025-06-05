@@ -1,3 +1,4 @@
+
 import { ApplyEntity } from '../entities/apply.entity';
 import { ApplyModel } from '../../../idea/domain/apply.model';
 import { UserMapper } from './user.mapper';

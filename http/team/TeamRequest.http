@@ -1,8 +1,38 @@
-### 4.1 팀 정보 조회
+### 4.1 (어드민) 팀 추가하기
+//@no-log
+POST {{host_url}}/api/v1/admins/teams
+Content-Type: application/json
+
+{
+  "generation": 4,
+  "name": "테스트팀",
+  "pm_capacity": 0,
+  "pd_capacity": 1,
+  "fe_capacity": 1,
+  "be_capacity": 1
+}
+
+### 4.2 (어드민) 특정 팀에 멤버 추가
+//@no-log
+POST {{host_url}}/api/v1/admins/teams/3/members
+Content-Type: application/json
+
+{
+  "role" : "BE",
+  "user_id": 3
+}
+
+
+### 4.3 어드민 팀 요약 리스트 조회
+// @no-log
+GET {{host_url}}/api/v1/admins/teams/overviews?page=1&size=10&generation=4
+
+
+### 4.5 팀 정보 조회
 // @no-log
 GET {{host_url}}/api/v1/users/teams/details?generation=4
 
-### 4.2 팀 정보 수정
+### 4.7 팀 정보 수정
 // @no-log
 PATCH {{host_url}}/api/v1/users/teams
 Content-Type: application/json

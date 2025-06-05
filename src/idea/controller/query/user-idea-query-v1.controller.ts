@@ -13,16 +13,16 @@ import { ResponseInterceptor } from '../../../core/interceptors/response.interce
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { ReadIdeaOverviewService } from '../../application/service/read-idea-overview.service';
 import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
-import { ReadIdeaOverviewQueryDto } from '../../application/dto/request/read-idea-overview.request.dto';
+import { ReadIdeaOverviewQueryDto } from '../../application/dto/request/read-idea-overview.query.dto';
 import { ResponseDto } from '../../../core/dto/response.dto';
 import { ReadMyIdeaDetailService } from '../../application/service/read-my-idea-detail.service';
 import { ReadIdeaDetailService } from '../../application/service/read-idea-detail.service';
 import { ReadRemainPreferenceBriefService } from '../../application/service/read-remain-preference-brief.service';
-import { ReadRemainPreferenceBriefRequestDto } from '../../application/dto/request/read-remain-preference-brief.request.dto';
+import { ReadRemainPreferenceBriefQueryDto } from '../../application/dto/request/read-remain-preference-brief.query.dto';
 import { ReadRemainPreferenceBriefResponseDto } from '../../application/dto/response/read-remain-preference-brief.response.dto';
 import { ReadMyApplyOverviewService } from '../../application/service/read-my-apply-overview.service';
-import { ReadMyApplyOverviewRequestDto } from '../../application/dto/request/read-my-apply-overview.request.dto';
-import { ReadTeamApplyOverviewRequestDto } from '../../application/dto/request/read-team-apply-overview.request.dto';
+import { ReadMyApplyOverviewQueryDto } from '../../application/dto/request/read-my-apply-overview.query.dto';
+import { ReadTeamApplyOverviewQueryDto } from '../../application/dto/request/read-team-apply-overview.query.dto';
 import { ReadTeamApplyOverviewService } from '../../application/service/read-team-apply-overview.service';
 import { ReadTeamApplyOverviewResponseDto } from '../../application/dto/response/read-team-apply-overview.response.dto';
 
@@ -100,7 +100,7 @@ export class UserIdeaQueryV1Controller {
   @UseGuards(JwtAuthGuard)
   async readMyApplyOverview(
     @Req() req,
-    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadMyApplyOverviewRequestDto,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadMyApplyOverviewQueryDto,
   ): Promise<ResponseDto<any>> {
     return ResponseDto.ok(
       await this.readMyApplyOverviewUseCase.execute(
@@ -118,7 +118,7 @@ export class UserIdeaQueryV1Controller {
   @UseGuards(JwtAuthGuard)
   async readRemainPreferenceBrief(
     @Req() req,
-    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadRemainPreferenceBriefRequestDto,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadRemainPreferenceBriefQueryDto,
   ): Promise<ResponseDto<ReadRemainPreferenceBriefResponseDto>> {
     return ResponseDto.ok(
       await this.readRemainPreferenceBriefUseCase.execute(
@@ -135,7 +135,7 @@ export class UserIdeaQueryV1Controller {
   @UseGuards(JwtAuthGuard)
   async readTeamApplyOverview(
     @Req() req,
-    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadTeamApplyOverviewRequestDto,
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadTeamApplyOverviewQueryDto,
   ): Promise<ResponseDto<ReadTeamApplyOverviewResponseDto>> {
     return ResponseDto.ok(await this.readTeamApplyOverviewUseCase.execute(req.user.id, query.generation, query.phase));
   }

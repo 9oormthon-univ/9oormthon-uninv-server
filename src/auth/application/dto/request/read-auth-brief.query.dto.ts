@@ -10,7 +10,7 @@ export function ToNumberOrUndefined() {
   });
 }
 
-export class ReadAuthBriefRequestDto {
+export class ReadAuthBriefQueryDto {
   @IsInt({ message: 'generation은 필수이며, 숫자여야 합니다.' })
   @ToNumberOrUndefined()
   generation: number;

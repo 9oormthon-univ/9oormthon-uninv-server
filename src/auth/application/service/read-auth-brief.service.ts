@@ -8,7 +8,7 @@ import { ESecurityRole } from '../../../core/enums/security-role.enum';
 import { ReadAuthBriefResponseDto } from '../dto/response/read-auth-brief.response.dto';
 import { UserRepository } from '../../../user/repository/user.repository';
 import { IdeaRepository } from '../../../idea/repository/idea.repository';
-import { ReadAuthBriefRequestDto } from '../dto/request/read-auth-brief.request.dto';
+import { ReadAuthBriefQueryDto } from '../dto/request/read-auth-brief.query.dto';
 import { MemberRepository } from '../../../team/repository/member.repository';
 import { EUserStatus } from '../../../core/enums/user-status.enum';
 import { ApplyRepository } from '../../../idea/repository/apply.repository';
@@ -26,7 +26,7 @@ export class ReadAuthBriefService {
   ) {
   }
 
-  async execute(accessToken: string, requestDto: ReadAuthBriefRequestDto): Promise<any> {
+  async execute(accessToken: string, requestDto: ReadAuthBriefQueryDto): Promise<any> {
     return this.dataSource.transaction(async (manager) => {
 
       let payload: any;
