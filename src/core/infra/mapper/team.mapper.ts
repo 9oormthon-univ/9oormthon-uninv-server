@@ -19,7 +19,7 @@ export class TeamMapper {
       options?.skipIdea
         ? null
         : IdeaMapper.toDomain(entity.idea),
-      entity.project ? ProjectMapper.toDomain(entity.project) : null,
+      entity.project ? ProjectMapper.toDomain(entity.project, { skipTeam: true }) : null,
       options?.skipMembers
         ? []
         : (entity.members ?? []).map(member => MemberMapper.toDomain(member, { skipTeam: true })),

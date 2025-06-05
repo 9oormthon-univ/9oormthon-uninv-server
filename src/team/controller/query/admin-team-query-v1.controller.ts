@@ -17,6 +17,7 @@ import { ResponseDto } from '../../../core/dto/response.dto';
 import { ReadTeamOverviewQueryDto } from '../../application/dto/request/read-team-overview.query.dto';
 import { ReadTeamOverviewResponseDto } from '../../application/dto/response/read-team-overview.response.dto';
 import { ReadMemberOverviewService } from '../../application/service/read-member-overview.service';
+import { ReadAdminTeamDetailService } from '../../application/service/read-admin-team-detail.service';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -25,6 +26,7 @@ export class AdminTeamQueryV1Controller {
   constructor(
     private readonly readTeamOverviewUseCase: ReadTeamOverviewService,
     private readonly readMemberOverviewUseCase: ReadMemberOverviewService,
+    private readonly readAdminTeamDetailUseCase: ReadAdminTeamDetailService,
   ) {}
 
   /**
@@ -49,8 +51,26 @@ export class AdminTeamQueryV1Controller {
     );
   }
 
+
   /**
-   * 4.4 어드민 팀원 정보 요약 리스트 조회
+   * 4.4 어드민 팀 상세 정보 조회
+   */
+  @Get('teams/:teamId(\\d+)/details')
+  @UseGuards(JwtAuthGuard)
+  async readAdminTeamDetail(
+    @Req() req,
+    @Param('teamId') teamId: number
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(
+      await this.readAdminTeamDetailUseCase.execute(
+        req.user.id,
+        teamId
+      )
+    );
+  }
+
+  /**
+   * 4.5 어드민 팀원 정보 요약 리스트 조회
    */
   @Get('teams/:teamId(\\d+)/members/overviews')
   @UseGuards(JwtAuthGuard)

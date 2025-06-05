@@ -3,7 +3,7 @@ import { ProjectModel } from '../../../team/domain/project.model';
 import { TeamMapper } from './team.mapper';
 
 export class ProjectMapper {
-  static toDomain(entity:ProjectEntity):ProjectModel {
+  static toDomain(entity:ProjectEntity, options?: { skipTeam: boolean }):ProjectModel {
     return new ProjectModel(
       entity.id,
       entity.name,
@@ -14,7 +14,9 @@ export class ProjectMapper {
       entity.frontendLink,
       entity.releaseLink,
       entity.imgUrl,
-      TeamMapper.toDomain(entity.team),
+      options?.skipTeam
+        ? null
+        : TeamMapper.toDomain(entity.team),
       entity.createdAt
     );
   }

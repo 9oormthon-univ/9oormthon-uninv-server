@@ -9,6 +9,15 @@ export class TeamRepository {
   constructor(private readonly dataSource: DataSource) {
   }
 
+  async findWithProjectById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+    const entity = await repo.findOne({
+      where: { id },
+      relations: ['project']
+    });
+    return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: true }) : undefined;
+  }
+
   async findWithMembersById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
     const entity = await repo.findOne({
