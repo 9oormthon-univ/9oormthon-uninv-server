@@ -2,7 +2,7 @@ import {
   Body,
   Controller, Delete,
   Param, Patch,
-  Post,
+  Post, Put,
   Req,
   UseFilters,
   UseGuards,
@@ -20,6 +20,8 @@ import { CreateMemberService } from '../../application/service/create-member.ser
 import { UpdateMemberIsLeaderService } from '../../application/service/update-member-is-leader.service';
 import { DeleteTeamService } from '../../application/service/delete-team.service';
 import { DeleteMemberService } from '../../application/service/delete-member.service';
+import { UpdateAdminTeamService } from '../../application/service/update-admin-team.service';
+import { UpdateAdminTeamRequestDto } from '../../application/dto/request/update-admin-team.request.dto';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -28,6 +30,7 @@ export class AdminTeamCommandV1Controller {
   constructor(
     private readonly createTeamUseCase: CreateTeamService,
     private readonly createMemberUseCase: CreateMemberService,
+    private readonly updateAdminTeamUseCase: UpdateAdminTeamService,
     private readonly updateMemberIsLeaderUseCase: UpdateMemberIsLeaderService,
     private readonly deleteTeamUseCase: DeleteTeamService,
     private readonly deleteMemberUseCase: DeleteMemberService
@@ -59,6 +62,21 @@ export class AdminTeamCommandV1Controller {
     await this.createMemberUseCase.execute(req.user.id, teamId, requestDto);
     return ResponseDto.created(null);
   }
+
+  /**
+   * 4.7 어드민 팀 정보 수정
+   */
+  @Put('/teams/:teamId(\\d+)')
+  @UseGuards(JwtAuthGuard)
+  async updateAdminTeam(
+    @Req() req,
+    @Param('teamId') teamId: number,
+    @Body(new ValidationPipe({ transform: true })) requestDto: UpdateAdminTeamRequestDto,
+  ): Promise<ResponseDto<any>> {
+    await this.updateAdminTeamUseCase.execute(req.user.id, teamId, requestDto);
+    return ResponseDto.ok(null);
+  }
+
 
   /**
    * 4.8 어드민 팀원 팀장 임명
