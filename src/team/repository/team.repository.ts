@@ -134,4 +134,10 @@ export class TeamRepository {
 
     await repo.save(TeamMapper.toEntity(team));
   }
+
+  async delete(team: TeamModel, manager?: EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+
+    await repo.remove(TeamMapper.toEntity(team));
+  }
 }
