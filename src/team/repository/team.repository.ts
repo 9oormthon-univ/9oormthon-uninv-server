@@ -129,6 +129,14 @@ export class TeamRepository {
     return TeamMapper.toDomain(await repo.save(TeamMapper.toEntity(team)));
   }
 
+  async saveAndReturnSkipIdeaTrue(team: TeamModel, manager?: EntityManager): Promise<TeamModel> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+
+    return TeamMapper.toDomain(await repo.save(TeamMapper.toEntity(team)), { skipIdea: true });
+  }
+
+
+
   async save(team: TeamModel, manager?: EntityManager): Promise<void> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
 

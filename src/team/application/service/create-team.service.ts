@@ -49,7 +49,7 @@ export class CreateTeamService {
 
       team.validateSystemCapacityLimits();
 
-      const createdTeam = await this.teamRepository.saveAndReturn(team, manager);
+      const createdTeam = await this.teamRepository.saveAndReturnSkipIdeaTrue(team, manager);
 
       // 프로젝트 생성
       const project = ProjectModel.createProject(
