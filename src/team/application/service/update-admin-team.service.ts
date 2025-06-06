@@ -55,28 +55,30 @@ export class UpdateAdminTeamService {
       )[0];
 
       // 팀 리더 변경
-      if (leader !== null && leader !== undefined && leader.user.id != requestDto.leaderId) {
-        const oldLeader = leader.changeIsLeader(false);
-        await this.memberRepository.save(oldLeader, manager);
+      if (requestDto.leaderId != 0) {
+        if (leader !== null && leader !== undefined && leader.user.id != requestDto.leaderId) {
+          const oldLeader = leader.changeIsLeader(false);
+          await this.memberRepository.save(oldLeader, manager);
 
-        const newLeader = team.members.filter(
-          (member) => member.user.id === requestDto.leaderId
-        )[0];
-        if (!newLeader) {
-          throw new CommonException(ErrorCode.NOT_FOUND_USER);
-        }
-        const updatedNewLeader = newLeader.changeIsLeader(true);
-        await this.memberRepository.save(updatedNewLeader, manager);
+          const newLeader = team.members.filter(
+            (member) => member.user.id === requestDto.leaderId
+          )[0];
+          if (!newLeader) {
+            throw new CommonException(ErrorCode.NOT_FOUND_USER);
+          }
+          const updatedNewLeader = newLeader.changeIsLeader(true);
+          await this.memberRepository.save(updatedNewLeader, manager);
 
-      } else if (leader === null || leader === undefined) { // 리더가 없었던 경우
-        const newLeader = team.members.filter(
-          (member) => member.user.id === requestDto.leaderId
-        )[0];
-        if (!newLeader) {
-          throw new CommonException(ErrorCode.NOT_FOUND_USER);
+        } else if (leader === null || leader === undefined) { // 리더가 없었던 경우
+          const newLeader = team.members.filter(
+            (member) => member.user.id === requestDto.leaderId
+          )[0];
+          if (!newLeader) {
+            throw new CommonException(ErrorCode.NOT_FOUND_USER);
+          }
+          const updatedNewLeader = newLeader.changeIsLeader(true);
+          await this.memberRepository.save(updatedNewLeader, manager);
         }
-        const updatedNewLeader = newLeader.changeIsLeader(true);
-        await this.memberRepository.save(updatedNewLeader, manager);
       }
 
       // 프로젝트 조회
