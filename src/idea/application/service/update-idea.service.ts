@@ -81,10 +81,13 @@ export class UpdateIdeaService {
       }
 
       if(member.role !== requestDto.ideaInfo.providerRole) {
-        // 바꾸려는 직군에 빈 자리가 있는지 확인
-        updatedTeam.validateTeamCapacityLimits(requestDto.ideaInfo.providerRole);
+        // 아이디어 제시자의 역할이 바뀌었다면, member 의 role 도 업데이트
         const updatedMember = member.changeRole(requestDto.ideaInfo.providerRole);
-        this.memberRepository.save(updatedMember, manager);
+        await this.memberRepository.save(updatedMember, manager);
+
+        // 바꾸려는 직군에 빈 자리가 있는지 확인
+        const updatedTeamWithMembers = await this.teamRepository.findByIdeaWithIdeaAndMembers(updatedIdea, manager);
+        updatedTeamWithMembers.validateTeamCapacityLimits(requestDto.ideaInfo.providerRole);
       }
     });
   }

@@ -48,7 +48,7 @@ export class ErrorCode {
   static readonly PD_CAPACITY_ERROR = new ErrorCode(40018, HttpStatus.BAD_REQUEST, "디자이너는 1명을 초과할 수 없습니다.");
   static readonly FE_CAPACITY_ERROR = new ErrorCode(40019, HttpStatus.BAD_REQUEST, "프론트엔드는 3명을 초과할 수 없습니다.");
   static readonly BE_CAPACITY_ERROR = new ErrorCode(40020, HttpStatus.BAD_REQUEST, "백엔드는 3명을 초과할 수 없습니다.");
-  static readonly CLOSED_APPLY_ERROR = new ErrorCode(40021, HttpStatus.BAD_REQUEST, "마감된 파트입니다.");
+  static readonly CLOSED_APPLY_ERROR = new ErrorCode(40021, HttpStatus.BAD_REQUEST, "해당 직군에 잔여 인원이 없습니다.");
   static readonly ALREADY_APPLIED_IDEA_ERROR = new ErrorCode(40022, HttpStatus.BAD_REQUEST, "이미 지원한 아이디어입니다.");
   static readonly NOT_IDEA_APPLY_PERIOD_ERROR = new ErrorCode(40023, HttpStatus.BAD_REQUEST, "아이디어 지원 기간이 아닙니다.");
   static readonly DUPLICATED_PREFERENCE_ERROR = new ErrorCode(40024, HttpStatus.BAD_REQUEST, "이미 지원한 지망 순번입니다.");
