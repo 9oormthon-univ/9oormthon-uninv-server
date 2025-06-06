@@ -36,7 +36,7 @@ export class CreateTeamService {
       // 팀 생성
       const team = TeamModel.createTeam(
         requestDto.name,
-        null,
+        0,
         requestDto.generation,
         requestDto.pmCapacity,
         requestDto.pdCapacity,

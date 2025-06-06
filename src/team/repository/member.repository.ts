@@ -29,6 +29,15 @@ export class MemberRepository {
     return member ? MemberMapper.toDomain(member) : undefined;
   }
 
+  async findByIdeaId(ideaId: number, manager?: EntityManager): Promise<MemberModel[]> {
+    const repo = manager ? manager.getRepository(MemberEntity) : this.dataSource.getRepository(MemberEntity);
+
+    const members = await repo.find({
+      where: { team: { idea: { id: ideaId } } },
+    });
+    return members.map((member) => MemberMapper.toDomain(member, { skipTeam: true }));
+  }
+
   async save(member: MemberModel, manager? : EntityManager) : Promise<void> {
     const repo = manager ? manager.getRepository(MemberEntity) : this.dataSource.getRepository(MemberEntity);
 

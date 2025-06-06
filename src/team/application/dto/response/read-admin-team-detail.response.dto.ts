@@ -9,6 +9,7 @@ export class ReadAdminTeamDetailResponseDto {
   fe_capacity: number;
   be_capacity: number;
   service_name: string;
+  idea_id: number | null;
   leader: {
     id: number;
     description: string;
@@ -23,6 +24,7 @@ export class ReadAdminTeamDetailResponseDto {
     fe_capacity: number,
     be_capacity: number,
     service_name: string,
+    idea_id: number | null,
     leader: { id: number; description: string }
   ) {
     this.id = id;
@@ -33,6 +35,7 @@ export class ReadAdminTeamDetailResponseDto {
     this.fe_capacity = fe_capacity;
     this.be_capacity = be_capacity;
     this.service_name = service_name;
+    this.idea_id = idea_id;
     this.leader = leader;
   }
 
@@ -48,6 +51,7 @@ export class ReadAdminTeamDetailResponseDto {
       team.feCapacity,
       team.beCapacity,
       team.project ? team.project.name : '',
+      team.idea ? team.idea.id : null,
       leader ? { id: leader.user.id, description: leader.user.name + ' / ' + leader.user.univ.name + ' / ' + leader.user.phoneNumber } : { id: 0, description: '' }
     );
   }
