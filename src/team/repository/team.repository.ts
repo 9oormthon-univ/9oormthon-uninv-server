@@ -13,9 +13,9 @@ export class TeamRepository {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
     const entity = await repo.findOne({
       where: { id },
-      relations: ['members', 'members.user', 'members.user.univ', 'project', 'idea']
+      relations: ['members', 'members.team', 'members.user', 'members.user.univ', 'project', 'idea']
     });
-    return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: true }) : undefined;
+    return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: false }) : undefined;
   }
 
   async findWithMembersById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
