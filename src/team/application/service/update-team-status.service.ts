@@ -51,8 +51,8 @@ export class UpdateTeamStatusService {
       }
 
       // 팀 상태 업데이트
-      team.updateStatus(ETeamStatus.END);
-      await this.teamRepository.save(team, manager);
+      const updatedTeam = team.updateStatus(ETeamStatus.END);
+      await this.teamRepository.save(updatedTeam, manager);
     });
   }
 }

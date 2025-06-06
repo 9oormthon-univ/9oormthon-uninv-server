@@ -38,7 +38,7 @@ export class UpdateAdminTeamService {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
 
-      team.updateByAdmin(
+      const updatedTeam = team.updateByAdmin(
         requestDto.teamName,
         requestDto.number,
         requestDto.pmCapacity,
@@ -47,23 +47,27 @@ export class UpdateAdminTeamService {
         requestDto.beCapacity
       );
       // 팀원 직군 유효성 검증
-      team.validateSystemCapacityLimits();
-      await this.teamRepository.save(team, manager);
+      updatedTeam.validateSystemCapacityLimits();
+      await this.teamRepository.save(updatedTeam, manager);
 
       const leader = team.members.filter(
         (member) => member.isLeader
       )[0];
+
       // 팀 리더 변경
       if (leader !== null && leader !== undefined && leader.user.id != requestDto.leaderId) {
-        leader.changeIsLeader(false);
+        const oldLeader = leader.changeIsLeader(false);
+        await this.memberRepository.save(oldLeader, manager);
+
         const newLeader = team.members.filter(
           (member) => member.user.id === requestDto.leaderId
         )[0];
         if (!newLeader) {
           throw new CommonException(ErrorCode.NOT_FOUND_USER);
         }
-        newLeader.changeIsLeader(true);
-        await this.memberRepository.save(newLeader, manager);
+        const updatedNewLeader = newLeader.changeIsLeader(true);
+        await this.memberRepository.save(updatedNewLeader, manager);
+
       } else if (leader === null || leader === undefined) { // 리더가 없었던 경우
         const newLeader = team.members.filter(
           (member) => member.user.id === requestDto.leaderId
@@ -71,8 +75,8 @@ export class UpdateAdminTeamService {
         if (!newLeader) {
           throw new CommonException(ErrorCode.NOT_FOUND_USER);
         }
-        newLeader.changeIsLeader(true);
-        await this.memberRepository.save(newLeader, manager);
+        const updatedNewLeader = newLeader.changeIsLeader(true);
+        await this.memberRepository.save(updatedNewLeader, manager);
       }
 
       // 프로젝트 조회
@@ -91,8 +95,8 @@ export class UpdateAdminTeamService {
         );
         await this.projectRepository.save(newProject, manager);
       } else {
-        project.updateName(requestDto.serviceName)
-        await this.projectRepository.save(project, manager);
+        const updatedProject = project.updateName(requestDto.serviceName)
+        await this.projectRepository.save(updatedProject, manager);
       }
     });
   }
