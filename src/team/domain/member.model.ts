@@ -43,6 +43,19 @@ export class MemberModel {
     );
   }
 
+  public changeIsLeader(
+    isLeader: boolean
+  ): MemberModel {
+    return new MemberModel(
+      this.id,
+      this.role,
+      isLeader,
+      this.user,
+      this.team,
+      this.createdAt
+    );
+  }
+
   public validateIsLeader(): void {
     if (!this.isLeader) {
       throw new CommonException(ErrorCode.NOT_TEAM_LEADER_ERROR);

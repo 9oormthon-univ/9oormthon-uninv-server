@@ -21,9 +21,9 @@ export class UpdateAdminUserRequestDto {
   @Expose({ name: 'phone_number' })
   phoneNumber: string;
 
-  @IsNotEmpty({ message: 'generation은 필수 값입니다.' })
-  @IsNumber({}, { message: 'generation은 숫자여야 합니다.' })
+  @IsNotEmpty({ message: 'generations은 필수 값입니다.' })
+  @IsNumber({}, { message: 'generations은 숫자여야 합니다.' })
   @Type(() => Number)
-  @Expose({ name: 'generation' })
-  generation: number[];
+  @Expose({ name: 'generations' })
+  generations: number[];
 }

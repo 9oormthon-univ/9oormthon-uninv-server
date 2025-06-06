@@ -6,6 +6,16 @@ import { MemberEntity } from '../../core/infra/entities/member.entity';
 export class MemberRepository {
   constructor(private readonly dataSource: DataSource) {}
 
+  async findWithTeamById(id: number, manager?: EntityManager): Promise<MemberModel | undefined> {
+    const repo = manager ? manager.getRepository(MemberEntity) : this.dataSource.getRepository(MemberEntity);
+
+    const member = await repo.findOne({
+      where: { id },
+      relations: ['user', 'team', 'team.members']
+    });
+    return member ? MemberMapper.toDomain(member) : undefined;
+  }
+
   async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<MemberModel | undefined> {
     const repo = manager ? manager.getRepository(MemberEntity) : this.dataSource.getRepository(MemberEntity);
 
