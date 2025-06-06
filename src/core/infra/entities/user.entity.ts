@@ -58,7 +58,7 @@ export class UserEntity {
   /* ----------------------------- */
   /* ----- Many To One Column ---- */
   /* ----------------------------- */
-  @ManyToOne(() => UnivEntity, { nullable: true })
+  @ManyToOne(() => UnivEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'univ_id' })
   univ: UnivEntity;
 

@@ -26,7 +26,7 @@ export class MemberEntity {
   /* ----------------------------- */
   /* ---- Many To One Column ----- */
   /* ----------------------------- */
-  @ManyToOne(() => UserEntity, { nullable: false })
+  @ManyToOne(() => UserEntity, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 

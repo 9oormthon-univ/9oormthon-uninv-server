@@ -24,7 +24,7 @@ export class UnivEntity {
   /* ----------------------------- */
   /* ---- Many To One Column ----- */
   /* ----------------------------- */
-  @ManyToOne(() => UserEntity, { nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'leader_id' })
   leader: UserEntity;
 

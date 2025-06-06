@@ -64,11 +64,11 @@ export class IdeaEntity {
   /* ----------------------------- */
   /* ----- Many To One Column ---- */
   /* ----------------------------- */
-  @ManyToOne(() => IdeaSubjectEntity)
+  @ManyToOne(() => IdeaSubjectEntity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'idea_subject_id' })
   ideaSubject: IdeaSubjectEntity;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'provider_id' })
   provider: UserEntity;
 
