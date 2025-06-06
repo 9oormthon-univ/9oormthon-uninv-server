@@ -75,7 +75,7 @@ export class CreateApplyService {
       const team = await this.teamRepository.findByIdeaWithIdeaAndMembers(idea, manager);
 
       // 지원이 마감된 파트에 대한 지원인지 확인
-      team.validateTeamCapacityLimits(requestDto.role);
+      team.validateApplyTeamCapacityLimits(requestDto.role);
 
       const apply = ApplyModel.createApply(
         requestDto.phase,

@@ -87,7 +87,7 @@ export class UpdateIdeaService {
 
         // 바꾸려는 직군에 빈 자리가 있는지 확인
         const updatedTeamWithMembers = await this.teamRepository.findByIdeaWithIdeaAndMembers(updatedIdea, manager);
-        updatedTeamWithMembers.validateTeamCapacityLimits(requestDto.ideaInfo.providerRole);
+        updatedTeamWithMembers.validateCreateOrUpdateTeamCapacityLimits(requestDto.ideaInfo.providerRole);
       }
     });
   }
