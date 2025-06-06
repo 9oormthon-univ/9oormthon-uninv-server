@@ -25,6 +25,7 @@ import { IdeaModule } from '../idea/idea.module';
 import { SystemSettingModule } from '../system-setting/system-setting.module';
 import { DeleteTeamService } from './application/service/delete-team.service';
 import { UpdateTeamStatusService } from './application/service/update-team-status.service';
+import { UpdateAdminTeamService } from './application/service/update-admin-team.service';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { UpdateTeamStatusService } from './application/service/update-team-statu
     ReadMemberOverviewService,
     ReadAdminTeamDetailService,
     UpdateMemberIsLeaderService,
+    UpdateAdminTeamService,
     UpdateTeamService,
     DeleteTeamService,
     DeleteMemberService,
