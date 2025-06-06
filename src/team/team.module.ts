@@ -20,6 +20,8 @@ import { ReadMemberOverviewService } from './application/service/read-member-ove
 import { ReadAdminTeamDetailService } from './application/service/read-admin-team-detail.service';
 import { UpdateMemberIsLeaderService } from './application/service/update-member-is-leader.service';
 import { ProjectRepository } from './repository/project.repository';
+import { DeleteTeamService } from './application/service/delete-team.service';
+import { DeleteMemberService } from './application/service/delete-member.service';
 
 @Module({
   imports: [
@@ -45,7 +47,9 @@ import { ProjectRepository } from './repository/project.repository';
     ReadMemberOverviewService,
     ReadAdminTeamDetailService,
     UpdateMemberIsLeaderService,
-    UpdateTeamService
+    UpdateTeamService,
+    DeleteTeamService,
+    DeleteMemberService
   ],
   exports: [TeamRepository, MemberRepository, ProjectRepository]
 })

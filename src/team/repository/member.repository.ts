@@ -34,4 +34,10 @@ export class MemberRepository {
 
     await repo.save(MemberMapper.toEntity(member));
   }
+
+  async delete(member: MemberModel, manager?: EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(MemberEntity) : this.dataSource.getRepository(MemberEntity);
+
+    await repo.remove(MemberMapper.toEntity(member));
+  }
 }

@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Param, Patch,
   Post,
   Req,
@@ -18,6 +18,8 @@ import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter
 import { CreateTeamService } from '../../application/service/create-team.service';
 import { CreateMemberService } from '../../application/service/create-member.service';
 import { UpdateMemberIsLeaderService } from '../../application/service/update-member-is-leader.service';
+import { DeleteTeamService } from '../../application/service/delete-team.service';
+import { DeleteMemberService } from '../../application/service/delete-member.service';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -27,6 +29,8 @@ export class AdminTeamCommandV1Controller {
     private readonly createTeamUseCase: CreateTeamService,
     private readonly createMemberUseCase: CreateMemberService,
     private readonly updateMemberIsLeaderUseCase: UpdateMemberIsLeaderService,
+    private readonly deleteTeamUseCase: DeleteTeamService,
+    private readonly deleteMemberUseCase: DeleteMemberService
   ) {}
 
   /**
@@ -66,6 +70,32 @@ export class AdminTeamCommandV1Controller {
     @Param('memberId') memberId: number,
   ): Promise<ResponseDto<any>> {
     await this.updateMemberIsLeaderUseCase.execute(req.user.id, memberId);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 4.10 어드민 팀 해체
+   */
+  @Delete('/teams/:teamId(\\d+)')
+  @UseGuards(JwtAuthGuard)
+  async deleteTeam(
+    @Req() req,
+    @Param('teamId') teamId: number,
+  ): Promise<ResponseDto<any>> {
+    await this.deleteTeamUseCase.execute(req.user.id, teamId);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 4.11 어드민 팀원 방출
+   */
+  @Delete('/members/:memberId(\\d+)')
+  @UseGuards(JwtAuthGuard)
+  async deleteMember(
+    @Req() req,
+    @Param('memberId') memberId: number,
+  ): Promise<ResponseDto<any>> {
+    await this.deleteMemberUseCase.execute(req.user.id, memberId);
     return ResponseDto.ok(null);
   }
 }
