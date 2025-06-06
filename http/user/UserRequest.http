@@ -64,7 +64,7 @@ Content-Type: application/json
   "univ_id": 1,
   "email": "jangelliot0404@dgu.ac.kr",
   "phone_number": "01056175155",
-  "generation": [2,3,4]
+  "generations": [2,3,4]
 }
 
 ### 2.8 어드민 유저 삭제

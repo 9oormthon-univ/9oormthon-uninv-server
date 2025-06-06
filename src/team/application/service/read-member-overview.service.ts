@@ -42,7 +42,8 @@ export class ReadMemberOverviewService {
             name: member.user.name,
             role: member.role,
             univ: member.user.univ.name,
-            email: member.user.serialId
+            email: member.user.serialId,
+            is_leader: member.isLeader,
           };
         });
       return ReadMemberOverviewResponseDto.of(members);

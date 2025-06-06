@@ -9,11 +9,11 @@ export class TeamRepository {
   constructor(private readonly dataSource: DataSource) {
   }
 
-  async findWithProjectById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
+  async findWithMembersAndProjectById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
     const entity = await repo.findOne({
       where: { id },
-      relations: ['project']
+      relations: ['members', 'members.user', 'members.user.univ', 'project']
     });
     return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: true }) : undefined;
   }

@@ -57,6 +57,7 @@ export class CreateMemberService {
       // 멤버 생성
       const member = MemberModel.createMember(
         requestDto.role,
+        requestDto.isLeader,
         user,
         team,
       );

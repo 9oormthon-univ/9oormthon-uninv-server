@@ -124,6 +124,7 @@ export class HandlePeriodTransitionBySchedulerService {
       // member 생성
       const member = MemberModel.createMember(
         confirmedApply.role,
+        false,
         confirmedApply.user,
         confirmedApply.idea.team,
       );

@@ -7,6 +7,7 @@ export class MemberOverviewDto {
   role: ERole;
   univ: string;
   email: string;
+  is_leader: boolean;
 
   constructor(
     id: number,
@@ -14,13 +15,16 @@ export class MemberOverviewDto {
     name: string,
     role: ERole,
     univ: string,
-    email: string
+    email: string,
+    is_leader: boolean
   ) {
     this.id = id;
+    this.user_id = user_id;
     this.name = name;
     this.role = role;
     this.univ = univ;
     this.email = email;
+    this.is_leader = is_leader;
   }
 }
 
