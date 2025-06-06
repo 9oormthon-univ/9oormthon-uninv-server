@@ -2,7 +2,11 @@
 // @no-log
 GET {{host_url}}/api/v1/system-settings/current-period
 
-### 0.2 기간 정보 수정
+### 0.2 시스템 설정 조회
+// @no-log
+GET {{host_url}}/api/v1/admins/system-settings/details
+
+### 0.3 기간 정보 수정
 // @no-log
 PUT {{host_url}}/api/v1/admins/system-settings
 Content-Type: application/json

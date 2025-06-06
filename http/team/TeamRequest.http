@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ### 4.3 어드민 팀 요약 리스트 조회
 // @no-log
-GET {{host_url}}/api/v1/admins/teams/overviews?page=1&size=10&generation=4
+GET {{host_url}}/api/v1/admins/teams/overviews?page=1&size=10&generation=4&sorting=ASC&sort-type=TEAM_NAME
 
 
 ### 4.4 어드민 팀 상세 정보 조회
