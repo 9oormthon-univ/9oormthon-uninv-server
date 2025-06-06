@@ -73,8 +73,11 @@ export class UserRepository {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
 
     const qb = repo.createQueryBuilder('user')
-      .leftJoinAndSelect('user.univ', 'univ')
-      .where('univ.id = :univId', { univId });
+      .leftJoinAndSelect('user.univ', 'univ');
+
+    if (univId) {
+      qb.andWhere('univ.id = :univId', { univId });
+    }
 
     if (search) {
       qb.andWhere('user.name LIKE :search OR user.phoneNumber LIKE :search', { search: `%${search}%` });
@@ -143,13 +146,14 @@ export class UserRepository {
     });
     return entity ? UserMapper.toDomain(entity) : null;
   }
+
   async findUserOverview(
     page: number,
     size: number,
     generation: number,
     univId: number | undefined,
     search: string | undefined,
-    manager?: EntityManager
+    manager?: EntityManager,
   ): Promise<{ users: UserOverviewDto[]; totalItems: number }> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
 
@@ -195,7 +199,7 @@ export class UserRepository {
         team_building: Number(rawRow['team_building_count']) > 0,
         generations: user.generations && user.generations.length > 0
           ? user.generations.map(g => `${g}기`).join(', ')
-          : ''
+          : '',
       };
     });
 

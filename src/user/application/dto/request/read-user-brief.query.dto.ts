@@ -7,7 +7,7 @@ export class ReadUserBriefQueryDto {
   @IsNumber({}, { message: 'generation은 숫자여야 합니다.' })
   generation: number;
 
-  @IsNotEmpty({ message: 'univ-id는 필수 값입니다.' })
+  @IsOptional()
   @Type(() => Number)
   @IsNumber({}, { message: 'univ-id는 숫자여야 합니다.' })
   @Expose({ name: 'univ-id' })
