@@ -1,7 +1,7 @@
 import {
   Body,
   Controller,
-  Param,
+  Param, Patch,
   Post,
   Req,
   UseFilters,
@@ -17,6 +17,7 @@ import { ResponseInterceptor } from '../../../core/interceptors/response.interce
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { CreateTeamService } from '../../application/service/create-team.service';
 import { CreateMemberService } from '../../application/service/create-member.service';
+import { UpdateMemberIsLeaderService } from '../../application/service/update-member-is-leader.service';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -25,6 +26,7 @@ export class AdminTeamCommandV1Controller {
   constructor(
     private readonly createTeamUseCase: CreateTeamService,
     private readonly createMemberUseCase: CreateMemberService,
+    private readonly updateMemberIsLeaderUseCase: UpdateMemberIsLeaderService,
   ) {}
 
   /**
@@ -52,5 +54,18 @@ export class AdminTeamCommandV1Controller {
   ): Promise<ResponseDto<any>> {
     await this.createMemberUseCase.execute(req.user.id, teamId, requestDto);
     return ResponseDto.created(null);
+  }
+
+  /**
+   * 4.8 어드민 팀원 팀장 임명
+   */
+  @Patch('members/:memberId(\\d+)/is-leader')
+  @UseGuards(JwtAuthGuard)
+  async updateMemberIsLeader(
+    @Req() req,
+    @Param('memberId') memberId: number,
+  ): Promise<ResponseDto<any>> {
+    await this.updateMemberIsLeaderUseCase.execute(req.user.id, memberId);
+    return ResponseDto.ok(null);
   }
 }

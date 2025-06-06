@@ -52,7 +52,7 @@ export class UpdateAdminUserService {
         univ,
         requestDto.email,
         requestDto.phoneNumber,
-        requestDto.generation.map(String)
+        requestDto.generations.map(String)
       );
       await this.userRepository.save(updatedUser, manager);
     });

@@ -12,8 +12,4 @@ export class CreateMemberRequestDto {
   @IsNotEmpty({ message: 'role는 필수 값입니다.' })
   @Expose({ name: 'role' })
   role: ERole;
-
-  @IsNotEmpty({ message: 'is_leader는 필수 값입니다.' })
-  @Expose({ name: 'is_leader' })
-  isLeader: boolean;
 }
