@@ -35,12 +35,13 @@ export class UpdateMemberIsLeaderService {
       // 팀의 현재 리더를 찾아서 리더 상태를 false로 변경. 현재 리더가 없다면 패스
       const currentLeader = member.team.members.find(m => m.isLeader);
       if (currentLeader) {
-        currentLeader.changeIsLeader(false);
-        await this.memberRepository.save(currentLeader, manager);
+        const updatedCurrentLeader = currentLeader.changeIsLeader(false);
+        await this.memberRepository.save(updatedCurrentLeader, manager);
       }
 
       // 멤버의 리더 상태를 true로 변경
-      member.changeIsLeader(true);
+      const updatedMember = member.changeIsLeader(true);
+      await this.memberRepository.save(updatedMember, manager);
     });
   }
 }

@@ -35,11 +35,32 @@ GET {{host_url}}/api/v1/admins/teams/2/details
 // @no-log
 GET {{host_url}}/api/v1/admins/teams/2/members/overviews
 
-### 4.5 팀 정보 조회
+### 4.6 팀 정보 조회
 // @no-log
 GET {{host_url}}/api/v1/users/teams/details?generation=4
 
-### 4.7 팀 정보 수정
+### 4.7 어드민 팀 정보 수정
+// @no-log
+PUT {{host_url}}/api/v1/admins/teams/2
+Content-Type: application/json
+
+{
+  "number": 0,
+  "team_name": "수정된 팀이름",
+  "pm_capacity": 1,
+  "pd_capacity": 1,
+  "fe_capacity": 1,
+  "be_capacity": 1,
+  "service_name": "수정된 서비스 이름",
+  "leader_id": 2
+}
+
+### 4.8 어드민 팀원 팀장 임명
+// @no-log
+PATCH {{host_url}}/api/v1/admins/members/2/is-leader
+
+
+### 4.9 팀 정보 수정
 // @no-log
 PATCH {{host_url}}/api/v1/users/teams
 Content-Type: application/json
