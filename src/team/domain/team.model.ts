@@ -131,7 +131,34 @@ export class TeamModel {
     }
   }
 
-  public validateTeamCapacityLimits(role: ERole): void {
+  public validateCreateOrUpdateTeamCapacityLimits(role: ERole): void {
+    switch (role) {
+      case 'PM':
+        if (this.pmCapacity < this.members.map(member => member.role).filter(role => role === 'PM').length) {
+          throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
+        }
+        break;
+      case 'PD':
+        if (this.pdCapacity < this.members.map(member => member.role).filter(role => role === 'PD').length) {
+          throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
+        }
+        break;
+      case 'FE':
+        if (this.feCapacity < this.members.map(member => member.role).filter(role => role === 'FE').length) {
+          throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
+        }
+        break;
+      case 'BE':
+        if (this.beCapacity < this.members.map(member => member.role).filter(role => role === 'BE').length) {
+          throw new CommonException(ErrorCode.CLOSED_APPLY_ERROR);
+        }
+        break;
+      default:
+        throw new CommonException(ErrorCode.INVALID_ROLE);
+    }
+  }
+
+  public validateApplyTeamCapacityLimits(role: ERole): void {
     switch (role) {
       case 'PM':
         if (this.pmCapacity <= this.members.map(member => member.role).filter(role => role === 'PM').length) {
