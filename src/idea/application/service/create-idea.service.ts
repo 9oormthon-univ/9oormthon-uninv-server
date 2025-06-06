@@ -117,6 +117,10 @@ export class CreateIdeaService {
       );
 
       await this.memberRepository.save(member, manager);
+
+      // 아이디어 제시자가 팀에 들어갔을 때의 팀원 수 유효성 검증
+      const teamWithMembers = await this.teamRepository.findWithMembersById(createdTeam.id, manager);
+      teamWithMembers.validateTeamCapacityLimits(requestDto.ideaInfo.providerRole);
     });
   }
 }
