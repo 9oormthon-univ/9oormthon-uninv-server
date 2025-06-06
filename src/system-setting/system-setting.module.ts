@@ -9,6 +9,8 @@ import { UserModule } from '../user/user.module';
 import { ReadCurrentPeriodService } from './application/service/read-current-period.service';
 import { SystemSettingInitializer } from './initializer/system-setting.initializer';
 import { UpdateSystemSettingService } from './application/service/update-system-setting.service';
+import { AdminSystemSettingQueryV1Controller } from './controller/query/admin-system-setting-query-v1.controller';
+import { ReadSystemSettingDetailService } from './application/service/read-system-setting-detail.service';
 
 @Module({
   imports: [
@@ -20,11 +22,13 @@ import { UpdateSystemSettingService } from './application/service/update-system-
   ],
   controllers: [
     SystemSettingQueryV1Controller,
+    AdminSystemSettingQueryV1Controller,
     AdminSystemSettingCommandV1Controller
   ],
   providers: [
     SystemSettingRepository,
     ReadCurrentPeriodService,
+    ReadSystemSettingDetailService,
     UpdateSystemSettingService,
     SystemSettingInitializer
   ],
