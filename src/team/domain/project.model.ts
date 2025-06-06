@@ -15,4 +15,48 @@ export class ProjectModel {
     public readonly createdAt: Date
   ) {
   }
+
+  static createProject(
+    name: string,
+    content: string,
+    generation: number,
+    award: string,
+    backendLink: string,
+    frontendLink: string,
+    releaseLink: string,
+    imgUrl: string,
+    team: TeamModel
+  ): ProjectModel {
+    return new ProjectModel(
+      null,
+      name,
+      content,
+      generation,
+      award,
+      backendLink,
+      frontendLink,
+      releaseLink,
+      imgUrl,
+      team,
+      new Date()
+    );
+  }
+
+  public updateName(
+    name: string
+  ): ProjectModel {
+    return new ProjectModel(
+      this.id,
+      name,
+      this.content,
+      this.generation,
+      this.award,
+      this.backendLink,
+      this.frontendLink,
+      this.releaseLink,
+      this.imgUrl,
+      this.team,
+      this.createdAt
+    )
+  }
 }

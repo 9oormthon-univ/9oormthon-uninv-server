@@ -58,6 +58,31 @@ export class TeamModel {
     );
   }
 
+  public updateByAdmin(
+    name: string,
+    number: number,
+    pmCapacity: number,
+    pdCapacity: number,
+    feCapacity: number,
+    beCapacity: number,
+  ): TeamModel {
+    return new TeamModel(
+      this.id,
+      name,
+      number,
+      this.generation,
+      pmCapacity,
+      pdCapacity,
+      feCapacity,
+      beCapacity,
+      this.status,
+      this.idea,
+      this.project,
+      this.members,
+      this.createdAt
+    );
+  }
+
   public updateName(
     name: string
   ) : TeamModel {

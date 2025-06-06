@@ -19,6 +19,7 @@ import { CreateMemberService } from './application/service/create-member.service
 import { ReadMemberOverviewService } from './application/service/read-member-overview.service';
 import { ReadAdminTeamDetailService } from './application/service/read-admin-team-detail.service';
 import { UpdateMemberIsLeaderService } from './application/service/update-member-is-leader.service';
+import { ProjectRepository } from './repository/project.repository';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UpdateMemberIsLeaderService } from './application/service/update-member
   providers: [
     TeamRepository,
     MemberRepository,
+    ProjectRepository,
     CreateTeamService,
     CreateMemberService,
     ReadTeamDetailService,
@@ -45,6 +47,6 @@ import { UpdateMemberIsLeaderService } from './application/service/update-member
     UpdateMemberIsLeaderService,
     UpdateTeamService
   ],
-  exports: [TeamRepository, MemberRepository]
+  exports: [TeamRepository, MemberRepository, ProjectRepository]
 })
 export class TeamModule {}

@@ -8,6 +8,8 @@ import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { TeamModel } from '../../domain/team.model';
 import { ETeamStatus } from '../../../core/enums/team-status.enum';
+import { ProjectRepository } from '../../repository/project.repository';
+import { ProjectModel } from '../../domain/project.model';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -15,6 +17,7 @@ export class CreateTeamService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly teamRepository: TeamRepository,
+    private readonly projectRepository: ProjectRepository,
     private readonly dataSource: DataSource
   ) {}
 
@@ -46,7 +49,21 @@ export class CreateTeamService {
 
       team.validateSystemCapacityLimits();
 
-      await this.teamRepository.save(team, manager);
+      const createdTeam = await this.teamRepository.saveAndReturn(team, manager);
+
+      // 프로젝트 생성
+      const project = ProjectModel.createProject(
+        "프로젝트 명",
+        "내용",
+        team.generation,
+        null,
+        null,
+        null,
+        null,
+        null,
+        createdTeam
+      );
+      await this.projectRepository.save(project, manager);
     });
   }
 }

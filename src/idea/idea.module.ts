@@ -74,7 +74,7 @@ import { DeleteIdeaService } from './application/service/delete-idea.service';
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,
-    BookmarkRepository
+    BookmarkRepository,
   ],
   exports: [
     IdeaRepository,

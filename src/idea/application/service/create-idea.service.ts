@@ -13,6 +13,8 @@ import { TeamModel } from '../../../team/domain/team.model';
 import { MemberRepository } from '../../../team/repository/member.repository';
 import { MemberModel } from '../../../team/domain/member.model';
 import { ETeamStatus } from '../../../core/enums/team-status.enum';
+import { ProjectRepository } from '../../../team/repository/project.repository';
+import { ProjectModel } from '../../../team/domain/project.model';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -23,6 +25,7 @@ export class CreateIdeaService {
     private readonly ideaSubjectRepository: IdeaSubjectRepository,
     private readonly teamRepository: TeamRepository,
     private readonly memberRepository: MemberRepository,
+    private readonly projectRepository: ProjectRepository,
     private readonly dataSource: DataSource
   ) {}
 
@@ -90,6 +93,20 @@ export class CreateIdeaService {
       team.validateSystemCapacityLimits();
 
       const createdTeam = await this.teamRepository.saveAndReturn(team, manager);
+
+      // 프로젝트 생성
+      const project = ProjectModel.createProject(
+        "프로젝트 명",
+        "내용",
+        team.generation,
+        null,
+        null,
+        null,
+        null,
+        null,
+        createdTeam
+      );
+      await this.projectRepository.save(project, manager);
 
       // Member 생성
       const member = MemberModel.createMember(
