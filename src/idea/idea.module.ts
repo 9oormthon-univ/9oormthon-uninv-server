@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserIdeaCommandV1Controller } from './controller/command/user-idea-command-v1.controller';
 import { CreateIdeaService } from './application/service/create-idea.service';
 import { IdeaEntity } from '../core/infra/entities/idea.entity';
@@ -43,7 +43,7 @@ import { DeleteIdeaService } from './application/service/delete-idea.service';
       [IdeaEntity]
     ),
     UserModule,
-    TeamModule,
+    forwardRef(() =>TeamModule),
     SystemSettingModule
   ],
   controllers: [

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TeamEntity } from '../core/infra/entities/team.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '../core/infra/database.module';
@@ -20,8 +20,11 @@ import { ReadMemberOverviewService } from './application/service/read-member-ove
 import { ReadAdminTeamDetailService } from './application/service/read-admin-team-detail.service';
 import { UpdateMemberIsLeaderService } from './application/service/update-member-is-leader.service';
 import { ProjectRepository } from './repository/project.repository';
-import { DeleteTeamService } from './application/service/delete-team.service';
 import { DeleteMemberService } from './application/service/delete-member.service';
+import { IdeaModule } from '../idea/idea.module';
+import { SystemSettingModule } from '../system-setting/system-setting.module';
+import { DeleteTeamService } from './application/service/delete-team.service';
+import { UpdateTeamStatusService } from './application/service/update-team-status.service';
 
 @Module({
   imports: [
@@ -34,6 +37,8 @@ import { DeleteMemberService } from './application/service/delete-member.service
       ]
     ),
     UserModule,
+    SystemSettingModule,
+    forwardRef(() => IdeaModule),
   ],
   controllers: [UserTeamQueryV1Controller, UserTeamCommandV1Controller, AdminTeamQueryV1Controller, AdminTeamCommandV1Controller],
   providers: [
@@ -49,7 +54,8 @@ import { DeleteMemberService } from './application/service/delete-member.service
     UpdateMemberIsLeaderService,
     UpdateTeamService,
     DeleteTeamService,
-    DeleteMemberService
+    DeleteMemberService,
+    UpdateTeamStatusService
   ],
   exports: [TeamRepository, MemberRepository, ProjectRepository]
 })

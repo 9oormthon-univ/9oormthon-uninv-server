@@ -20,6 +20,18 @@ export class ApplyRepository {
     return entity ? ApplyMapper.toDomain(entity) : null;
   }
 
+  async findByIdeaIdAndPhase(ideaId: number, phase: number, manager?: EntityManager): Promise<ApplyModel[] | null> {
+    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
+
+    const entities = await repo.find(
+      {
+        where: { idea: { id: ideaId }, phase },
+      }
+    );
+
+    return entities.length !== 0 ? ApplyMapper.toDomains(entities) : null;
+  }
+
   async findByUserIdAndGenerationAndPhase(userId: number, generation: number, phase: number, manager?: EntityManager): Promise<ApplyModel[] | null> {
     const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
 

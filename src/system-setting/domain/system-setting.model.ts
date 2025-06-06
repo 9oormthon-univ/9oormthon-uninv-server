@@ -185,6 +185,19 @@ export class SystemSettingModel {
     }
   }
 
+  public getWhichPhase(): number {
+    const period = this.getWhichPeriod();
+    if (period === EPeriod.PHASE1_TEAM_BUILDING || period === EPeriod.PHASE1_CONFIRMATION) {
+      return 1;
+    } else if (period === EPeriod.PHASE2_TEAM_BUILDING || period === EPeriod.PHASE2_CONFIRMATION) {
+      return 2;
+    } else if (period === EPeriod.PHASE3_TEAM_BUILDING || period === EPeriod.PHASE3_CONFIRMATION) {
+      return 3;
+    } else {
+      return 0; // NONE or IDEA_SUBMISSION
+    }
+  }
+
   public validateIdeaApplyPeriod(phase: number): void {
     Logger.log("현재 기간은!!!!!!!!!! : " + this.getWhichPeriod());
     if (
@@ -206,12 +219,6 @@ export class SystemSettingModel {
 
     if (this.getWhichPeriod() !== EPeriod.teamBuildingFromPhase(phase)) {
       throw new CommonException(ErrorCode.NOT_APPLY_DELETE_PERIOD_ERROR);
-    }
-  }
-
-  public validateDeleteIdeaPeriod(): void {
-    if (this.getWhichPeriod() !== EPeriod.IDEA_SUBMISSION) {
-      throw new CommonException(ErrorCode.NOT_IDEA_DELETE_PERIOD_ERROR);
     }
   }
 

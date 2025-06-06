@@ -28,7 +28,7 @@ export class ReadAdminTeamDetailService {
       admin.validateAdminRole();
 
       // 팀 조회
-      const team = await this.teamRepository.findWithMembersAndProjectById(teamId, manager);
+      const team = await this.teamRepository.findWithMembersAndProjectAndIdeaById(teamId, manager);
       if (!team) {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
