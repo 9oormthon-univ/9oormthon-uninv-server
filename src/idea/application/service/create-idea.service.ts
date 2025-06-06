@@ -94,6 +94,7 @@ export class CreateIdeaService {
       // Member 생성
       const member = MemberModel.createMember(
         requestDto.ideaInfo.providerRole,
+        true,
         user,
         createdTeam
       );

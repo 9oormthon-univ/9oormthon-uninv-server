@@ -37,6 +37,8 @@ export class ReadAdminTeamDetailResponseDto {
   }
 
   static from(team: TeamModel): ReadAdminTeamDetailResponseDto {
+    const leader = team.members.filter((member) => member.isLeader)[0];
+
     return new ReadAdminTeamDetailResponseDto(
       team.id,
       team.number ? team.number : 0,
@@ -46,7 +48,7 @@ export class ReadAdminTeamDetailResponseDto {
       team.feCapacity,
       team.beCapacity,
       team.project ? team.project.name : '',
-      { id: 0, description: '' } // TODO: 팀장 정보로 바꿔야함
-    )
+      leader ? { id: leader.user.id, description: leader.user.name + ' / ' + leader.user.univ.name + ' / ' + leader.user.phoneNumber } : { id: 0, description: '' }
+    );
   }
 }

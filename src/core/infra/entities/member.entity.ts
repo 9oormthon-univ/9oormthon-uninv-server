@@ -23,6 +23,9 @@ export class MemberEntity {
   @Column({ name: 'role', type: 'enum', enum: ERole, nullable: false })
   role: ERole;
 
+  @Column({ name: 'is_leader', type: 'boolean', default: false })
+  isLeader: boolean;
+
   /* ----------------------------- */
   /* ---- Many To One Column ----- */
   /* ----------------------------- */

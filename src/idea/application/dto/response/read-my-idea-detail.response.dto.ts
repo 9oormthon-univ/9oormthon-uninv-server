@@ -5,6 +5,7 @@ import { TeamModel } from '../../../../team/domain/team.model';
 import { CommonException } from '../../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../../core/exceptions/error-code';
 import { ApplyModel } from '../../../domain/apply.model';
+import { MemberModel } from '../../../../team/domain/member.model';
 
 export class ProviderInfoDto {
   id: number;
@@ -55,16 +56,18 @@ export class CurrentMemberDto {
   img_url: string;
   name: string;
   univ: string;
+  is_leader: boolean;
 
-  constructor(id: number, imgUrl: string, name: string, univ: string) {
+  constructor(id: number, imgUrl: string, name: string, univ: string, isLeader: boolean) {
     this.id = id;
     this.img_url = imgUrl;
     this.name = name;
     this.univ = univ;
+    this.is_leader = isLeader;
   }
 
-  static from(model: UserModel): CurrentMemberDto {
-    return new CurrentMemberDto(model.id, model.imgUrl, model.name, model.univ.name);
+  static from(model: MemberModel): CurrentMemberDto {
+    return new CurrentMemberDto(model.user.id, model.user.imgUrl, model.user.name, model.user.univ.name, model.isLeader);
   }
 }
 
@@ -92,7 +95,7 @@ export class RoleRequirementDto {
           idea.pmRequirement,
           team.members.filter((member) => member.role === ERole.PM).length,
           team.pmCapacity,
-          idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member.user)),
+          idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member)),
           team.pmCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity).toFixed(2).toString() + ':1' : '0:1')
         );
       case ERole.PD:
@@ -101,7 +104,7 @@ export class RoleRequirementDto {
           team.members.filter((member) => member.role === ERole.PD).length,
           team.pdCapacity,
           idea.pdRequiredTechStacks,
-          team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member.user)),
+          team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member)),
           team.pdCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity).toFixed(2).toString() + ':1' : '0:1')
         );
       case ERole.FE:
@@ -110,7 +113,7 @@ export class RoleRequirementDto {
           team.members.filter((member) => member.role === ERole.FE).length,
           team.feCapacity,
           idea.feRequiredTechStacks,
-          team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member.user)),
+          team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member)),
           team.feCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity).toFixed(2).toString() + ':1' : '0:1')
         );
       case ERole.BE:
@@ -119,7 +122,7 @@ export class RoleRequirementDto {
           team.members.filter((member) => member.role === ERole.BE).length,
           team.beCapacity,
           idea.beRequiredTechStacks,
-          team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member.user)),
+          team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member)),
           team.beCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity).toFixed(2).toString() + ':1' : '0:1')
         );
       default:

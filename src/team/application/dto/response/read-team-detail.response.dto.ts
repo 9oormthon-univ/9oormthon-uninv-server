@@ -5,15 +5,17 @@ export class MemberDto {
   id: number;
   name: string;
   img_url: string;
+  is_leader: boolean;
 
-  constructor(id: number, name: string, img_url: string) {
+  constructor(id: number, name: string, img_url: string, is_leader: boolean) {
     this.id = id;
     this.name = name;
     this.img_url = img_url;
+    this.is_leader = is_leader;
   }
 
   static from(member: MemberModel): MemberDto {
-    return new MemberDto(member.user.id, member.user.name, member.user.imgUrl);
+    return new MemberDto(member.user.id, member.user.name, member.user.imgUrl, member.isLeader);
   }
 }
 

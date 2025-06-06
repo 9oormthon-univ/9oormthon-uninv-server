@@ -79,7 +79,7 @@ export class UserQueryV1Controller {
     @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadAdminUserDetailQueryDto,
     @Param('userId') userId: number
   ): Promise<ResponseDto<any>> {
-    return ResponseDto.ok(await this.readAdminUserDetailUseCase.execute(req.user.id, userId, query.generation));
+    return ResponseDto.ok(await this.readAdminUserDetailUseCase.execute(req.user.id, userId, query.generations));
   }
 
   @Get('admins/univs/briefs')

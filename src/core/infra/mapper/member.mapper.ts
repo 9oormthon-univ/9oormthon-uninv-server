@@ -9,6 +9,7 @@ export class MemberMapper {
     return new MemberModel(
       entity.id,
       entity.role,
+      entity.isLeader,
       UserMapper.toDomain(entity.user),
       options?.skipTeam
         ? ({ id: entity.team.id } as TeamModel)
@@ -21,6 +22,7 @@ export class MemberMapper {
     const entity = new MemberEntity();
     entity.id = domain.id;
     entity.role = domain.role;
+    entity.isLeader = domain.isLeader;
     entity.user = UserMapper.toEntity(domain.user);
     entity.team = domain.team ? TeamMapper.toEntity(domain.team) : null;
     entity.createdAt = domain.createdAt;

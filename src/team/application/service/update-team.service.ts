@@ -24,7 +24,11 @@ export class UpdateTeamService {
       }
 
       // 팀장 여부 확인
-      team.idea.validateIsProvider(userId);
+      team.members.map((member) => {
+        if (member.user.id === userId) {
+          member.validateIsLeader();
+        }
+      });
 
       const updatedTeam = team.updateName(requestDto.name)
       await this.teamRepository.save(updatedTeam, manager);
