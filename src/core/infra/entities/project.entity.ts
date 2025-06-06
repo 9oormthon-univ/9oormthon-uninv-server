@@ -49,7 +49,7 @@ export class ProjectEntity {
   /* ----------------------------- */
   /* ----- One To One Column ----- */
   /* ----------------------------- */
-  @OneToOne(() => TeamEntity, { nullable: true, onDelete: 'CASCADE' })
+  @OneToOne(() => TeamEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'team_id' })
   team: TeamEntity;
 
