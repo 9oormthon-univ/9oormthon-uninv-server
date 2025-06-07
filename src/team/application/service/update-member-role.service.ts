@@ -29,7 +29,7 @@ export class UpdateMemberRoleService {
       admin.validateAdminRole();
 
       // 멤버 조회
-      const member = await this.memberRepository.findWithTeamById(memberId);
+      const member = await this.memberRepository.findWithTeamById(memberId, manager);
       if (!member) {
         throw new CommonException(ErrorCode.NOT_FOUND_MEMBER);
       }
