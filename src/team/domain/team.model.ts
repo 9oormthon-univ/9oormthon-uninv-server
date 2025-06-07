@@ -227,4 +227,24 @@ export class TeamModel {
       this.createdAt
     )
   }
+
+  public updateNumber(
+    number: number
+  ): TeamModel {
+    return new TeamModel(
+      this.id,
+      this.name,
+      number,
+      this.generation,
+      this.pmCapacity,
+      this.pdCapacity,
+      this.feCapacity,
+      this.beCapacity,
+      this.status,
+      this.idea,
+      this.project,
+      this.members,
+      this.createdAt
+    );
+  }
 }
