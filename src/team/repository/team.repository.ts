@@ -37,11 +37,21 @@ export class TeamRepository {
 
   async findWithMembersByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<TeamModel | undefined> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
-    const entity = await repo.findOne({
-      where: { members: { user: { id: userId } }, idea: { generation } },
+
+    const teamIdResult = await repo.createQueryBuilder('team')
+      .innerJoin('team.members', 'member')
+      .where('team.generation = :generation', { generation })
+      .andWhere('member.user = :userId', { userId })
+      .select(['team.id'])
+      .getOne();
+
+    if (!teamIdResult) return undefined;
+
+    const team = await repo.findOne({
+      where: { id: teamIdResult.id },
       relations: ['members', 'members.team', 'members.user', 'members.user.univ'],
     });
-    return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: false }) : undefined;
+    return team ? TeamMapper.toDomain(team, { skipIdea: true, skipMembers: false }) : undefined;
   }
 
   async findByIdeaWithIdeaAndMembers(idea: IdeaModel, manager?: EntityManager): Promise<TeamModel | undefined> {
