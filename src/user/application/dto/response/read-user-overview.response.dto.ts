@@ -1,4 +1,3 @@
-import { ERole } from '../../../../core/enums/role.enum';
 import { PageInfoDto } from '../../../../core/dto/page-info.dto';
 import { ESecurityRole } from '../../../../core/enums/security-role.enum';
 

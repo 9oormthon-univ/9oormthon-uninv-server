@@ -2,9 +2,11 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGene
 import { UnivEntity } from './univ.entity';
 import { ESecurityRole } from '../../enums/security-role.enum';
 import { LinkEntity } from './link.entity';
+import { MemberEntity } from './member.entity';
 
 @Entity('users')
-export class UserEntity {
+export class
+UserEntity {
   /* ----------------------------- */
   /* ------- Default Column ------ */
   /* ----------------------------- */
@@ -67,6 +69,9 @@ export class UserEntity {
   /* ----------------------------- */
   @OneToMany(() => LinkEntity, (link) => link.user)
   links: LinkEntity[];
+
+  @OneToMany(() => MemberEntity, (member) => member.user)
+  members: MemberEntity[];
 
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */

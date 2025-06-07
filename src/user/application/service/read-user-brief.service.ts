@@ -14,7 +14,7 @@ export class ReadUserBriefService {
     private readonly dataSource: DataSource
   ) {}
 
-  async execute(userId: number, univId: number, search: string, generation: number) {
+  async execute(userId: number, univId: number, teamId: number, search: string, generation: number) {
     return this.dataSource.transaction(async (manager) => {
       // 어드민 조회
       const admin = await this.userRepository.findById(userId, manager);
@@ -26,7 +26,7 @@ export class ReadUserBriefService {
       admin.validateAdminRole();
 
       // 모든 유저 조회
-      const users = await this.userRepository.findAllByUnivIdAndSearchAndGeneration(univId, search, generation, manager);
+      const users = await this.userRepository.findAllByUnivIdAndSearchAndGeneration(univId, teamId, search, generation, manager);
       const userInfos = users.map(
         (user) => ({
           id: user.id,

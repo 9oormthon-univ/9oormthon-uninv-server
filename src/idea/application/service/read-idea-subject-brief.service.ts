@@ -12,11 +12,11 @@ export class ReadIdeaSubjectBriefService {
     private readonly dataSource: DataSource
   ) {}
 
-  async execute(): Promise<ReadIdeaSubjectBriefResponseDto> {
+  async execute(generation: number): Promise<ReadIdeaSubjectBriefResponseDto> {
     return this.dataSource.transaction(async (manager) => {
 
       // 아이디어 주제 조회
-      const ideaSubjects = await this.ideaSubjectRepository.findAll(manager);
+      const ideaSubjects = await this.ideaSubjectRepository.findAllByGeneration(generation, manager);
 
       return ReadIdeaSubjectBriefResponseDto.from(ideaSubjects);
     });

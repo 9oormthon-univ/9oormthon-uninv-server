@@ -9,6 +9,12 @@ export class ReadUserBriefQueryDto {
 
   @IsOptional()
   @Type(() => Number)
+  @IsNumber({}, { message: 'team-id는 숫자여야 합니다.' })
+  @Expose({ name: 'team-id' })
+  teamId: number;
+
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber({}, { message: 'univ-id는 숫자여야 합니다.' })
   @Expose({ name: 'univ-id' })
   univId: number;

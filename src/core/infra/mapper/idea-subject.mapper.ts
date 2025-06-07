@@ -6,6 +6,7 @@ export class IdeaSubjectMapper {
   static toDomain(entity: IdeaSubjectEntity): IdeaSubjectModel {
     return new IdeaSubjectModel(
       entity.id,
+      entity.generation,
       entity.name,
       entity.isActive
     );
@@ -18,6 +19,7 @@ export class IdeaSubjectMapper {
   static toEntity(domain: IdeaSubjectModel): IdeaSubjectEntity {
     const entity = new IdeaSubjectEntity();
     entity.id = domain.id;
+    entity.generation = domain.generation;
     entity.name = domain.name;
     entity.isActive = domain.isActive;
     return entity;

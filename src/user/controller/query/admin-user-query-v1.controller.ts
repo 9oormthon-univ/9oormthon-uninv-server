@@ -44,7 +44,7 @@ export class AdminUserQueryV1Controller {
     @Req() req,
     @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadUserBriefQueryDto
   ): Promise<ResponseDto<any>> {
-    return ResponseDto.ok(await this.readUserBriefUseCase.execute(req.user.id, query.univId, query.search, query.generation));
+    return ResponseDto.ok(await this.readUserBriefUseCase.execute(req.user.id, query.univId, query.teamId, query.search, query.generation));
   }
 
   /**

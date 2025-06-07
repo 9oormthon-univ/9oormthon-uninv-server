@@ -1,9 +1,10 @@
-import { Controller, Get, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Query, UseFilters, UseGuards, UseInterceptors, ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from '../../../core/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { ReadIdeaSubjectBriefService } from '../../application/service/read-idea-subject-brief.service';
 import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { ResponseDto } from '../../../core/dto/response.dto';
+import { ReadIdeaSubjectBriefQueryDto } from '../../application/dto/request/read-idea-subject-brief.query.dto';
 
 @Controller('/api/v1/idea-subjects')
 @UseInterceptors(ResponseInterceptor)
@@ -18,7 +19,9 @@ export class IdeaQueryV1Controller {
    */
   @Get('briefs')
   @UseGuards(JwtAuthGuard)
-  async readIdeaSubjectBrief(): Promise<ResponseDto<any>> {
-    return ResponseDto.ok(await this.readIdeaSubjectBriefUseCase.execute());
+  async readIdeaSubjectBrief(
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadIdeaSubjectBriefQueryDto
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.readIdeaSubjectBriefUseCase.execute(query.generation));
   }
 }

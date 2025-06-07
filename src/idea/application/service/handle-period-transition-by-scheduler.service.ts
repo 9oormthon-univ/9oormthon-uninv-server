@@ -94,7 +94,7 @@ export class HandlePeriodTransitionBySchedulerService {
     });
   }
 
-
+  // TODO: 테스트 끝나고 주석 해제
   // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   // async handlePeriodTransitions(): Promise<void> {
   //   return this.dataSource.transaction(async (manager) => {
