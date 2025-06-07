@@ -69,3 +69,19 @@ Content-Type: application/json
     "generation": 4,
     "name": "팀이름"
 }
+
+### 4.10 팀 빌딩 확정하기
+// @no-log
+PATCH {{host_url}}/api/v1/users/teams/status?generation=4
+
+### 4.11 어드민 팀 해체
+// @no-log
+DELETE {{host_url}}/api/v1/admins/teams/2
+
+### 4.12 어드민 팀원 방출
+// @no-log
+DELETE {{host_url}}/api/v1/admins/members/3
+
+### 4.13 어드민 팀 번호 랜덤 부여
+// @no-log
+POST {{host_url}}/api/v1/admins/teams/number/randomize?generation=4

@@ -141,6 +141,16 @@ export class TeamRepository {
     return { teams, totalItems };
   }
 
+  async findAllByGeneration(generation: number, manager?: EntityManager): Promise<TeamModel[]> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+
+    const entities = await repo.find({
+      where: { generation },
+    });
+
+    return entities.map(entity => TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: true }));
+  }
+
   async saveAndReturn(team: TeamModel, manager?: EntityManager): Promise<TeamModel> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
 
@@ -153,12 +163,17 @@ export class TeamRepository {
     return TeamMapper.toDomain(await repo.save(TeamMapper.toEntity(team)), { skipIdea: true });
   }
 
-
-
   async save(team: TeamModel, manager?: EntityManager): Promise<void> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
 
     await repo.save(TeamMapper.toEntity(team));
+  }
+
+  async saveAll(teams: TeamModel[], manager?: EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+
+    const entities = teams.map(team => TeamMapper.toEntity(team));
+    await repo.save(entities);
   }
 
   async delete(team: TeamModel, manager?: EntityManager): Promise<void> {

@@ -2,7 +2,7 @@ import {
   Body,
   Controller, Delete,
   Param, Patch,
-  Post, Put,
+  Post, Put, Query,
   Req,
   UseFilters,
   UseGuards,
@@ -22,6 +22,8 @@ import { DeleteTeamService } from '../../application/service/delete-team.service
 import { DeleteMemberService } from '../../application/service/delete-member.service';
 import { UpdateAdminTeamService } from '../../application/service/update-admin-team.service';
 import { UpdateAdminTeamRequestDto } from '../../application/dto/request/update-admin-team.request.dto';
+import { RandomizeTeamNumberService } from '../../application/service/randomize-team-number.service';
+import { RandomizeTeamNumberQueryDto } from '../../application/dto/request/randomize-team-number.query.dto';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -33,8 +35,10 @@ export class AdminTeamCommandV1Controller {
     private readonly updateAdminTeamUseCase: UpdateAdminTeamService,
     private readonly updateMemberIsLeaderUseCase: UpdateMemberIsLeaderService,
     private readonly deleteTeamUseCase: DeleteTeamService,
-    private readonly deleteMemberUseCase: DeleteMemberService
-  ) {}
+    private readonly deleteMemberUseCase: DeleteMemberService,
+    private readonly randomizeTeamNumberUseCase: RandomizeTeamNumberService,
+  ) {
+  }
 
   /**
    * 4.1 어드민 팀 추가
@@ -92,7 +96,7 @@ export class AdminTeamCommandV1Controller {
   }
 
   /**
-   * 4.10 어드민 팀 해체
+   * 4.11 어드민 팀 해체
    */
   @Delete('/teams/:teamId(\\d+)')
   @UseGuards(JwtAuthGuard)
@@ -105,7 +109,7 @@ export class AdminTeamCommandV1Controller {
   }
 
   /**
-   * 4.11 어드민 팀원 방출
+   * 4.12 어드민 팀원 방출
    */
   @Delete('/members/:memberId(\\d+)')
   @UseGuards(JwtAuthGuard)
@@ -114,6 +118,19 @@ export class AdminTeamCommandV1Controller {
     @Param('memberId') memberId: number,
   ): Promise<ResponseDto<any>> {
     await this.deleteMemberUseCase.execute(req.user.id, memberId);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 4.13 어드민 팀 번호 랜덤 부여
+   */
+  @Post('/teams/number/randomize')
+  @UseGuards(JwtAuthGuard)
+  async randomizeTeamNumber(
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: RandomizeTeamNumberQueryDto,
+    @Req() req,
+  ): Promise<ResponseDto<any>> {
+    await this.randomizeTeamNumberUseCase.execute(req.user.id, query.generation);
     return ResponseDto.ok(null);
   }
 }

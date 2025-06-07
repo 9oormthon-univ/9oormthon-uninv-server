@@ -26,6 +26,7 @@ import { SystemSettingModule } from '../system-setting/system-setting.module';
 import { DeleteTeamService } from './application/service/delete-team.service';
 import { UpdateTeamStatusService } from './application/service/update-team-status.service';
 import { UpdateAdminTeamService } from './application/service/update-admin-team.service';
+import { RandomizeTeamNumberService } from './application/service/randomize-team-number.service';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { UpdateAdminTeamService } from './application/service/update-admin-team.
     UpdateTeamService,
     DeleteTeamService,
     DeleteMemberService,
+    RandomizeTeamNumberService,
     UpdateTeamStatusService
   ],
   exports: [TeamRepository, MemberRepository, ProjectRepository]

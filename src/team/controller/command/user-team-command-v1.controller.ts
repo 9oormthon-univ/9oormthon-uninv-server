@@ -40,7 +40,7 @@ export class UserTeamCommandV1Controller {
   }
 
   /**
-   * 4.10 팀 상태 수정
+   * 4.10 팀 빌딩 확정하기
    */
   @Patch('/status')
   @UseGuards(JwtAuthGuard)
