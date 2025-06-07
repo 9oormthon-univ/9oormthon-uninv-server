@@ -38,8 +38,12 @@ export class TeamMapper {
     entity.feCapacity = domain.feCapacity;
     entity.beCapacity = domain.beCapacity;
     entity.status = domain.status;
-    entity.idea = domain.idea ? IdeaMapper.toEntity(domain.idea) : null;
-    entity.project = domain.project ? ProjectMapper.toEntity(domain.project) : null;
+    if (domain.idea) {
+      entity.idea = IdeaMapper.toEntity(domain.idea);
+    }
+    if (domain.project) {
+      entity.project = ProjectMapper.toEntity(domain.project);
+    }
     entity.createdAt = domain.createdAt;
     return entity;
   }

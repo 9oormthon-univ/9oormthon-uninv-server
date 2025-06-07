@@ -24,7 +24,9 @@ export class UnivMapper {
     entity.name = domain.name;
     entity.instagramUrl = domain.instagramUrl;
     entity.generation = domain.generation;
-    entity.leader = domain.leader ? UserMapper.toEntity(domain.leader) : null;
+    if (domain.leader) {
+      entity.leader = UserMapper.toEntity(domain.leader);
+    }
     entity.createdAt = domain.createdAt;
     return entity;
   }

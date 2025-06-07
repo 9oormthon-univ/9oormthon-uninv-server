@@ -24,7 +24,9 @@ export class MemberMapper {
     entity.role = domain.role;
     entity.isLeader = domain.isLeader;
     entity.user = UserMapper.toEntity(domain.user);
-    entity.team = domain.team ? TeamMapper.toEntity(domain.team) : null;
+    if (domain.team) {
+      entity.team = TeamMapper.toEntity(domain.team);
+    }
     entity.createdAt = domain.createdAt;
     return entity;
   }

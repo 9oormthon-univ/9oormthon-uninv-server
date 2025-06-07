@@ -50,8 +50,8 @@ export class CreateMemberService {
 
       // 인원이 최대 인원 수 이상을 갖춘 팀의 경우, 팀 상태를 END로 변경
       if (team.members.length + 1 >= TeamModel.MAX_TOTAL_CAPACITY) {
-        team.updateStatus(ETeamStatus.END);
-        await this.teamRepository.save(team, manager);
+        const updatedTeam = team.updateStatus(ETeamStatus.END);
+        await this.teamRepository.save(updatedTeam, manager);
       }
 
       // 멤버 생성

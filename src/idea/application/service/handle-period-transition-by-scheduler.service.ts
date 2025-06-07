@@ -223,9 +223,9 @@ export class HandlePeriodTransitionBySchedulerService {
 
       // 인원이 최대 인원 수 이상을 갖춘 팀의 경우, 팀 상태를 END로 변경
       if (confirmedApply.idea.team.members.length >= TeamModel.MAX_TOTAL_CAPACITY) {
-        confirmedApply.idea.team.updateStatus(ETeamStatus.END);
+        const updatedConfirmedApply = confirmedApply.idea.team.updateStatus(ETeamStatus.END);
+        await this.teamRepository.save(updatedConfirmedApply.idea.team, manager);
       }
-      await this.teamRepository.save(confirmedApply.idea.team, manager);
 
       // 동일 사용자에 대해 두 번째 이후의 Apply는 ACCEPTED_NOT_JOINED로 업데이트
       for (let i = 1; i < userApplies.length; i++) {
