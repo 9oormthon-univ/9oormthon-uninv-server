@@ -12,6 +12,7 @@ import { MemberModel } from '../../../team/domain/member.model';
 import { TeamRepository } from '../../../team/repository/team.repository';
 import { ETeamStatus } from '../../../core/enums/team-status.enum';
 import { TeamModel } from '../../../team/domain/team.model';
+import { EPeriod } from '../../../core/enums/period.enum';
 
 @Injectable()
 export class HandlePeriodTransitionBySchedulerService {
@@ -23,48 +24,115 @@ export class HandlePeriodTransitionBySchedulerService {
     private readonly memberRepository: MemberRepository,
     private readonly teamRepository: TeamRepository,
     private readonly dataSource: DataSource,
-  ) {
-  }
+  ) {}
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async handlePeriodTransitions(): Promise<void> {
+
+  @Cron('*/3 * * * *')
+  async testFlowScheduler(): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
+      const now = new Date();
 
-      // 시스템 설정 조회
-      const systemSetting = await this.systemSettingRepository.findFirst(manager);
-      if (!systemSetting) {
+      // 날짜 포맷 도우미
+      const format = (date: Date) =>
+        `${date.getFullYear()}년${date.getMonth() + 1}월${date.getDate()}일 ${date.getHours()}시${date.getMinutes()}분`;
+
+      const currentSystemSetting = await this.systemSettingRepository.findFirst(manager);
+      if (!currentSystemSetting) {
         throw new CommonException(ErrorCode.NOT_FOUND_SYSTEM_SETTING);
       }
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      // 특정 end 날짜의 하루 뒤가 오늘인지 확인
-      const isDayAfter = (endDate: Date): boolean => {
-        const nextDay = new Date(endDate);
-        nextDay.setHours(0, 0, 0, 0);
-        nextDay.setDate(nextDay.getDate() + 1);
-        return today.getTime() === nextDay.getTime();
-      };
-
-      // Phase1ConfirmationEnd의 하루 뒤인 경우
-      if (isDayAfter(systemSetting.phase1ConfirmationEnd)) {
-        await this.processConfirmationTransition(Number(process.env.GENERATION), 1, manager);
+      switch (currentSystemSetting.getWhichPeriod()) {
+        case EPeriod.IDEA_SUBMISSION:
+          this.logger.log(`아이디어 제시 기간 입니다. ${format(currentSystemSetting.ideaSubmissionStart)} ~ ${format(currentSystemSetting.ideaSubmissionEnd)}`);
+          break;
+        case EPeriod.PHASE1_TEAM_BUILDING:
+          this.logger.log(`1차 팀빌딩 기간입니다. ${format(currentSystemSetting.phase1TeamBuildingStart)} ~ ${format(currentSystemSetting.phase1TeamBuildingEnd)}`);
+          break;
+        case EPeriod.PHASE1_CONFIRMATION:
+          this.logger.log(`1차 팀빌딩 확정 기간입니다. ${format(currentSystemSetting.phase1ConfirmationStart)} ~ ${format(currentSystemSetting.phase1ConfirmationEnd)}`);
+          break;
+        case EPeriod.PHASE2_TEAM_BUILDING:
+          await this.processConfirmationTransition(Number(process.env.GENERATION), 1, manager);
+          this.logger.log('1차 팀빌딩 확정이 완료되었습니다. 로직이 처리되었습니다.');
+          this.logger.log(`2차 팀빌딩 기간입니다. ${format(currentSystemSetting.phase2TeamBuildingStart)} ~ ${format(currentSystemSetting.phase2TeamBuildingEnd)}`);
+          break;
+        case EPeriod.PHASE2_CONFIRMATION:
+          this.logger.log(`2차 팀빌딩 확정 기간입니다. ${format(currentSystemSetting.phase2ConfirmationStart)} ~ ${format(currentSystemSetting.phase2ConfirmationEnd)}`);
+          break;
+        case EPeriod.PHASE3_TEAM_BUILDING:
+          await this.processConfirmationTransition(Number(process.env.GENERATION), 2, manager);
+          this.logger.log('2차 팀빌딩 확정이 완료되었습니다. 로직이 처리되었습니다.');
+          this.logger.log(`3차 팀빌딩 기간입니다. ${format(currentSystemSetting.phase3TeamBuildingStart)} ~ ${format(currentSystemSetting.phase3TeamBuildingEnd)}`);
+          break;
+        case EPeriod.PHASE3_CONFIRMATION:
+          this.logger.log(`3차 팀빌딩 확정 기간입니다. ${format(currentSystemSetting.phase3ConfirmationStart)} ~ ${format(currentSystemSetting.phase3ConfirmationEnd)}`);
+          break;
+        case EPeriod.NONE:
+          await this.processConfirmationTransition(Number(process.env.GENERATION), 3, manager);
+          this.logger.log('3차 팀빌딩 확정이 완료되었습니다. 로직이 처리되었습니다.');
+          this.logger.log('모든 팀빌딩이 완료되었습니다. 시스템 설정을 초기화하고 3 분 뒤 아이디어 제시 기간이 다시 시작됩니다.');
+          // 시스템 설정 초기화
+          const updatedSetting = currentSystemSetting.updateDatesByTest(
+            new Date(now.getTime() + 3 * 60000), // IDEA_SUBMISSION 시작
+            new Date((now.getTime() + 6 * 60000) - 1000), // IDEA_SUBMISSION 종료
+            new Date(now.getTime() + 6 * 60000), // PHASE1_TEAM_BUILDING 시작
+            new Date((now.getTime() + 9 * 60000) - 1000), // PHASE1_TEAM_BUILDING 종료
+            new Date(now.getTime() + 9 * 60000), // PHASE1_CONFIRMATION 시작
+            new Date((now.getTime() + 12 * 60000) - 1000), // PHASE1_CONFIRMATION 종료
+            new Date(now.getTime() + 12 * 60000), // PHASE2_TEAM_BUILDING 시작
+            new Date((now.getTime() + 15 * 60000) - 1000), // PHASE2_TEAM_BUILDING 종료
+            new Date(now.getTime() + 15 * 60000), // PHASE2_CONFIRMATION 시작
+            new Date((now.getTime() + 18 * 60000) - 1000), // PHASE2_CONFIRMATION 종료
+            new Date(now.getTime() + 18 * 60000), // PHASE3_TEAM_BUILDING 시작
+            new Date((now.getTime() + 21 * 60000) - 1000), // PHASE3_TEAM_BUILDING 종료
+            new Date(now.getTime() + 21 * 60000), // PHASE3_CONFIRMATION 시작
+            new Date((now.getTime() + 24 * 60000) - 1000) // PHASE3_CONFIRMATION 종료
+          )
+          await this.systemSettingRepository.save(updatedSetting, manager);
       }
-
-      // Phase2ConfirmationEnd의 하루 뒤인 경우
-      if (isDayAfter(systemSetting.phase2ConfirmationEnd)) {
-        await this.processConfirmationTransition(Number(process.env.GENERATION), 2, manager);
-      }
-
-      // Phase3ConfirmationEnd의 하루 뒤인 경우
-      if (isDayAfter(systemSetting.phase3ConfirmationEnd)) {
-        await this.processConfirmationTransition(Number(process.env.GENERATION), 3, manager);
-      }
-
-      this.logger.log('------------기간 전환 처리 완료. 로직 처리 이후, ' + systemSetting.getWhichPeriod() + '로 변경됨. ------------');
     });
   }
+
+
+  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // async handlePeriodTransitions(): Promise<void> {
+  //   return this.dataSource.transaction(async (manager) => {
+  //
+  //     // 시스템 설정 조회
+  //     const systemSetting = await this.systemSettingRepository.findFirst(manager);
+  //     if (!systemSetting) {
+  //       throw new CommonException(ErrorCode.NOT_FOUND_SYSTEM_SETTING);
+  //     }
+  //
+  //     const today = new Date();
+  //     today.setHours(0, 0, 0, 0);
+  //
+  //     // 특정 end 날짜의 하루 뒤가 오늘인지 확인
+  //     const isDayAfter = (endDate: Date): boolean => {
+  //       const nextDay = new Date(endDate);
+  //       nextDay.setHours(0, 0, 0, 0);
+  //       nextDay.setDate(nextDay.getDate() + 1);
+  //       return today.getTime() === nextDay.getTime();
+  //     };
+  //
+  //     // Phase1ConfirmationEnd의 하루 뒤인 경우
+  //     if (isDayAfter(systemSetting.phase1ConfirmationEnd)) {
+  //       await this.processConfirmationTransition(Number(process.env.GENERATION), 1, manager);
+  //     }
+  //
+  //     // Phase2ConfirmationEnd의 하루 뒤인 경우
+  //     if (isDayAfter(systemSetting.phase2ConfirmationEnd)) {
+  //       await this.processConfirmationTransition(Number(process.env.GENERATION), 2, manager);
+  //     }
+  //
+  //     // Phase3ConfirmationEnd의 하루 뒤인 경우
+  //     if (isDayAfter(systemSetting.phase3ConfirmationEnd)) {
+  //       await this.processConfirmationTransition(Number(process.env.GENERATION), 3, manager);
+  //     }
+  //
+  //     this.logger.log('------------기간 전환 처리 완료. 로직 처리 이후, ' + systemSetting.getWhichPeriod() + '로 변경됨. ------------');
+  //   });
+  // }
 
   /**
    * 해당 기수(generation)와 팀빌딩 차수(phase)에 해당하는 Apply들을 처리하는 로직

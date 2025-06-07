@@ -4,11 +4,11 @@ POST {{host_url}}/api/v1/admins/users
 Content-Type: application/json
 
 {
-  "name": "장동겸",
-  "univ_id": 1,
-  "email": "jangelliot0404@dgu.ac.kr",
+  "name": "동겸테스트",
+  "univ_id": 5,
+  "email": "hsw0106@gmail.com",
   "phone_number": "01056175155",
-  "generations": [2,3,4]
+  "generations": [4]
 }
 
 ### 2.2 어드민 유저 엑셀로 생성
