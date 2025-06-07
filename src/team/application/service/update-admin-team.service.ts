@@ -8,7 +8,6 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import { MemberRepository } from '../../repository/member.repository';
 import { UpdateAdminTeamRequestDto } from '../dto/request/update-admin-team.request.dto';
 import { ProjectRepository } from '../../repository/project.repository';
-import { ProjectModel } from '../../domain/project.model';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -90,7 +89,6 @@ export class UpdateAdminTeamService {
       }
       const updatedProject = project.updateName(requestDto.serviceName);
       await this.projectRepository.save(updatedProject, manager);
-
     });
   }
 }
