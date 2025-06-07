@@ -57,7 +57,7 @@ Content-Type: application/json
 
 ### 4.8 어드민 팀원 팀장 임명
 // @no-log
-PATCH {{host_url}}/api/v1/admins/members/2/is-leader
+PATCH {{host_url}}/api/v1/admins/members/10/is-leader
 
 
 ### 4.9 팀 정보 수정
@@ -85,3 +85,12 @@ DELETE {{host_url}}/api/v1/admins/members/3
 ### 4.13 어드민 팀 번호 랜덤 부여
 // @no-log
 POST {{host_url}}/api/v1/admins/teams/number/randomize?generation=4
+
+### 4.14 어드민 팀원 지원파트 변경
+// @no-log
+PATCH {{host_url}}/api/v1/admins/members/10/role
+Content-Type: application/json
+
+{
+  "role": "PM"
+}
