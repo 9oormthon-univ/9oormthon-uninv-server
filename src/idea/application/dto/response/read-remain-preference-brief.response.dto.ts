@@ -16,7 +16,7 @@ export class PreferenceDto {
 
     const preferences = Array.from({ length: maxPreferencesPerUser }, (_, i) => i + 1);
     return preferences.map(preference => {
-      const isActive = models.some(model => !(model.preference === preference));
+      const isActive = !models.some(model => model.preference === preference);
       return new PreferenceDto(preference, isActive);
     });
   }
