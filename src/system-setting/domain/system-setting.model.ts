@@ -25,6 +25,44 @@ export class SystemSettingModel {
     public readonly updatedAt: Date
   ) {}
 
+  public updateDatesByTest(
+    ideaSubmissionStart: Date,
+    ideaSubmissionEnd: Date,
+    phase1TeamBuildingStart: Date,
+    phase1TeamBuildingEnd: Date,
+    phase1ConfirmationStart: Date,
+    phase1ConfirmationEnd: Date,
+    phase2TeamBuildingStart: Date,
+    phase2TeamBuildingEnd: Date,
+    phase2ConfirmationStart: Date,
+    phase2ConfirmationEnd: Date,
+    phase3TeamBuildingStart: Date,
+    phase3TeamBuildingEnd: Date,
+    phase3ConfirmationStart: Date,
+    phase3ConfirmationEnd: Date
+  ): SystemSettingModel {
+    return new SystemSettingModel(
+      this.id,
+      ideaSubmissionStart,
+      ideaSubmissionEnd,
+      phase1TeamBuildingStart,
+      phase1TeamBuildingEnd,
+      phase1ConfirmationStart,
+      phase1ConfirmationEnd,
+      phase2TeamBuildingStart,
+      phase2TeamBuildingEnd,
+      phase2ConfirmationStart,
+      phase2ConfirmationEnd,
+      phase3TeamBuildingStart,
+      phase3TeamBuildingEnd,
+      phase3ConfirmationStart,
+      phase3ConfirmationEnd,
+      this.maxPreferencesPerUser,
+      this.createdAt,
+      new Date()
+    );
+  }
+
   public updateDates(
     ideaSubmissionStart: Date,
     ideaSubmissionEnd: Date,
@@ -165,7 +203,6 @@ export class SystemSettingModel {
 
   public getWhichPeriod(): EPeriod {
     const now = new Date();
-    Logger.log("현재 시간은!!!!!!!!!! : " + now);
     if (this.ideaSubmissionStart <= now && now <= this.ideaSubmissionEnd) {
       return EPeriod.IDEA_SUBMISSION;
     } else if (this.phase1TeamBuildingStart <= now && now <= this.phase1TeamBuildingEnd) {
@@ -199,7 +236,6 @@ export class SystemSettingModel {
   }
 
   public validateIdeaApplyPeriod(phase: number): void {
-    Logger.log("현재 기간은!!!!!!!!!! : " + this.getWhichPeriod());
     if (
       (
         (this.getWhichPeriod() !== EPeriod.PHASE1_TEAM_BUILDING) &&
@@ -223,7 +259,6 @@ export class SystemSettingModel {
   }
 
   public validateAcceptOrRejectApplyPeriod(phase: number): void {
-    Logger.log("현재 기간은!!!!!!!!!! : " + this.getWhichPeriod());
     if (this.getWhichPeriod() !== EPeriod.PHASE1_CONFIRMATION && this.getWhichPeriod() !== EPeriod.PHASE2_CONFIRMATION && this.getWhichPeriod() !== EPeriod.PHASE3_CONFIRMATION) {
       throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
     }
