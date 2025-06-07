@@ -28,7 +28,7 @@ export class UpdateTeamStatusService {
       }
 
       // 팀 조회
-      const team = await this.teamRepository.findByUserIdAndGeneration(userId, generation, manager);
+      const team = await this.teamRepository.findWithMembersByUserIdAndGeneration(userId, generation, manager);
       if (!team) {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }

@@ -16,7 +16,7 @@ export class ReadTeamDetailService {
 
   async execute(userId: number, generation: number): Promise<ReadTeamDetailResponseDto> {
     return this.dataSource.transaction(async (manager) => {
-      const team = await this.teamRepository.findByUserIdAndGeneration(userId, generation, manager);
+      const team = await this.teamRepository.findWithMembersByUserIdAndGeneration(userId, generation, manager);
       if (!team) {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
