@@ -1,24 +1,50 @@
-### 2.1 내 정보 조회
+### 2.1 어드민 유저 생성
+// @no-log
+POST {{host_url}}/api/v1/admins/users
+Content-Type: application/json
+
+{
+  "name": "장동겸",
+  "univ_id": 1,
+  "email": "jangelliot0404@dgu.ac.kr",
+  "phone_number": "01056175155",
+  "generations": [2,3,4]
+}
+
+### 2.2 어드민 유저 엑셀로 생성
+// @no-log
+POST {{host_url}}/api/v1/admins/users/excel
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file" ; filename="test.xlsx"
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< /Users/kyeom/Desktop/test.xlsx
+
+--boundary
+
+### 2.3 내 정보 조회
 // @no-log
 GET {{host_url}}/api/v1/users/details
 
-### 2.2 유저 정보 조회
+### 2.4 유저 정보 조회
 // @no-log
 GET {{host_url}}/api/v1/users/2/details
 
-### 2.3 어드민 유저 간단 리스트 조회
+### 2.5 어드민 유저 간단 리스트 조회
 // @no-log
 GET {{host_url}}/api/v1/admins/users/briefs?generation=4
 
-### 2.4 어드민 유저 요약 리스트 조회
+### 2.6 어드민 유저 요약 리스트 조회
 // @no-log
 GET {{host_url}}/api/v1/admins/users/overviews?page=1&size=10&generation=4&univ-id=1&search=은
 
-### 2.5 어드민 유저 상세 조회
+### 2.7 어드민 유저 상세 조회
 // @no-log
 GET {{host_url}}/api/v1/admins/users/4/details?generation=4
 
-### 2.6 유저 정보 수정
+### 2.8 유저 정보 수정
 // @no-log
 PUT {{host_url}}/api/v1/users
 Content-Type: application/json
@@ -54,7 +80,7 @@ Content-Type: application/json
   ]
 }
 
-### 2.7 어드민 유저 수정
+### 2.9 어드민 유저 수정
 // @no-log
 PUT {{host_url}}/api/v1/admins/users/4
 Content-Type: application/json
@@ -67,7 +93,7 @@ Content-Type: application/json
   "generations": [2,3,4]
 }
 
-### 2.8 어드민 유저 삭제
+### 2.10 어드민 유저 삭제
 // @no-log
 DELETE {{host_url}}/api/v1/admins/users/5
 

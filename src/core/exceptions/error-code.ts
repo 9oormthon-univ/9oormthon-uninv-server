@@ -26,6 +26,7 @@ export class ErrorCode {
   static readonly NOT_FOUND_SYSTEM_SETTING = new ErrorCode(40410, HttpStatus.NOT_FOUND, "시스템 설정을 찾을 수 없습니다.");
   static readonly NOT_FOUND_MEMBER = new ErrorCode(40411, HttpStatus.NOT_FOUND, "해당 멤버를 찾을 수 없습니다.");
   static readonly NOT_FOUND_APPLY = new ErrorCode(40412, HttpStatus.NOT_FOUND, "해당 지원 정보를 찾을 수 없습니다.");
+  static readonly NOT_FOUND_PROJECT = new ErrorCode(40413, HttpStatus.NOT_FOUND, "해당 프로젝트를 찾을 수 없습니다.");
 
   // Invalid Argument Error
   static readonly MISSING_REQUEST_PARAMETER = new ErrorCode(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다.");

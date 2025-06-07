@@ -1,34 +1,30 @@
 import { Injectable, UseFilters } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { JwtService } from '@nestjs/jwt';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { CommonException, UnivNotFoundException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import * as XLSX from 'xlsx';
 import { DataSource } from 'typeorm';
-import { ESecurityRole } from '../../../core/enums/security-role.enum';
-import { UserRepository } from '../../../user/repository/user.repository';
-import { UserModel } from '../../../user/domain/user.model';
-import { UnivRepository } from '../../../user/repository/univ.repository';
+import { UserRepository } from '../../repository/user.repository';
+import { UserModel } from '../../domain/user.model';
+import { UnivRepository } from '../../repository/univ.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
-export class SignUpService {
+export class CreateUserByExcelService {
   constructor(
-    private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
     private readonly univRepository: UnivRepository,
     private readonly dataSource: DataSource,
   ) {
   }
 
-  async execute(userId: number, file: Express.Multer.File): Promise<void> {
+  async execute(adminId: number, file: Express.Multer.File): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
-
       const users: UserModel[] = [];
 
       // 어드민 조회
-      const admin = await this.userRepository.findById(userId, manager);
+      const admin = await this.userRepository.findById(adminId, manager);
 
       // 어드민 권한 검증
       admin.validateAdminRole();

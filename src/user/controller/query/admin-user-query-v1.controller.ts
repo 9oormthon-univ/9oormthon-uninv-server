@@ -36,7 +36,7 @@ export class AdminUserQueryV1Controller {
   ) {}
 
   /**
-   * 2.3 어드민 유저 간단 리스트 조회
+   * 2.5 어드민 유저 간단 리스트 조회
    */
   @Get('users/briefs')
   @UseGuards(JwtAuthGuard)
@@ -48,7 +48,7 @@ export class AdminUserQueryV1Controller {
   }
 
   /**
-   * 2.4 어드민 유저 요약 리스트 조회
+   * 2.6 어드민 유저 요약 리스트 조회
    */
   @Get('users/overviews')
   @UseGuards(JwtAuthGuard)
@@ -60,7 +60,7 @@ export class AdminUserQueryV1Controller {
   }
 
   /**
-   * 2.5 어드민 유저 상세 조회
+   * 2.7 어드민 유저 상세 조회
    */
   @Get('users/:userId(\\d+)/details')
   @UseGuards(JwtAuthGuard)
