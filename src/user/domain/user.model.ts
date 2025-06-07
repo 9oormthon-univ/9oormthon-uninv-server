@@ -97,6 +97,7 @@ export class UserModel {
   }
 
   public updateUserByAdmin(
+    imgUrl: string,
     name: string,
     univ: UnivModel,
     email: string,
@@ -107,7 +108,7 @@ export class UserModel {
       this.id,
       email,
       this.password,
-      this.imgUrl,
+      imgUrl,
       name,
       phoneNumber,
       this.introduction,
