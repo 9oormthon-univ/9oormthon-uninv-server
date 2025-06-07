@@ -45,4 +45,9 @@ export class ReadIdeaOverviewQueryDto {
   @IsBoolean({ message: 'is-bookmarked는 boolean 값이어야 합니다.' })
   @Expose({ name: 'is-bookmarked' })
   isBookmarked?: boolean;
+
+  // search는 선택사항 (아이디어 제목 검색)
+  @IsOptional()
+  @Expose({ name: 'search' })
+  search: string;
 }

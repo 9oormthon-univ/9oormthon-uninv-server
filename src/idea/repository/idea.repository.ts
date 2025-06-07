@@ -75,6 +75,7 @@ export class IdeaRepository {
     subjectId: number | undefined,
     isActive: boolean | undefined,
     isBookmarked: boolean | undefined,
+    search: string | undefined,
     userId: number,
     manager?: EntityManager
   ): Promise<{ ideas: IdeaOverviewDto[]; totalItems: number }> {
@@ -93,6 +94,11 @@ export class IdeaRepository {
     // is-bookmarked 필터
     if (isBookmarked === true) {
       qb.andWhere(`(SELECT COUNT(*) FROM bookmarks b WHERE b.idea_id = idea.id AND b.user_id = :userId) > 0`);
+    }
+
+    // search 필터
+    if (search) {
+      qb.andWhere('idea.title LIKE :search OR idea.summary LIKE :search', { search: `%${search}%` });
     }
 
     // bookmark_count를 서브쿼리로 계산 (나중에 매핑할 때 사용)
