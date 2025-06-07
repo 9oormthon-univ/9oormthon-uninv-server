@@ -13,6 +13,8 @@ import { TeamRepository } from '../../../team/repository/team.repository';
 import { ETeamStatus } from '../../../core/enums/team-status.enum';
 import { TeamModel } from '../../../team/domain/team.model';
 import { EPeriod } from '../../../core/enums/period.enum';
+import { ApplyMapper } from '../../../core/infra/mapper/apply.mapper';
+import { ApplyEntity } from '../../../core/infra/entities/apply.entity';
 
 @Injectable()
 export class HandlePeriodTransitionBySchedulerService {
@@ -20,7 +22,6 @@ export class HandlePeriodTransitionBySchedulerService {
 
   constructor(
     private readonly systemSettingRepository: SystemSettingRepository,
-    private readonly applyRepository: ApplyRepository,
     private readonly memberRepository: MemberRepository,
     private readonly teamRepository: TeamRepository,
     private readonly dataSource: DataSource,
@@ -149,17 +150,38 @@ export class HandlePeriodTransitionBySchedulerService {
     this.logger.log(`generation: ${generation}, phase: ${phase}에 대한 기간 전환 처리 시작`);
 
     // 1. 해당 generation, phase에 해당하는 Apply들을 조회
-    const applies = await this.applyRepository.findByGenerationAndPhase(generation, phase, manager);
-    if (applies == null || applies.length === 0) {
+    // 트랜잭션 매니저에서 직접 Repository 뽑기
+    const repo = manager.getRepository(ApplyEntity);
+
+    // relations는 필요한 것만 유지 (너무 깊은 relations는 성능 및 오류의 원인)
+    const entities = await repo.find({
+      where: { idea: { generation }, phase },
+      relations: [
+        'user',
+        'user.univ',
+        'idea',
+        'idea.provider',
+        'idea.ideaSubject',
+        'idea.team',
+        'idea.team.members',
+      ],
+    });
+
+    if (!entities || entities.length === 0) {
       this.logger.log(`generation: ${generation}, phase:${phase}에 대한 Apply가 없습니다.`);
       return;
     }
+
+    this.logger.log(`generation: ${generation}, phase: ${phase}에 대한 Apply가 ${entities.length}건 조회되었습니다.`);
+
+    // Entity → Domain 모델 매핑
+    const applies = ApplyMapper.toDomains(entities);
 
     // 2. WAITING 상태의 Apply들은 REJECTED로 변경
     for (const apply of applies) {
       if (apply.status === EApplyStatus.WAITING) {
         const updatedApply = apply.reject();
-        await this.applyRepository.save(updatedApply, manager);
+        await repo.save(ApplyMapper.toEntity(updatedApply));
       }
     }
 
@@ -188,7 +210,7 @@ export class HandlePeriodTransitionBySchedulerService {
       // 첫 번째 Apply를 CONFIRMED로 변경
       const confirmedApply = userApplies[0];
       const updatedApply = confirmedApply.confirm();
-      await this.applyRepository.save(updatedApply);
+      await repo.save(ApplyMapper.toEntity(updatedApply));
       // member 생성
       const member = MemberModel.createMember(
         confirmedApply.role,
@@ -208,7 +230,7 @@ export class HandlePeriodTransitionBySchedulerService {
       // 동일 사용자에 대해 두 번째 이후의 Apply는 ACCEPTED_NOT_JOINED로 업데이트
       for (let i = 1; i < userApplies.length; i++) {
         const updatedApply = userApplies[i].acceptedNotJoined();
-        await this.applyRepository.save(updatedApply, manager);
+        await repo.save(ApplyMapper.toEntity(updatedApply));
       }
     }
   }

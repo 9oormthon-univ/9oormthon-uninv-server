@@ -9,6 +9,7 @@ import { UserEntity } from './user.entity';
 import { IdeaSubjectEntity } from './idea-subject.entity';
 import { BookmarkEntity } from './bookmark.entity';
 import { TeamEntity } from './team.entity';
+import { ApplyEntity } from './apply.entity';
 
 @Entity('ideas')
 export class IdeaEntity {
@@ -80,6 +81,10 @@ export class IdeaEntity {
   /* ----------------------------- */
   @OneToMany(() => BookmarkEntity, (bookmark) => bookmark.idea)
   bookmarks: BookmarkEntity[];
+
+  @OneToMany(() => ApplyEntity, apply => apply.idea)
+  applies: ApplyEntity[];
+
 
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */
