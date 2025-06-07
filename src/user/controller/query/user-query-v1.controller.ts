@@ -16,7 +16,7 @@ export class UserQueryV1Controller {
   ) {}
 
   /**
-   * 2.1 내 정보 조회
+   * 2.3 내 정보 조회
    */
   @Get('details')
   @UseGuards(JwtAuthGuard)
@@ -25,7 +25,7 @@ export class UserQueryV1Controller {
   }
 
   /**
-   * 2.2 유저 정보 상세 조회
+   * 2.4 유저 정보 상세 조회
    */
   @Get(':userId(\\d+)/details')
   @UseGuards(JwtAuthGuard)

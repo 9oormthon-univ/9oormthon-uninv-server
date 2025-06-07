@@ -18,8 +18,9 @@ export class UpdateAdminTeamService {
     private readonly memberRepository: MemberRepository,
     private readonly teamRepository: TeamRepository,
     private readonly projectRepository: ProjectRepository,
-    private readonly dataSource: DataSource
-  ) {}
+    private readonly dataSource: DataSource,
+  ) {
+  }
 
   async execute(adminId: number, teamId: number, requestDto: UpdateAdminTeamRequestDto) {
     return this.dataSource.transaction(async (manager) => {
@@ -44,24 +45,25 @@ export class UpdateAdminTeamService {
         requestDto.pmCapacity,
         requestDto.pdCapacity,
         requestDto.feCapacity,
-        requestDto.beCapacity
+        requestDto.beCapacity,
       );
       // 팀원 직군 유효성 검증
       updatedTeam.validateSystemCapacityLimits();
       await this.teamRepository.save(updatedTeam, manager);
 
       const leader = team.members.filter(
-        (member) => member.isLeader
+        (member) => member.isLeader,
       )[0];
 
       // 팀 리더 변경
-      if (requestDto.leaderId != 0) {
+      if (requestDto.leaderId != 0) { // 리더가 0으로 오는 경우, 리더가 없는 것. 이 경우 제외
+        // 현재 리더가 있다면 현재 리더를 false로 변경 후 새로운 리더 true로 변경
         if (leader !== null && leader !== undefined && leader.user.id != requestDto.leaderId) {
           const oldLeader = leader.changeIsLeader(false);
           await this.memberRepository.save(oldLeader, manager);
 
           const newLeader = team.members.filter(
-            (member) => member.user.id === requestDto.leaderId
+            (member) => member.user.id === requestDto.leaderId,
           )[0];
           if (!newLeader) {
             throw new CommonException(ErrorCode.NOT_FOUND_USER);
@@ -69,9 +71,9 @@ export class UpdateAdminTeamService {
           const updatedNewLeader = newLeader.changeIsLeader(true);
           await this.memberRepository.save(updatedNewLeader, manager);
 
-        } else if (leader === null || leader === undefined) { // 리더가 없었던 경우
+        } else if (leader === null || leader === undefined) { // 현재 리더가 없다면 새로운 리더만 true로 변경
           const newLeader = team.members.filter(
-            (member) => member.user.id === requestDto.leaderId
+            (member) => member.user.id === requestDto.leaderId,
           )[0];
           if (!newLeader) {
             throw new CommonException(ErrorCode.NOT_FOUND_USER);
@@ -83,23 +85,12 @@ export class UpdateAdminTeamService {
 
       // 프로젝트 조회
       const project = await this.projectRepository.findByTeamId(teamId, manager);
-      if (!project && requestDto.serviceName !== null && requestDto.serviceName !== undefined && requestDto.serviceName !== '') {
-        const newProject = ProjectModel.createProject(
-          requestDto.serviceName,
-          "내용",
-          team.generation,
-          null,
-          null,
-          null,
-          null,
-          null,
-          team
-        );
-        await this.projectRepository.save(newProject, manager);
-      } else {
-        const updatedProject = project.updateName(requestDto.serviceName)
-        await this.projectRepository.save(updatedProject, manager);
+      if (!project) {
+        throw new CommonException(ErrorCode.NOT_FOUND_PROJECT);
       }
+      const updatedProject = project.updateName(requestDto.serviceName);
+      await this.projectRepository.save(updatedProject, manager);
+
     });
   }
 }

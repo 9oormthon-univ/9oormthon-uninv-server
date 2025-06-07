@@ -11,7 +11,6 @@ import { LoginService } from './application/service/login.service';
 import { LogoutService } from './application/service/logout.service';
 import { ReadAuthBriefService } from './application/service/read-auth-brief.service';
 import { ReissueJwtService } from './application/service/reissue-jwt.service';
-import { SignUpService } from './application/service/sign-up.service';
 import { SignUpAdminService } from './application/service/sign-up-admin.service';
 import { ChangePasswordService } from './application/service/change-password.service';
 import { IdeaModule } from '../idea/idea.module';
@@ -33,7 +32,6 @@ import { TeamModule } from '../team/team.module';
     LogoutService,
     ReadAuthBriefService,
     ReissueJwtService,
-    SignUpService,
     SignUpAdminService,
     ChangePasswordService,
     JwtStrategy,

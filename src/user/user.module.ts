@@ -24,6 +24,8 @@ import { UserQueryV1Controller } from './controller/query/user-query-v1.controll
 import { UserCommandV1Controller } from './controller/command/user-command-v1.controller';
 import { AdminUserCommandV1Controller } from './controller/command/admin-user-command-v1.controller';
 import { AdminUserQueryV1Controller } from './controller/query/admin-user-query-v1.controller';
+import { CreateUserService } from './application/service/create-user.service';
+import { CreateUserByExcelService } from './application/service/create-user-by-excel.service';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { AdminUserQueryV1Controller } from './controller/query/admin-user-query-
     TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [
+    CreateUserService,
+    CreateUserByExcelService,
     ReadMyUserDetailService,
     ReadUserDetailService,
     UpdateUserService,

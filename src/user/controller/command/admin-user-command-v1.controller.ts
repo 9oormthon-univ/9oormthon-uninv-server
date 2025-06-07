@@ -5,7 +5,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
+  Req, UploadedFile,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -23,12 +23,19 @@ import { DeleteUnivService } from '../../application/service/delete-univ.service
 import { UpdateAdminUserService } from '../../application/service/update-admin-user-service';
 import { UpdateAdminUserRequestDto } from '../../application/dto/request/update-admin-user.request.dto';
 import { DeleteUserService } from '../../application/service/delete-user.service';
+import { CreateUserService } from '../../application/service/create-user.service';
+import { CreateUserRequestDto } from '../../application/dto/request/create-user.request.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
+import { CreateUserByExcelService } from '../../application/service/create-user-by-excel.service';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
 @UseFilters(HttpExceptionFilter)
 export class AdminUserCommandV1Controller {
   constructor(
+    private readonly createUserUseCase: CreateUserService,
+    private readonly createUserByExcelUseCase: CreateUserByExcelService,
     private readonly updateAdminUserUseCase: UpdateAdminUserService,
     private readonly deleteUserUseCase: DeleteUserService,
     private readonly createUnivUseCase: CreateUnivService,
@@ -37,7 +44,34 @@ export class AdminUserCommandV1Controller {
   ) {}
 
   /**
-   * 2.7 어드민 유저 정보 수정
+   * 2.1 어드민 유저 생성
+   */
+  @Post('users')
+  @UseGuards(JwtAuthGuard)
+  async createUser(
+    @Req() req,
+    @Body(new ValidationPipe({ transform: true })) createUserDto: CreateUserRequestDto,
+  ): Promise<ResponseDto<any>> {
+    await this.createUserUseCase.execute(req.user.userId, createUserDto);
+    return ResponseDto.created(null);
+  }
+
+  /**
+   * 2.2 어드민 유저 엑셀로 생성
+   */
+  @Post('/users/excel')
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(JwtAuthGuard)
+  async signUp(
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<ResponseDto<any>> {
+    await this.createUserByExcelUseCase.execute(req.user.id, file);
+    return ResponseDto.created(null);
+  }
+
+  /**
+   * 2.9 어드민 유저 정보 수정
    */
   @Put('users/:userId(\\d+)')
   @UseGuards(JwtAuthGuard)
@@ -51,7 +85,7 @@ export class AdminUserCommandV1Controller {
   }
 
   /**
-   * 2.8 어드민 유저 삭제
+   * 2.10 어드민 유저 삭제
    */
   @Delete('users/:userId(\\d+)')
   @UseGuards(JwtAuthGuard)
@@ -89,7 +123,7 @@ export class AdminUserCommandV1Controller {
 
   /**
    * 6.5 어드민 유니브 삭제
-   */ㅁ
+   */
   @Delete('univs/:univId(\\d+)')
   @UseGuards(JwtAuthGuard)
   async deleteUniv(

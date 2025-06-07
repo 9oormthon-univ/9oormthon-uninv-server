@@ -15,7 +15,7 @@ export class UserCommandV1Controller {
   ) {}
 
   /**
-   * 2.6 유저 정보 수정
+   * 2.8 유저 정보 수정
    */
   @Put()
   @UseGuards(JwtAuthGuard)
