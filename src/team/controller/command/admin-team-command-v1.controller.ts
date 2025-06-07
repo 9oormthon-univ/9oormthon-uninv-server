@@ -24,6 +24,8 @@ import { UpdateAdminTeamService } from '../../application/service/update-admin-t
 import { UpdateAdminTeamRequestDto } from '../../application/dto/request/update-admin-team.request.dto';
 import { RandomizeTeamNumberService } from '../../application/service/randomize-team-number.service';
 import { RandomizeTeamNumberQueryDto } from '../../application/dto/request/randomize-team-number.query.dto';
+import { UpdateMemberRoleService } from '../../application/service/update-member-role.service';
+import { UpdateMemberRoleRequestDto } from '../../application/dto/request/update-member-role.request.dto';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -37,6 +39,7 @@ export class AdminTeamCommandV1Controller {
     private readonly deleteTeamUseCase: DeleteTeamService,
     private readonly deleteMemberUseCase: DeleteMemberService,
     private readonly randomizeTeamNumberUseCase: RandomizeTeamNumberService,
+    private readonly updateMemberRoleUseCase: UpdateMemberRoleService,
   ) {
   }
 
@@ -131,6 +134,20 @@ export class AdminTeamCommandV1Controller {
     @Req() req,
   ): Promise<ResponseDto<any>> {
     await this.randomizeTeamNumberUseCase.execute(req.user.id, query.generation);
+    return ResponseDto.ok(null);
+  }
+
+  /**
+   * 4.14 어드민 팀원 지원파트 변경
+   */
+  @Patch('/members/:memberId(\\d+)/role')
+  @UseGuards(JwtAuthGuard)
+  async updateMemberRole(
+    @Req() req,
+    @Param('memberId') memberId: number,
+    @Body(new ValidationPipe({ transform: true })) requestDto: UpdateMemberRoleRequestDto
+  ): Promise<ResponseDto<any>> {
+    await this.updateMemberRoleUseCase.execute(req.user.id, memberId, requestDto);
     return ResponseDto.ok(null);
   }
 }
