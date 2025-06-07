@@ -116,6 +116,7 @@ export class IdeaRepository {
         AND EXISTS (
           SELECT 1 FROM teams t 
           WHERE t.idea_id = idea.id 
+            AND t.status = 'RECRUITING'
             AND (
               t.pm_capacity > (
                 SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'PM'
@@ -141,7 +142,8 @@ export class IdeaRepository {
         qb.andWhere(`(
           EXISTS (
             SELECT 1 FROM teams t 
-            WHERE t.idea_id = idea.id 
+            WHERE t.idea_id = idea.id
+            AND t.status = 'RECRUITING'
               AND (
                 t.pm_capacity > (SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'PM')
              OR t.pd_capacity > (SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'PD')
@@ -155,7 +157,8 @@ export class IdeaRepository {
         qb.andWhere(`(
           NOT EXISTS (
             SELECT 1 FROM teams t 
-            WHERE t.idea_id = idea.id 
+            WHERE t.idea_id = idea.id
+            AND t.status = 'RECRUITING'
               AND (
                 t.pm_capacity > (SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'PM')
              OR t.pd_capacity > (SELECT COUNT(*) FROM members m WHERE m.team_id = t.id AND m.role = 'PD')

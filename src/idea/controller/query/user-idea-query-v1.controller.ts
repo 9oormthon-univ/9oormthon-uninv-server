@@ -25,6 +25,8 @@ import { ReadMyApplyOverviewQueryDto } from '../../application/dto/request/read-
 import { ReadTeamApplyOverviewQueryDto } from '../../application/dto/request/read-team-apply-overview.query.dto';
 import { ReadTeamApplyOverviewService } from '../../application/service/read-team-apply-overview.service';
 import { ReadTeamApplyOverviewResponseDto } from '../../application/dto/response/read-team-apply-overview.response.dto';
+import { ReadIdeaSubjectBriefQueryDto } from '../../application/dto/request/read-idea-subject-brief.query.dto';
+import { ReadIdeaSubjectBriefService } from '../../application/service/read-idea-subject-brief.service';
 
 @Controller('/api/v1/users')
 @UseInterceptors(ResponseInterceptor)
@@ -34,6 +36,7 @@ export class UserIdeaQueryV1Controller {
     private readonly readIdeaOverviewUseCase: ReadIdeaOverviewService,
     private readonly readMyIdeaDetailUseCase: ReadMyIdeaDetailService,
     private readonly readIdeaDetailUseCase: ReadIdeaDetailService,
+    private readonly readIdeaSubjectBriefUseCase: ReadIdeaSubjectBriefService,
     private readonly readRemainPreferenceBriefUseCase: ReadRemainPreferenceBriefService,
     private readonly readMyApplyOverviewUseCase: ReadMyApplyOverviewService,
     private readonly readTeamApplyOverviewUseCase: ReadTeamApplyOverviewService
@@ -92,6 +95,17 @@ export class UserIdeaQueryV1Controller {
         id
       )
     );
+  }
+
+  /**
+   * 3.9 아이디어 주제 간단 리스트 조회
+   */
+  @Get('idea-subjects/briefs')
+  @UseGuards(JwtAuthGuard)
+  async readIdeaSubjectBrief(
+    @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadIdeaSubjectBriefQueryDto
+  ): Promise<ResponseDto<any>> {
+    return ResponseDto.ok(await this.readIdeaSubjectBriefUseCase.execute(query.generation));
   }
 
   /**

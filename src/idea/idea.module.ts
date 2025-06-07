@@ -20,7 +20,7 @@ import { TeamModule } from '../team/team.module';
 import { ReadMyIdeaDetailService } from './application/service/read-my-idea-detail.service';
 import { ReadIdeaDetailService } from './application/service/read-idea-detail.service';
 import { ReadIdeaSubjectBriefService } from './application/service/read-idea-subject-brief.service';
-import { IdeaQueryV1Controller } from './controller/query/idea-query-v1.controller';
+import { AdminIdeaQueryV1Controller } from './controller/query/admin-idea-query-v1.controller';
 import { SystemSettingModule } from '../system-setting/system-setting.module';
 import { ReadRemainPreferenceBriefService } from './application/service/read-remain-preference-brief.service';
 import { UpdateIdeaService } from './application/service/update-idea.service';
@@ -37,6 +37,7 @@ import { DeleteIdeaService } from './application/service/delete-idea.service';
 import { BookmarkEntity } from '../core/infra/entities/bookmark.entity';
 import { ApplyEntity } from '../core/infra/entities/apply.entity';
 import { IdeaSubjectEntity } from '../core/infra/entities/idea-subject.entity';
+import { ReadAdminIdeaSubjectBriefService } from './application/service/read-admin-idea-subject-brief.service';
 
 @Module({
   imports: [
@@ -58,7 +59,7 @@ import { IdeaSubjectEntity } from '../core/infra/entities/idea-subject.entity';
     UserIdeaCommandV1Controller,
     UserIdeaQueryV1Controller,
     AdminIdeaCommandV1Controller,
-    IdeaQueryV1Controller
+    AdminIdeaQueryV1Controller
   ],
   providers: [
     HandlePeriodTransitionBySchedulerService,
@@ -79,6 +80,7 @@ import { IdeaSubjectEntity } from '../core/infra/entities/idea-subject.entity';
     RejectApplyService,
     CancelApplyService,
     DeleteIdeaService,
+    ReadAdminIdeaSubjectBriefService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,

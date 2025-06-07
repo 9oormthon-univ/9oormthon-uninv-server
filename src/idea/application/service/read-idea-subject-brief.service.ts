@@ -16,7 +16,7 @@ export class ReadIdeaSubjectBriefService {
     return this.dataSource.transaction(async (manager) => {
 
       // 아이디어 주제 조회
-      const ideaSubjects = await this.ideaSubjectRepository.findAllByGeneration(generation, manager);
+      const ideaSubjects = await this.ideaSubjectRepository.findAllByGenerationAndIsActiveTrue(generation, manager);
 
       return ReadIdeaSubjectBriefResponseDto.from(ideaSubjects);
     });
