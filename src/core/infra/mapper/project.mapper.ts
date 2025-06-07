@@ -32,7 +32,9 @@ export class ProjectMapper {
     entity.frontendLink = domain.frontendLink;
     entity.releaseLink = domain.releaseLink;
     entity.imgUrl = domain.imgUrl;
-    entity.team = TeamMapper.toEntity(domain.team);
+    if (domain.team) {
+      entity.team = TeamMapper.toEntity(domain.team);
+    }
     entity.createdAt = domain.createdAt;
     return entity;
   }

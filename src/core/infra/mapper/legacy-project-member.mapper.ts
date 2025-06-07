@@ -18,7 +18,9 @@ export class LegacyProjectMemberMapper {
     entity.id = domain.id;
     entity.name = domain.name;
     entity.role = domain.role;
-    entity.project = ProjectMapper.toEntity(domain.project);
+    if (domain.project) {
+      entity.project = ProjectMapper.toEntity(domain.project);
+    }
     entity.createdAt = domain.createdAt;
     return entity;
   }
