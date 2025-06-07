@@ -34,13 +34,21 @@ import {
   HandlePeriodTransitionBySchedulerService,
 } from './application/service/handle-period-transition-by-scheduler.service';
 import { DeleteIdeaService } from './application/service/delete-idea.service';
+import { BookmarkEntity } from '../core/infra/entities/bookmark.entity';
+import { ApplyEntity } from '../core/infra/entities/apply.entity';
+import { IdeaSubjectEntity } from '../core/infra/entities/idea-subject.entity';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     DatabaseModule,
     TypeOrmModule.forFeature(
-      [IdeaEntity]
+      [
+        ApplyEntity,
+        BookmarkEntity,
+        IdeaEntity,
+        IdeaSubjectEntity
+      ]
     ),
     UserModule,
     forwardRef(() =>TeamModule),

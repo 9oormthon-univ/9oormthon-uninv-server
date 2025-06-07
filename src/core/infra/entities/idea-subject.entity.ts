@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { BookmarkEntity } from './bookmark.entity';
+import { IdeaEntity } from './idea.entity';
 
 @Entity('idea_subjects')
 export class IdeaSubjectEntity {
@@ -16,4 +18,10 @@ export class IdeaSubjectEntity {
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
+
+  /* ----------------------------- */
+  /* ---- One To Many Column ----- */
+  /* ----------------------------- */
+  @OneToMany(() => IdeaEntity, (idea) => idea.ideaSubject)
+  ideas: IdeaEntity[];
 }
