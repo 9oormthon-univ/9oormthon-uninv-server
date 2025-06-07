@@ -48,6 +48,7 @@ export class UpdateAdminUserService {
 
       // 유저 정보 업데이트
       const updatedUser = user.updateUserByAdmin(
+        requestDto.imgUrl,
         requestDto.name,
         univ,
         requestDto.email,

@@ -3,6 +3,10 @@ import { Expose, Type } from 'class-transformer';
 
 export class UpdateAdminUserRequestDto {
 
+  @IsNotEmpty({ message: 'img_url은 필수 값입니다.' })
+  @Expose({ name: 'img_url' })
+  imgUrl: string;
+
   @IsNotEmpty({ message: 'name은 필수 값입니다.' })
   @Expose({ name: 'name' })
   name: string;
