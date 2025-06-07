@@ -31,7 +31,7 @@ export class TeamRepository {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
     const entity = await repo.findOne({
       where: { members: { user: { id: userId } }, idea: { generation } },
-      relations: ['idea', 'members', 'members.team', 'members.user', 'members.user.univ', 'idea.provider', 'idea.ideaSubject', 'idea.applies'],
+      relations: ['idea', 'members', 'members.team', 'members.user', 'members.user.univ', 'idea.provider', 'idea.ideaSubject'],
     });
     return entity ? TeamMapper.toDomain(entity) : undefined;
   }
