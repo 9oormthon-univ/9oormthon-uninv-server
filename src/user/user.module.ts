@@ -22,6 +22,8 @@ import { UpdateAdminUserService } from './application/service/update-admin-user-
 import { DeleteUserService } from './application/service/delete-user.service';
 import { UserQueryV1Controller } from './controller/query/user-query-v1.controller';
 import { UserCommandV1Controller } from './controller/command/user-command-v1.controller';
+import { AdminUserCommandV1Controller } from './controller/command/admin-user-command-v1.controller';
+import { AdminUserQueryV1Controller } from './controller/query/admin-user-query-v1.controller';
 
 @Module({
   imports: [
@@ -50,7 +52,7 @@ import { UserCommandV1Controller } from './controller/command/user-command-v1.co
     MemberRepository,
     LinkRepository,
   ],
-  controllers: [UserQueryV1Controller, UserCommandV1Controller],
+  controllers: [UserQueryV1Controller, UserCommandV1Controller, AdminUserCommandV1Controller, AdminUserQueryV1Controller],
   exports: [UserRepository, UnivRepository],
 })
 export class UserModule {}

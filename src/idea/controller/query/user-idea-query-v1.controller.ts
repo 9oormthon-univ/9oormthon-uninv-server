@@ -56,6 +56,7 @@ export class UserIdeaQueryV1Controller {
       query.subjectId,
       query.isActive,
       query.isBookmarked,
+      query.search,
       req.user.id
       )
     );

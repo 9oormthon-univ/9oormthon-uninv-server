@@ -25,6 +25,7 @@ export class ReadIdeaOverviewService {
     subjectId: number | undefined,
     isActive: boolean | undefined,
     isBookmarked: boolean | undefined,
+    search: string | undefined,
     userId: number,
   ): Promise<ReadIdeaOverviewResponseDto> {
     return this.dataSource.transaction(async (manager) => {
@@ -47,6 +48,7 @@ export class ReadIdeaOverviewService {
         subjectId,
         isActive,
         isBookmarked,
+        search,
         userId,
         manager
       );
