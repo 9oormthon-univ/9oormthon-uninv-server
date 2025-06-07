@@ -39,7 +39,7 @@ export class UnivRepository {
     return entity ? UnivMapper.toDomain(entity) : null;
   }
 
-  async findAllByName(name: string, manager? : EntityManager): Promise<UnivEntity[]> {
+  async findAllByName(name: string, manager? : EntityManager): Promise<UnivModel[]> {
     const repo = manager ? manager.getRepository(UnivEntity) : this.dataSource.getRepository(UnivEntity);
     const entities = await repo.find({
       where: {

@@ -13,6 +13,9 @@ export class IdeaSubjectEntity {
   /* ----------------------------- */
   /* ---- Information Column ----- */
   /* ----------------------------- */
+  @Column({ name: 'generation', type: 'int', nullable: false })
+  generation: number;
+
   @Column({ name: 'name', nullable: false })
   name: string;
 

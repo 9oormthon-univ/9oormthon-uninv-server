@@ -1,13 +1,9 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
-import { Expose, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 
-export class CreateIdeaSubjectRequestDto {
+export class ReadIdeaSubjectBriefQueryDto {
   @IsNotEmpty({ message: 'generation은 필수 값입니다.' })
   @Type(() => Number)
   @IsNumber({}, { message: 'generation은 숫자여야 합니다.' })
   generation: number;
-
-  @IsNotEmpty({ message: '아이디어 주제를 입력해주세요.' })
-  @Expose({ name: 'name'})
-  name: string;
 }

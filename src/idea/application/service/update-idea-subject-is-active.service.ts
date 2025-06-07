@@ -15,11 +15,11 @@ export class UpdateIdeaSubjectIsActiveService {
     private readonly dataSource: DataSource
   ) {}
 
-  async execute(userId: number, ideaSubjectId: number): Promise<void> {
+  async execute(adminId: number, ideaSubjectId: number): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
 
       // 유저 조회
-      const user = await this.userRepository.findById(userId, manager);
+      const user = await this.userRepository.findById(adminId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }

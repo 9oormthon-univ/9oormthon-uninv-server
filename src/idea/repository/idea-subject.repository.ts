@@ -6,10 +6,14 @@ import { IdeaSubjectMapper } from '../../core/infra/mapper/idea-subject.mapper';
 export class IdeaSubjectRepository {
   constructor(private readonly dataSource: DataSource) {}
 
-  async findAll(manager?: EntityManager): Promise<IdeaSubjectModel[]> {
+  async findAllByGeneration(generation: number, manager?: EntityManager): Promise<IdeaSubjectModel[]> {
     const repo = manager ? manager.getRepository(IdeaSubjectEntity) : this.dataSource.getRepository(IdeaSubjectEntity);
 
-    const entities = await repo.find();
+    const entities = await repo.find(
+      {
+        where: { isActive: true, generation },
+      }
+    );
 
     return IdeaSubjectMapper.toDomains(entities);
   }

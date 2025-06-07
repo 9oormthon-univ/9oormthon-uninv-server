@@ -86,7 +86,7 @@ GET {{host_url}}/api/v1/users/ideas/1/details
 
 ### 3.9 아이디어 주제 간단 리스트 조회
 //@no-log
-GET {{host_url}}/api/v1/idea-subjects/briefs
+GET {{host_url}}/api/v1/idea-subjects/briefs?generation=4
 
 ### 3.10 내 지원정보 요약 리스트 조회
 //@no-log

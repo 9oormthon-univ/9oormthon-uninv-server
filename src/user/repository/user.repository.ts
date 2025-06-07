@@ -66,6 +66,7 @@ export class UserRepository {
 
   async findAllByUnivIdAndSearchAndGeneration(
     univId: number,
+    teamId: number,
     search: string,
     generation: number,
     manager?: EntityManager,
@@ -73,10 +74,16 @@ export class UserRepository {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
 
     const qb = repo.createQueryBuilder('user')
-      .leftJoinAndSelect('user.univ', 'univ');
+      .leftJoinAndSelect('user.univ', 'univ')
+      .leftJoinAndSelect('user.members', 'userMembers')
+      .leftJoinAndSelect('userMembers.team', 'team');
 
     if (univId) {
       qb.andWhere('univ.id = :univId', { univId });
+    }
+
+    if (teamId) {
+      qb.andWhere('team.id = :teamId', { teamId });
     }
 
     if (search) {

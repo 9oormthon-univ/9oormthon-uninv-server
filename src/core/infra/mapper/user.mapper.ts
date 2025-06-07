@@ -34,7 +34,9 @@ export class UserMapper {
     entity.introduction = domain.introduction;
     entity.generations = domain.generations;
     entity.stacks = domain.stacks;
-    entity.links = domain.links;
+    if (domain.links && domain.links.length > 0) {
+      entity.links = domain.links.map(link => LinkMapper.toEntity(link));
+    }
     entity.refreshToken = domain.refreshToken;
     entity.role = domain.role;
 

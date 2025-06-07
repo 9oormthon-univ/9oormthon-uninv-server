@@ -17,11 +17,11 @@ export class CreateIdeaSubjectService {
     private readonly dataSource: DataSource
   ) {}
 
-  async execute(userId: number, requestDto: CreateIdeaSubjectRequestDto): Promise<void> {
+  async execute(adminId: number, requestDto: CreateIdeaSubjectRequestDto): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
 
       // 유저 조회
-      const user = await this.userRepository.findById(userId, manager);
+      const user = await this.userRepository.findById(adminId, manager);
       if (!user) {
         throw new CommonException(ErrorCode.NOT_FOUND_USER);
       }
@@ -29,7 +29,7 @@ export class CreateIdeaSubjectService {
       // 관리자 권한 확인
       user.validateAdminRole();
 
-      const ideaSubject = IdeaSubjectModel.createIdeaSubject(requestDto.name);
+      const ideaSubject = IdeaSubjectModel.createIdeaSubject(requestDto.generation, requestDto.name);
 
       await this.ideaSubjectRepository.save(ideaSubject, manager);
     });
