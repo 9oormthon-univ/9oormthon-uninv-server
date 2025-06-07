@@ -9,6 +9,14 @@ export class TeamRepository {
   constructor(private readonly dataSource: DataSource) {
   }
 
+  async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<TeamModel | undefined> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+    const entity = await repo.findOne({
+      where: { members: { user: { id: userId } }, idea: { generation } },
+    });
+    return entity ? TeamMapper.toDomain(entity, {skipMembers: true, skipIdea: true}) : undefined;
+  }
+
   async findWithMembersAndProjectAndIdeaById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
     const entity = await repo.findOne({
@@ -27,13 +35,13 @@ export class TeamRepository {
     return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: false }) : undefined;
   }
 
-  async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<TeamModel | undefined> {
+  async findWithMembersByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<TeamModel | undefined> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
     const entity = await repo.findOne({
       where: { members: { user: { id: userId } }, idea: { generation } },
-      relations: ['idea', 'members', 'members.team', 'members.user', 'members.user.univ', 'idea.provider', 'idea.ideaSubject'],
+      relations: ['members', 'members.team', 'members.user', 'members.user.univ'],
     });
-    return entity ? TeamMapper.toDomain(entity) : undefined;
+    return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: false }) : undefined;
   }
 
   async findByIdeaWithIdeaAndMembers(idea: IdeaModel, manager?: EntityManager): Promise<TeamModel | undefined> {

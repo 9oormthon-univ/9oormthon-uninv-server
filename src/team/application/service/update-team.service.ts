@@ -18,7 +18,7 @@ export class UpdateTeamService {
     return this.dataSource.transaction(async (manager) => {
 
       // 팀 조회
-      const team = await this.teamRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
+      const team = await this.teamRepository.findWithMembersByUserIdAndGeneration(userId, requestDto.generation, manager);
       if (!team) {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
