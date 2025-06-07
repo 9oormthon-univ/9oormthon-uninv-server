@@ -21,7 +21,7 @@ export class ProjectRepository {
     const project = await repo.findOne({
       where: { team: { id: teamId } },
     });
-    return project ? ProjectMapper.toDomain(project) : undefined;
+    return project ? ProjectMapper.toDomain(project, { skipTeam: true }) : undefined;
   }
 
   async save(project: ProjectModel, manager? : EntityManager) : Promise<void> {

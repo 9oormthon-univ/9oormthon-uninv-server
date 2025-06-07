@@ -172,8 +172,6 @@ export class HandlePeriodTransitionBySchedulerService {
       return;
     }
 
-    this.logger.log(`generation: ${generation}, phase: ${phase}에 대한 Apply가 ${entities.length}건 조회되었습니다.`);
-
     // Entity → Domain 모델 매핑
     const applies = ApplyMapper.toDomains(entities);
 
