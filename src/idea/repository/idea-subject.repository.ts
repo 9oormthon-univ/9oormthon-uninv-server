@@ -11,6 +11,18 @@ export class IdeaSubjectRepository {
 
     const entities = await repo.find(
       {
+        where: { generation },
+      }
+    );
+
+    return IdeaSubjectMapper.toDomains(entities);
+  }
+
+  async findAllByGenerationAndIsActiveTrue(generation: number, manager?: EntityManager): Promise<IdeaSubjectModel[]> {
+    const repo = manager ? manager.getRepository(IdeaSubjectEntity) : this.dataSource.getRepository(IdeaSubjectEntity);
+
+    const entities = await repo.find(
+      {
         where: { isActive: true, generation },
       }
     );
