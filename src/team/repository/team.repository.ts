@@ -117,11 +117,16 @@ export class TeamRepository {
             qb.orderBy('team.id', sortType);
             break;
         }
-        qb.skip((page - 1) * size)
-          .take(size)
-          .distinct(true);
+      } else {
+        qb.orderBy('team.id', 'ASC'); // 기본 정렬
       }
+    } else {
+      qb.orderBy('team.id', 'ASC'); // 기본 정렬
     }
+
+    qb.skip((page - 1) * size)
+      .take(size)
+      .distinct(true);
 
     const totalItems = await qb.getCount();
     const { entities, raw } = await qb.getRawAndEntities();

@@ -15,7 +15,7 @@ export class ReadUserOverviewService {
     private readonly dataSource: DataSource
   ) {}
 
-  async execute(page: number, size: number, userId: number, generation: number, univId: number, search: string) {
+  async execute(page: number, size: number, userId: number, generation: number, univId: number, sorting: string, sortType: string, search: string) {
     return this.dataSource.transaction(async (manager) => {
       // 어드민 조회
       const admin = await this.userRepository.findById(userId, manager);
@@ -27,7 +27,7 @@ export class ReadUserOverviewService {
       admin.validateAdminRole();
 
       // 모든 유저 조회
-      const { users, totalItems } = await this.userRepository.findUserOverview(page, size, generation, univId, search, manager);
+      const { users, totalItems } = await this.userRepository.findUserOverview(page, size, generation, univId, sorting, sortType, search, manager);
 
       const totalPages = Math.ceil(totalItems / size);
 
