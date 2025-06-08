@@ -45,6 +45,7 @@ export class UpdateAdminTeamService {
         requestDto.pdCapacity,
         requestDto.feCapacity,
         requestDto.beCapacity,
+        requestDto.status
       );
       // 팀원 직군 유효성 검증
       updatedTeam.validateSystemCapacityLimits();

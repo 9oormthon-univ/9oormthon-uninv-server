@@ -65,6 +65,7 @@ export class TeamModel {
     pdCapacity: number,
     feCapacity: number,
     beCapacity: number,
+    status: ETeamStatus,
   ): TeamModel {
     return new TeamModel(
       this.id,
@@ -75,7 +76,7 @@ export class TeamModel {
       pdCapacity,
       feCapacity,
       beCapacity,
-      this.status,
+      status,
       this.idea,
       this.project,
       this.members,

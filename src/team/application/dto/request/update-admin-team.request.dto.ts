@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
+import { ETeamStatus } from '../../../../core/enums/team-status.enum';
 
 export class UpdateAdminTeamRequestDto {
   @IsNotEmpty({ message: 'number는 필수 값입니다.' })
@@ -45,4 +46,9 @@ export class UpdateAdminTeamRequestDto {
   @Type(() => Number)
   @Expose({ name: 'leader_id' })
   leaderId: number;
+
+  @IsNotEmpty({ message: 'status는 필수 값입니다.' })
+  @Expose({ name: 'status' })
+  status: ETeamStatus;
+
 }
