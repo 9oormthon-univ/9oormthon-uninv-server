@@ -97,6 +97,7 @@ export class ErrorCode {
   static readonly ALREADY_HAVE_TEAM_ERROR = new ErrorCode(40903, HttpStatus.CONFLICT, "이미 팀이 존재합니다.");
   static readonly UNIV_HAS_USERS = new ErrorCode(40904, HttpStatus.CONFLICT, "해당 대학에 소속된 사용자가 존재합니다.");
   static readonly ALREADY_HAVE_LEADER_ERROR = new ErrorCode(40905, HttpStatus.CONFLICT, "이미 팀장이 존재합니다.");
+  static readonly FAILURE_CHANGE_PASSWORD_SAME_ERROR = new ErrorCode(40906, HttpStatus.CONFLICT, "새 비밀번호가 현재 비밀번호와 동일합니다.");
 
   // Internal Server Error
   static readonly INTERNAL_SERVER_ERROR = new ErrorCode(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");

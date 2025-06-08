@@ -37,6 +37,14 @@ export class ChangePasswordService {
         throw new CommonException(ErrorCode.FAILURE_CHANGE_PASSWORD_ERROR);
       }
 
+      const isNewPasswordSameAsCurrent = await bcrypt.compare(
+        changePasswordDto.newPassword,
+        user.password,
+      );
+      if (isNewPasswordSameAsCurrent) {
+        throw new CommonException(ErrorCode.FAILURE_CHANGE_PASSWORD_SAME_ERROR);
+      }
+
       // 비밀번호 변경
       const updatedUser = user.updatePassword(await bcrypt.hash(changePasswordDto.newPassword, 10));
 
