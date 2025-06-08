@@ -159,6 +159,8 @@ export class UserRepository {
     size: number,
     generation: number,
     univId: number | undefined,
+    sorting: string | undefined,
+    sortType: string | undefined,
     search: string | undefined,
     manager?: EntityManager,
   ): Promise<{ users: UserOverviewDto[]; totalItems: number }> {
@@ -187,9 +189,34 @@ export class UserRepository {
     }, 'team_building_count');
 
 
+    if (sorting && sortType) {
+      if (sortType === 'ASC' || sortType === 'DESC') {
+        switch (sorting) {
+          case 'ID':
+            qb.orderBy('user.id', sortType);
+            break;
+          case 'NAME':
+            qb.orderBy('user.name', sortType);
+            break;
+          case 'EMAIL':
+            qb.orderBy('user.serialId', sortType);
+            break;
+          case 'TEAM_BUILDING':
+            qb.orderBy('team_building_count', sortType);
+            break;
+          default:
+            qb.orderBy('user.name', 'ASC'); // 기본 정렬
+            break;
+        }
+      } else {
+        qb.orderBy('user.name', 'ASC'); // 기본 정렬
+      }
+    } else {
+      qb.orderBy('user.name', 'ASC'); // 기본 정렬
+    }
+
     // 정렬 및 페이지네이션
-    qb.orderBy('user.name', 'ASC')
-      .skip((page - 1) * size)
+    qb.skip((page - 1) * size)
       .take(size)
       .distinct(true);
 

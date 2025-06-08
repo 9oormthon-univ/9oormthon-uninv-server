@@ -38,7 +38,7 @@ GET {{host_url}}/api/v1/admins/users/briefs?generation=4&team-id=3
 
 ### 2.6 어드민 유저 요약 리스트 조회
 // @no-log
-GET {{host_url}}/api/v1/admins/users/overviews?page=1&size=10&generation=4&univ-id=1&search=은
+GET {{host_url}}/api/v1/admins/users/overviews?page=1&size=10&generation=4&sorting=TEAM_BUILDING&sort-type=DESC
 
 ### 2.7 어드민 유저 상세 조회
 // @no-log

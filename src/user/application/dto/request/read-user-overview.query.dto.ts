@@ -25,6 +25,16 @@ export class ReadUserOverviewQueryDto {
   @Expose({ name: 'univ-id' })
   univId?: number;
 
+  // sorting는 선택사항
+  @IsOptional()
+  @Expose({ name: 'sorting' })
+  sorting: string;
+
+  // sortType는 선택사항
+  @IsOptional()
+  @Expose({ name: 'sort-type' })
+  sortType: string;
+
   // search는 선택사항
   @IsOptional()
   @IsString()
