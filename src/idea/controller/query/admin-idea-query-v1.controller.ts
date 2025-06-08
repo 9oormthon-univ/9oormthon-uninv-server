@@ -17,7 +17,7 @@ export class AdminIdeaQueryV1Controller {
   ) {}
 
   /**
-   * 3.9 아이디어 주제 간단 리스트 조회
+   * 3.18 어드민 아이디어 주제 간단 리스트 조회
    */
   @Get('idea-subjects/briefs')
   @UseGuards(JwtAuthGuard)
