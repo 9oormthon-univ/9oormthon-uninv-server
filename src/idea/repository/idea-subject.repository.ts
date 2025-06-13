@@ -23,7 +23,7 @@ export class IdeaSubjectRepository {
 
     const entities = await repo.find(
       {
-        where: { isActive: true, generation },
+        where: { generation },
       }
     );
 

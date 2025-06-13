@@ -8,7 +8,6 @@ export class IdeaSubjectMapper {
       entity.id,
       entity.generation,
       entity.name,
-      entity.isActive
     );
   }
 
@@ -21,7 +20,6 @@ export class IdeaSubjectMapper {
     entity.id = domain.id;
     entity.generation = domain.generation;
     entity.name = domain.name;
-    entity.isActive = domain.isActive;
     return entity;
   }
 }
