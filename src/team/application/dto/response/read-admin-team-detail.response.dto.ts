@@ -1,4 +1,5 @@
 import { TeamModel } from '../../../domain/team.model';
+import { ETeamStatus } from '../../../../core/enums/team-status.enum';
 
 export class ReadAdminTeamDetailResponseDto {
   id: number;
@@ -13,7 +14,8 @@ export class ReadAdminTeamDetailResponseDto {
   leader: {
     id: number;
     description: string;
-  }
+  };
+  team_building: ETeamStatus;
 
   constructor(
     id: number,
@@ -25,7 +27,8 @@ export class ReadAdminTeamDetailResponseDto {
     be_capacity: number,
     service_name: string,
     idea_id: number | null,
-    leader: { id: number; description: string }
+    leader: { id: number; description: string },
+    team_building: ETeamStatus
   ) {
     this.id = id;
     this.number = number;
@@ -37,6 +40,7 @@ export class ReadAdminTeamDetailResponseDto {
     this.service_name = service_name;
     this.idea_id = idea_id;
     this.leader = leader;
+    this.team_building = team_building;
   }
 
   static from(team: TeamModel): ReadAdminTeamDetailResponseDto {
@@ -52,7 +56,8 @@ export class ReadAdminTeamDetailResponseDto {
       team.beCapacity,
       team.project ? team.project.name : '',
       team.idea ? team.idea.id : null,
-      leader ? { id: leader.user.id, description: leader.user.name + ' / ' + leader.user.univ.name + ' / ' + leader.user.phoneNumber } : { id: 0, description: '' }
+      leader ? { id: leader.user.id, description: leader.user.name + ' / ' + leader.user.univ.name + ' / ' + leader.user.phoneNumber } : { id: 0, description: '' },
+      team.status
     );
   }
 }
