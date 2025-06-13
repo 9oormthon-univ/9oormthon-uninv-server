@@ -267,6 +267,12 @@ export class SystemSettingModel {
       throw new CommonException(ErrorCode.NOT_APPLY_ACCEPT_OR_REJECT_PERIOD_ERROR);
     }
   }
+
+  public validateIdeaSubjectViewPeriod() : void {
+    if (this.getWhichPeriod() == EPeriod.NONE) {
+      throw new CommonException(ErrorCode.NOT_IDEA_SUBJECT_VIEW_PERIOD_ERROR);
+    }
+  }
 }
 
 
