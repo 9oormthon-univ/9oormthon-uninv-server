@@ -19,9 +19,6 @@ export class IdeaSubjectEntity {
   @Column({ name: 'name', nullable: false })
   name: string;
 
-  @Column({ name: 'is_active', type: 'boolean', default: true })
-  isActive: boolean;
-
   /* ----------------------------- */
   /* ---- One To Many Column ----- */
   /* ----------------------------- */

@@ -3,7 +3,6 @@ export class IdeaSubjectModel {
     public readonly id: number,
     public readonly generation: number,
     public readonly name: string,
-    public readonly isActive: boolean,
   ) {}
 
   static createIdeaSubject(
@@ -14,7 +13,6 @@ export class IdeaSubjectModel {
       null,
       generation,
       name,
-      true
     );
   }
 
@@ -23,7 +21,6 @@ export class IdeaSubjectModel {
       this.id,
       this.generation,
       this.name,
-      !this.isActive
     );
   }
 }
