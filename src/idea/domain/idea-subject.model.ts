@@ -14,7 +14,7 @@ export class IdeaSubjectModel {
       null,
       generation,
       name,
-      false
+      true
     );
   }
 
