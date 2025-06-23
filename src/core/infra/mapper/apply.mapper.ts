@@ -13,8 +13,8 @@ export class ApplyMapper {
       entity.preference,
       entity.motivation,
       entity.role,
-      UserMapper.toDomain(entity.user),
-      IdeaMapper.toDomain(entity.idea),
+      entity.user ? UserMapper.toDomain(entity.user) : null,
+      entity.idea ? IdeaMapper.toDomain(entity.idea) : null,
       entity.createdAt
     );
   }
