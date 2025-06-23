@@ -72,7 +72,12 @@ Content-Type: application/json
 
 ### 4.10 팀 빌딩 확정하기
 // @no-log
-PATCH {{host_url}}/api/v1/users/teams/status?generation=4
+PATCH {{host_url}}/api/v1/users/teams/status
+Content-Type: application/json
+
+{
+  "generation": 4
+}
 
 ### 4.11 어드민 팀 해체
 // @no-log

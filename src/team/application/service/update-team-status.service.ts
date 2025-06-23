@@ -1,4 +1,4 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { Injectable, Logger, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { TeamRepository } from '../../repository/team.repository';
 import { DataSource } from 'typeorm';
@@ -8,6 +8,7 @@ import { ETeamStatus } from '../../../core/enums/team-status.enum';
 import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
 import { ApplyRepository } from '../../../idea/repository/apply.repository';
 import { TeamModel } from '../../domain/team.model';
+import { IdeaRepository } from '../../../idea/repository/idea.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -15,6 +16,7 @@ export class UpdateTeamStatusService {
   constructor(
     private readonly teamRepository: TeamRepository,
     private readonly applyRepository: ApplyRepository,
+    private readonly ideaRepository: IdeaRepository,
     private readonly systemSettingRepository: SystemSettingRepository,
     private readonly dataSource: DataSource
   ) {}
@@ -44,9 +46,15 @@ export class UpdateTeamStatusService {
         throw new CommonException(ErrorCode.NOT_TEAM_LEADER_ERROR);
       }
 
+      // 아이디어 조회
+      const idea = await this.ideaRepository.findByUserIdAndGeneration(userId, generation, manager);
+      if (!idea) {
+        throw new CommonException(ErrorCode.NOT_FOUND_IDEA);
+      }
+
       // 현재 차수에 이미 지원자가 있는지 확인
-      const apply = await this.applyRepository.findByIdeaIdAndPhase(team.idea.id, systemSetting.getWhichPhase(), manager);
-      if (apply.length > 0) {
+      const apply = await this.applyRepository.findByIdeaIdAndPhase(idea.id, systemSetting.getWhichPhase(), manager);
+      if ((apply ?? []).length > 0) {
         throw new CommonException(ErrorCode.ALREADY_APPLIER_IN_CURRENT_PHASE);
       }
 
