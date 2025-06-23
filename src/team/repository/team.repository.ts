@@ -49,7 +49,7 @@ export class TeamRepository {
 
     const team = await repo.findOne({
       where: { id: teamIdResult.id },
-      relations: ['members', 'members.team', 'members.user', 'members.user.univ', 'idea'],
+      relations: ['members', 'members.team', 'members.user', 'members.user.univ'],
     });
     return team ? TeamMapper.toDomain(team, { skipIdea: true, skipMembers: false }) : undefined;
   }

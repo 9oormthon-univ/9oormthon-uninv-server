@@ -12,7 +12,7 @@ export class MemberMapper {
       entity.isLeader,
       entity.user ? UserMapper.toDomain(entity.user) : null,
       options?.skipTeam
-        ? ({ id: entity.team.id } as TeamModel)
+        ? null
         : TeamMapper.toDomain(entity.team, { skipMembers: true, skipIdea: true }),
       entity.createdAt
     );
