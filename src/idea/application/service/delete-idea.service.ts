@@ -39,14 +39,14 @@ export class DeleteIdeaService {
 
       // 팀에 팀장을 제외한 멤버가 있는지 확인
       const members = await this.memberRepository.findByIdeaId(idea.id, manager);
-      if (members.length > 1) {
+      if ((members ?? []).length > 1) {
         throw new CommonException(ErrorCode.ALREADY_ANOTHER_MEMBER_IN_TEAM);
       }
 
       // 아이디어 등록기간이 아니라면, 현재 차수에 해당 아이디어에 대한 지원이 있는지 확인. 있다면 예외 발생
       if (systemSetting.getWhichPeriod() !== EPeriod.IDEA_SUBMISSION || systemSetting.getWhichPeriod() !== EPeriod.NONE) {
         const apply = await this.applyRepository.findByIdeaIdAndPhase(ideaId, systemSetting.getWhichPhase(), manager);
-        if (apply.length > 0) {
+        if ((apply ?? []).length > 0) {
           throw new CommonException(ErrorCode.ALREADY_APPLIER_IN_CURRENT_PHASE);
         }
       }
