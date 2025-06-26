@@ -12,7 +12,6 @@ import { CreateIdeaSubjectService } from './application/service/create-idea-subj
 import { ApplyRepository } from './repository/apply.repository';
 import { BookmarkRepository } from './repository/bookmark.repository';
 import { AdminIdeaCommandV1Controller } from './controller/command/admin-idea-command-v1.controller';
-import { UpdateIdeaSubjectIsActiveService } from './application/service/update-idea-subject-is-active.service';
 import { CreateApplyService } from './application/service/create-apply.service';
 import { CreateOrDeleteBookmarkService } from './application/service/create-or-delete-bookmark.service';
 import { ReadIdeaOverviewService } from './application/service/read-idea-overview.service';
@@ -38,6 +37,10 @@ import { BookmarkEntity } from '../core/infra/entities/bookmark.entity';
 import { ApplyEntity } from '../core/infra/entities/apply.entity';
 import { IdeaSubjectEntity } from '../core/infra/entities/idea-subject.entity';
 import { ReadAdminIdeaSubjectBriefService } from './application/service/read-admin-idea-subject-brief.service';
+import { UpdateIdeaSubjectService } from './application/service/update-idea-subject.service';
+import { DeleteIdeaSubjectService } from './application/service/delete-idea-subject.service';
+import { ReadAdminIdeaOverviewService } from './application/service/read-admin-idea-overview.service';
+import { ReadAdminIdeaDetailService } from './application/service/read-admin-idea-detail.service';
 
 @Module({
   imports: [
@@ -65,7 +68,6 @@ import { ReadAdminIdeaSubjectBriefService } from './application/service/read-adm
     HandlePeriodTransitionBySchedulerService,
     CreateIdeaService,
     CreateIdeaSubjectService,
-    UpdateIdeaSubjectIsActiveService,
     CreateApplyService,
     CreateOrDeleteBookmarkService,
     ReadIdeaOverviewService,
@@ -81,6 +83,11 @@ import { ReadAdminIdeaSubjectBriefService } from './application/service/read-adm
     CancelApplyService,
     DeleteIdeaService,
     ReadAdminIdeaSubjectBriefService,
+    UpdateIdeaSubjectService,
+    DeleteIdeaSubjectService,
+    DeleteIdeaService,
+    ReadAdminIdeaOverviewService,
+    ReadAdminIdeaDetailService,
     IdeaRepository,
     IdeaSubjectRepository,
     ApplyRepository,

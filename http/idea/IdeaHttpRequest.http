@@ -152,3 +152,12 @@ DELETE {{host_url}}/api/v1/users/ideas/1
 ### 3.17 지원 삭제(지원 취소)
 //@no-log
 DELETE {{host_url}}/api/v1/users/applies/3
+
+### 3.22 어드민 아이디어 요약 리스트 조회
+//@no-log
+GET {{host_url}}/api/v1/admins/ideas/overviews?page=1&size=10&generation=4&sorting=PROVIDER&sort-type=ASC
+
+### 3.23 어드민 아이디어 상세 조회
+//@no-log
+GET {{host_url}}/api/v1/admins/ideas/2/details
+
