@@ -16,11 +16,11 @@ export class IdeaSubjectModel {
     );
   }
 
-  public isActiveToggle(): IdeaSubjectModel {
+  public updateName(name: string): IdeaSubjectModel {
     return new IdeaSubjectModel(
       this.id,
       this.generation,
-      this.name,
+      name,
     );
   }
 }

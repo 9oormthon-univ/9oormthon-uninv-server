@@ -3,6 +3,8 @@ import { IdeaModel } from '../domain/idea.model';
 import { IdeaEntity } from '../../core/infra/entities/idea.entity';
 import { IdeaMapper } from '../../core/infra/mapper/idea.mapper';
 import { IdeaOverviewDto } from '../application/dto/response/read-idea-overview.response.dto';
+import { AdminIdeaOverviewDto } from '../application/dto/response/read-admin-idea-overview.response.dto';
+import { ETeamStatus } from '../../core/enums/team-status.enum';
 
 export class IdeaRepository {
   constructor(private readonly dataSource: DataSource) {
@@ -195,6 +197,73 @@ export class IdeaRepository {
     return { ideas, totalItems };
   }
 
+  async findAdminIdeaOverview(
+    page: number,
+    size: number,
+    generation: number,
+    sorting: string | undefined,
+    sortType: string | undefined,
+    search: string | undefined,
+    manager?: EntityManager
+  ): Promise<{ ideas: AdminIdeaOverviewDto[]; totalItems: number }> {
+    const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
+
+    // 아이디어 엔티티와 아이디어 주제(ideaSubject)를 조인
+    const qb = repo.createQueryBuilder('idea')
+      .leftJoinAndSelect('idea.ideaSubject', 'ideaSubject')
+      .leftJoinAndSelect('idea.provider', 'provider')
+      .leftJoinAndSelect('idea.team', 'team')
+      .where('idea.generation = :generation', { generation });
+
+    // search 필터
+    if (search) {
+      qb.andWhere('idea.title LIKE :search OR idea.summary LIKE :search', { search: `%${search}%` });
+    }
+
+    if (sorting && sortType) {
+      if (sortType === 'ASC' || sortType === 'DESC') {
+        switch (sorting) {
+          case 'TITLE':
+            qb.orderBy('idea.title', sortType);
+            break;
+          case 'SUBJECT':
+            qb.orderBy('ideaSubject.name', sortType);
+            break;
+          case 'TEAM_BUILDING':
+            qb.orderBy('team.status', sortType);
+            break;
+          case 'PROVIDER':
+            qb.orderBy('provider.name', sortType);
+            break;
+          default:
+            qb.orderBy('idea.id', sortType);
+            break;
+        }
+      } else {
+        qb.orderBy('idea.id', 'ASC'); // 기본 정렬
+      }
+
+      qb.skip((page - 1) * size)
+        .take(size)
+        .distinct(true);
+    }
+
+    const totalItems = await qb.getCount();
+    const { entities, raw } = await qb.getRawAndEntities();
+    const ideas: AdminIdeaOverviewDto[] = entities.map((idea, index) => {
+      const rawRow = raw[index];
+      return {
+        id: idea.id,
+        title: idea.title,
+        subject: idea.ideaSubject ? idea.ideaSubject.name : null,
+        provider: idea.provider ? idea.provider.name : null,
+        team_building: idea.team ? idea.team.status : null,
+      };
+    });
+
+    return { ideas, totalItems };
+  }
+
   async findMyIdeaDetail(
     userId: number,
     manager?: EntityManager
@@ -329,4 +398,17 @@ export class IdeaRepository {
     return { idea, isBookmarked, isActive };
   }
 
+  async findAdminIdeaDetail(
+    ideaId: number,
+    manager?: EntityManager
+  ): Promise<IdeaModel | null> {
+    const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
+    const entity = await repo.findOne(
+      {
+        where: { id: ideaId },
+        relations: ['provider', 'ideaSubject', 'provider.univ', 'team', 'team.members', 'team.members.user', 'team.members.user.univ']
+      }
+    );
+    return entity ? IdeaMapper.toDomain(entity, {skipTeam: false}) : null;
+  }
 }

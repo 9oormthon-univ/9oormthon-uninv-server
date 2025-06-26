@@ -1,8 +1,7 @@
 import {
   Body,
-  Controller,
-  Param,
-  Post,
+  Controller, Delete, Param,
+  Post, Put,
   Req,
   UseFilters,
   UseGuards,
@@ -15,7 +14,10 @@ import { CreateIdeaSubjectService } from '../../application/service/create-idea-
 import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { CreateIdeaSubjectRequestDto } from '../../application/dto/request/create-idea-subject.request.dto';
 import { ResponseDto } from '../../../core/dto/response.dto';
-import { UpdateIdeaSubjectIsActiveService } from '../../application/service/update-idea-subject-is-active.service';
+import { UpdateIdeaSubjectService } from '../../application/service/update-idea-subject.service';
+import { DeleteIdeaSubjectService } from '../../application/service/delete-idea-subject.service';
+import { UpdateIdeaSubjectRequestDto } from '../../application/dto/request/update-idea-subject.request.dto';
+import { DeleteIdeaService } from '../../application/service/delete-idea.service';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -23,11 +25,13 @@ import { UpdateIdeaSubjectIsActiveService } from '../../application/service/upda
 export class AdminIdeaCommandV1Controller {
   constructor(
     private readonly createIdeaSubjectUseCase: CreateIdeaSubjectService,
-    private readonly updateIdeaSubjectIsActiveUseCase: UpdateIdeaSubjectIsActiveService,
+    private readonly updateIdeaSubjectUseCase: UpdateIdeaSubjectService,
+    private readonly deleteIdeaSubjectUseCase: DeleteIdeaSubjectService,
+    private readonly deleteIdeaUseCase: DeleteIdeaService
   ) {}
 
   /**
-   * 3.2 아이디어 주제 생성
+   * 3.19 아이디어 주제 생성
    */
   @Post('/idea-subjects')
   @UseGuards(JwtAuthGuard)
@@ -41,18 +45,42 @@ export class AdminIdeaCommandV1Controller {
   }
 
   /**
-   * 3.3 아이디어 주제 노출 상태 토글(활성화 or 비활성화)
+   * 3.20 아이디어 주제 수정
    */
-  @Post('/idea-subjects/:id/toggle-active')
+  @Put('/idea-subjects/:ideaSubjectId')
   @UseGuards(JwtAuthGuard)
-  async toggleIdeaSubjectIsActive(
+  async updateIdeaSubject(
     @Req() req,
-    @Param('id') id: number
+    @Body(new ValidationPipe({ transform: true })) requestDto: UpdateIdeaSubjectRequestDto,
+    @Param('ideaSubjectId') ideaSubjectId: number
   ): Promise<ResponseDto<any>> {
-
-    await this.updateIdeaSubjectIsActiveUseCase.execute(req.user.id, id);
+    await this.updateIdeaSubjectUseCase.execute(req.user.id, ideaSubjectId, requestDto);
     return ResponseDto.ok(null);
   }
 
+  /**
+   * 3.21 아이디어 주제 삭제
+   */
+  @Delete('/idea-subjects/:ideaSubjectId')
+  @UseGuards(JwtAuthGuard)
+  async deleteIdeaSubject(
+    @Req() req,
+    @Param('ideaSubjectId') ideaSubjectId: number
+  ): Promise<ResponseDto<any>> {
+    await this.deleteIdeaSubjectUseCase.execute(req.user.id, ideaSubjectId);
+    return ResponseDto.ok(null);
+  }
 
+  /**
+   * 3.25 아이디어 삭제
+   */
+  @Delete('/ideas/:ideaId')
+  @UseGuards(JwtAuthGuard)
+  async deleteIdea(
+    @Req() req,
+    @Param('ideaId') ideaId: number
+  ): Promise<ResponseDto<any>> {
+    await this.deleteIdeaUseCase.execute(req.user.id, ideaId);
+    return ResponseDto.ok(null);
+  }
 }
