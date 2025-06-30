@@ -30,15 +30,17 @@ export class ProviderInfoDto {
 export class IdeaInfoDto {
   id: number;
   subject: string;
+  subject_id: number;
   title: string;
   is_active: boolean;
   summary: string;
   content: string;
   is_bookmarked: boolean;
 
-  constructor(id: number, subject: string, title: string, isActive: boolean, summary: string, content: string, isBookmarked: boolean) {
+  constructor(id: number, subject: string, subjectId: number, title: string, isActive: boolean, summary: string, content: string, isBookmarked: boolean) {
     this.id = id;
     this.subject = subject;
+    this.subject_id = subjectId;
     this.title = title;
     this.is_active = isActive;
     this.summary = summary;
@@ -47,7 +49,7 @@ export class IdeaInfoDto {
   }
 
   static of(idea: IdeaModel, isBookmarked: boolean, isActive: boolean): IdeaInfoDto {
-    return new IdeaInfoDto(idea.id, idea.ideaSubject.name, idea.title, isActive, idea.summary, idea.content, isBookmarked);
+    return new IdeaInfoDto(idea.id, idea.ideaSubject.name, idea.ideaSubject.id, idea.title, isActive, idea.summary, idea.content, isBookmarked);
   }
 }
 

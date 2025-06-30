@@ -6,6 +6,7 @@ import { IdeaRepository } from '../../repository/idea.repository';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
+import { TeamRepository } from '../../../team/repository/team.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -13,6 +14,7 @@ export class AcceptApplyService {
   constructor(
     private readonly ideaRepository: IdeaRepository,
     private readonly applyRepository: ApplyRepository,
+    private readonly teamRepository: TeamRepository,
     private readonly systemSettingRepository: SystemSettingRepository,
     private readonly dataSource: DataSource
   ) {}
@@ -44,6 +46,21 @@ export class AcceptApplyService {
       // 지원 정보의 아이디어와 유저의 아이디어가 일치하는지 확인
       if (idea.id !== apply.idea.id) {
         throw new CommonException(ErrorCode.NOT_MATCH_IDEA_ERROR);
+      }
+
+      // 유저의 팀 조회
+      const team = await this.teamRepository.findWithMembersByUserIdAndGeneration(userId, apply.idea.generation, manager);
+      if (!team) {
+        throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
+      }
+
+      // 현재 페이즈의 모든 지원 정보 조회
+      const applies = await this.applyRepository.findByIdeaIdAndPhase(userId, apply.idea.generation, manager);
+
+      // 수락하려는 직군의 인원 수가, 현재 팀의 해당 직군 인원 수 + 이미 수락한 해당 직군의 인원수 + 1 보다 크면 예외 발생
+      const roleCount = applies.filter(a => a.role === apply.role).length + team.getMemberCountByRole(apply.role) + 1;
+      if (roleCount > team.getRoleCapacity(apply.role)) {
+        throw new CommonException(ErrorCode.APPLY_ROLE_CAPACITY_ERROR);
       }
 
       // 지원 정보의 상태를 ACCEPT 로 변경

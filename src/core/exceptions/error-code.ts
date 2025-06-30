@@ -72,6 +72,7 @@ export class ErrorCode {
   static readonly ALREADY_APPLIER_IN_CURRENT_PHASE = new ErrorCode(40041, HttpStatus.BAD_REQUEST, "현재 차수에 이미 지원자가 존재합니다.");
   static readonly ALREADY_ANOTHER_MEMBER_IN_TEAM = new ErrorCode(40042, HttpStatus.BAD_REQUEST, "이미 다른 멤버가 팀에 존재합니다.");
   static readonly NOT_IDEA_SUBJECT_VIEW_PERIOD_ERROR = new ErrorCode(40043, HttpStatus.BAD_REQUEST, "아이디어 주제 조회 기간이 아닙니다.");
+  static readonly APPLY_ROLE_CAPACITY_ERROR = new ErrorCode(40044, HttpStatus.BAD_REQUEST, "해당 직군의 인원 수가 초과되었습니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
