@@ -12,6 +12,7 @@ import { ReadAuthBriefQueryDto } from '../dto/request/read-auth-brief.query.dto'
 import { MemberRepository } from '../../../team/repository/member.repository';
 import { EUserStatus } from '../../../core/enums/user-status.enum';
 import { ApplyRepository } from '../../../idea/repository/apply.repository';
+import { EApplyStatus } from '../../../core/enums/apply-status.enum';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -63,6 +64,10 @@ export class ReadAuthBriefService {
       // 지원자면 APPLICANT 반환
       const apply = await this.applyRepository.findByUserIdAndGeneration(userId, requestDto.generation, manager);
       if (apply) {
+        // 만약 모든 지원 정보가 거절 상태라면, APPLICANT_REJECTED 반환
+        if (apply.every(a => a.status === EApplyStatus.REJECTED)) {
+          return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.APPLICANT_REJECTED);
+        }
         return ReadAuthBriefResponseDto.of(user.role, user.imgUrl, EUserStatus.APPLICANT);
       }
 
