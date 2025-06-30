@@ -7,6 +7,7 @@ import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
 import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
 import { TeamRepository } from '../../../team/repository/team.repository';
+import { EApplyStatus } from '../../../core/enums/apply-status.enum';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -58,9 +59,15 @@ export class AcceptApplyService {
       const applies = await this.applyRepository.findByIdeaIdAndPhase(userId, apply.idea.generation, manager);
 
       // 수락하려는 직군의 인원 수가, 현재 팀의 해당 직군 인원 수 + 이미 수락한 해당 직군의 인원수 + 1 보다 크면 예외 발생
-      const roleCount = applies.filter(a => a.role === apply.role).length + team.getMemberCountByRole(apply.role) + 1;
+      const roleCount = applies.filter(a => a.role === apply.role && a.status === EApplyStatus.ACCEPTED).length + team.getMemberCountByRole(apply.role) + 1;
       if (roleCount > team.getRoleCapacity(apply.role)) {
         throw new CommonException(ErrorCode.APPLY_ROLE_CAPACITY_ERROR);
+      }
+
+      // 수락하려는 지원자의 유니브가, 현재 팀의 멤버의 유니브와 이미 수락한 지원자의 유니브 수를 전부 더했을 때 2개를 초과하면 예외 발생
+      const applierUniv = apply.user.univ;
+      if (team.members.filter(member => member.user.univ.id === applierUniv.id).length + applies.filter(a => a.status === EApplyStatus.ACCEPTED && a.user.univ.id === applierUniv.id).length >= 2) {
+        throw new CommonException(ErrorCode.APPLY_UNIV_CAPACITY_ERROR);
       }
 
       // 지원 정보의 상태를 ACCEPT 로 변경
