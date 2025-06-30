@@ -15,7 +15,7 @@ export class UserTeamQueryV1Controller {
   ) {}
 
   /**
-   * 4.1 팀 정보 조회
+   * 4.6 팀 정보 조회
    */
   @Get('details')
   @UseGuards(JwtAuthGuard)

@@ -1,5 +1,6 @@
 import { TeamModel } from '../../../domain/team.model';
 import { MemberModel } from '../../../domain/member.model';
+import { ETeamStatus } from '../../../../core/enums/team-status.enum';
 
 export class MemberDto {
   id: number;
@@ -102,17 +103,19 @@ export class RoleDto {
 }
 
 export class ReadTeamDetailResponseDto {
+  team_building: ETeamStatus;
   name: string;
   number: number;
   role: RoleDto;
 
-  constructor(name: string, number: number, role: RoleDto) {
+  constructor(team_building: ETeamStatus, name: string, number: number, role: RoleDto) {
+    this.team_building = team_building;
     this.name = name;
     this.number = number;
     this.role = role;
   }
 
   static from(team: TeamModel): ReadTeamDetailResponseDto {
-    return new ReadTeamDetailResponseDto(team.name, team.number, RoleDto.of(BEInfoDto.from(team), FEInfoDto.from(team), PDInfoDto.from(team), PMInfoDto.from(team)));
+    return new ReadTeamDetailResponseDto(team.status, team.name, team.number, RoleDto.of(BEInfoDto.from(team), FEInfoDto.from(team), PDInfoDto.from(team), PMInfoDto.from(team)));
   }
 }
