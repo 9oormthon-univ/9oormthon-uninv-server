@@ -29,6 +29,29 @@ export class TeamModel {
     public readonly createdAt: Date
   ) {}
 
+  public getMemberCountByRole(
+    role: ERole
+  ): number {
+    return this.members.filter(member => member.role === role).length;
+  }
+
+  public getRoleCapacity(
+    role: ERole
+  ): number {
+    switch (role) {
+      case 'PM':
+        return this.pmCapacity;
+      case 'PD':
+        return this.pdCapacity;
+      case 'FE':
+        return this.feCapacity;
+      case 'BE':
+        return this.beCapacity;
+      default:
+        throw new CommonException(ErrorCode.INVALID_ROLE);
+    }
+  }
+
   static createTeam(
     name: string | null,
     number: number | null,
