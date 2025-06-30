@@ -152,6 +152,6 @@ export class UserIdeaQueryV1Controller {
     @Req() req,
     @Query(new ValidationPipe({ transform: true, whitelist: true })) query: ReadTeamApplyOverviewQueryDto,
   ): Promise<ResponseDto<ReadTeamApplyOverviewResponseDto>> {
-    return ResponseDto.ok(await this.readTeamApplyOverviewUseCase.execute(req.user.id, query.generation, query.phase));
+    return ResponseDto.ok(await this.readTeamApplyOverviewUseCase.execute(req.user.id, query.generation, query.phase, query.sorting, query.sortType));
   }
 }

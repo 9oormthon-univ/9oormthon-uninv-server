@@ -71,6 +71,52 @@ export class ApplyRepository {
     return entities.length !== 0 ? ApplyMapper.toDomains(entities) : null;
   }
 
+  async findByTeamIdAndGenerationAndPhaseSort(
+    teamId: number,
+    generation: number,
+    phase: number,
+    sorting: string,
+    sortType: string,
+    manager?: EntityManager
+  ): Promise<ApplyModel[] | null> {
+    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
+
+    const qb = repo.createQueryBuilder('apply')
+      .leftJoinAndSelect('apply.user', 'user')
+      .leftJoinAndSelect('user.univ', 'univ')
+      .leftJoinAndSelect('apply.idea', 'idea')
+      .leftJoinAndSelect('idea.provider', 'provider')
+      .leftJoinAndSelect('idea.ideaSubject', 'ideaSubject')
+      .leftJoinAndSelect('idea.team', 'team')
+      .where('idea.generation = :generation', { generation })
+      .andWhere('team.id = :teamId', { teamId })
+      .andWhere('apply.phase = :phase', { phase });
+
+    if (sorting && sortType) {
+      if (sortType === 'ASC' || sortType === 'DESC') {
+        switch (sorting) {
+          case 'UNIV':
+            qb.addOrderBy('univ.name', sortType);
+            break;
+          case 'ROLE':
+            qb.addOrderBy('apply.role', sortType);
+            break;
+          case 'ID':
+          default:
+            qb.addOrderBy('apply.id', sortType);
+            break;
+        }
+      } else {
+        qb.orderBy('apply.id', 'ASC'); // 기본 정렬
+      }
+    } else {
+      qb.orderBy('apply.id', 'ASC'); // 기본 정렬
+    }
+
+    const entities = await qb.getMany();
+    return entities.length !== 0 ? ApplyMapper.toDomains(entities) : null;
+  }
+
   async findByUserIdAndIdeaId(userId: number, ideaId: number, manager?: EntityManager): Promise<ApplyModel | null> {
     const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
 

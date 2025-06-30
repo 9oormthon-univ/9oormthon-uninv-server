@@ -18,7 +18,7 @@ export class ReadTeamApplyOverviewService {
     private readonly dataSource: DataSource
   ) {}
 
-  async execute(userId: number, generation: number, phase: number): Promise<ReadTeamApplyOverviewResponseDto> {
+  async execute(userId: number, generation: number, phase: number, sorting: string, sortType: string): Promise<ReadTeamApplyOverviewResponseDto> {
     return this.dataSource.transaction(async (manager) => {
 
       // 아이디어 조회
@@ -34,7 +34,7 @@ export class ReadTeamApplyOverviewService {
       }
 
       // 팀의 지원 정보 조회
-      const applies = await this.applyRepository.findByTeamIdAndGenerationAndPhase(team.id, generation, phase, manager);
+      const applies = await this.applyRepository.findByTeamIdAndGenerationAndPhaseSort(team.id, generation, phase, sorting, sortType, manager);
 
       return ReadTeamApplyOverviewResponseDto.from(applies);
     });
