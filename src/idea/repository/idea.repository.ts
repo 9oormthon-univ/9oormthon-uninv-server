@@ -411,4 +411,15 @@ export class IdeaRepository {
     );
     return entity ? IdeaMapper.toDomain(entity, {skipTeam: false}) : null;
   }
+
+  async findByIdeaSubjectId(ideaSubjectId: number, manager?: EntityManager): Promise<IdeaModel[]> {
+    const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
+
+    const entities = await repo.find({
+      where: { ideaSubject: { id: ideaSubjectId } },
+      relations: ['provider', 'ideaSubject']
+    });
+
+    return IdeaMapper.toDomains(entities);
+  }
 }
