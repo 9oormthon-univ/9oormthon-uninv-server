@@ -61,6 +61,16 @@ export class UpdateIdeaService {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
 
+      const members = await this.memberRepository.findByIdeaId(requestDto.ideaInfo.ideaSubjectId, manager);
+
+      // 현재 멤버들로 이루어진 특정 파트의 멤버 수 보다 더 적은 수로 파트 정원을 변경하려고 할 시 예외 처리
+      if (requestDto.requirements.pm.capacity < members.filter(member => member.role === 'PM').length ||
+          requestDto.requirements.pd.capacity < members.filter(member => member.role === 'PD').length ||
+          requestDto.requirements.fe.capacity < members.filter(member => member.role === 'FE').length ||
+          requestDto.requirements.be.capacity < members.filter(member => member.role === 'BE').length) {
+        throw new CommonException(ErrorCode.TEAM_ROLE_CAPACITY_CONFLICT);
+      }
+
       // 각 직군별 capacity 업데이트
       const updatedTeam = team.updateCapacity(
         requestDto.requirements.pm.capacity,
