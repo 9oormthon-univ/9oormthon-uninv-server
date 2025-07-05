@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Param,
+  Param, Patch,
   Post,
   Put,
   Req, UploadedFile,
@@ -28,6 +28,7 @@ import { CreateUserRequestDto } from '../../application/dto/request/create-user.
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { CreateUserByExcelService } from '../../application/service/create-user-by-excel.service';
+import { UpdateAdminUserPasswordService } from '../../application/service/update-admin-user-password-service';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -41,6 +42,7 @@ export class AdminUserCommandV1Controller {
     private readonly createUnivUseCase: CreateUnivService,
     private readonly updateUnivUseCase: UpdateUnivService,
     private readonly deleteUnivUseCase: DeleteUnivService,
+    private readonly updateAdminUserPasswordUseCase: UpdateAdminUserPasswordService,
   ) {}
 
   /**
@@ -95,6 +97,19 @@ export class AdminUserCommandV1Controller {
   ): Promise<ResponseDto<any>> {
     await this.deleteUserUseCase.execute(req.user.userId, userId);
     return ResponseDto.ok(null);
+  }
+
+  /**
+   * 2.11 어드민 유저 비밀번호 초기화
+   */
+  @Post('users/:userId(\\d+)/password/reset')
+  @UseGuards(JwtAuthGuard)
+  async updateAdminUserPassword(
+    @Req() req,
+    @Param('userId') userId: number
+  ): Promise<ResponseDto<any>> {
+    const response = await this.updateAdminUserPasswordUseCase.execute(req.user.userId, userId);
+    return ResponseDto.ok(response);
   }
 
   /**
