@@ -8,6 +8,7 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
 import { TeamRepository } from '../../../team/repository/team.repository';
 import { EApplyStatus } from '../../../core/enums/apply-status.enum';
+import { MemberRepository } from '../../../team/repository/member.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -16,6 +17,7 @@ export class AcceptApplyService {
     private readonly ideaRepository: IdeaRepository,
     private readonly applyRepository: ApplyRepository,
     private readonly teamRepository: TeamRepository,
+    private readonly memberRepository: MemberRepository,
     private readonly systemSettingRepository: SystemSettingRepository,
     private readonly dataSource: DataSource
   ) {}
@@ -55,6 +57,9 @@ export class AcceptApplyService {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
 
+      // 팀의 멤버 조회
+      const members = await this.memberRepository.findWithTeamByIdeaId(apply.idea.id, manager);
+
       // 현재 페이즈의 모든 지원 정보 조회
       const applies = await this.applyRepository.findByIdeaIdAndPhase(userId, apply.idea.generation, manager);
 
@@ -66,7 +71,7 @@ export class AcceptApplyService {
 
       // 수락하려는 지원자의 유니브가, 현재 팀의 멤버의 유니브와 이미 수락한 지원자의 유니브 수를 전부 더했을 때 2개를 초과하면 예외 발생
       const applierUniv = apply.user.univ;
-      if (team.members.filter(member => member.user.univ.id === applierUniv.id).length + applies.filter(a => a.status === EApplyStatus.ACCEPTED && a.user.univ.id === applierUniv.id).length >= 2) {
+      if (members.filter(member => member.user.univ.id === applierUniv.id).length + applies.filter(a => a.status === EApplyStatus.ACCEPTED && a.user.univ.id === applierUniv.id).length >= 2) {
         throw new CommonException(ErrorCode.APPLY_UNIV_CAPACITY_ERROR);
       }
 

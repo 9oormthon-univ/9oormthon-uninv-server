@@ -13,7 +13,7 @@ export class ApplyRepository {
     const entity = await repo.findOne(
       {
         where: { id },
-        relations: ['user', 'idea.provider', 'idea.ideaSubject']
+        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject']
       }
     );
 
