@@ -53,6 +53,12 @@ export class SystemSettingEntity {
   @Column({ name: 'phase3_confirmation_end', type: 'timestamp' })
   phase3ConfirmationEnd: Date;
 
+  @Column({ name: 'hackathon_start', type: 'timestamp' })
+  hackathonStart: Date;
+
+  @Column({ name: 'hackathon_end', type: 'timestamp' })
+  hackathonEnd: Date;
+
   @Column({ name: 'max_preferences_per_user', type: 'int' })
   maxPreferencesPerUser: number;
 

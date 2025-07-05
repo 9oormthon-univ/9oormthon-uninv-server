@@ -45,6 +45,10 @@ export class SystemSettingInitializer implements OnModuleInit {
       defaultSetting.phase3ConfirmationStart = new Date("2025-03-22T00:00:00");
       defaultSetting.phase3ConfirmationEnd   = new Date("2025-03-23T23:59:59");
 
+      // 해커톤 기간: 2025년 3월 24일 00:00:00 ~ 2025년 5월 31일 23:59:59
+      defaultSetting.hackathonStart = new Date("2025-03-24T00:00:00");
+      defaultSetting.hackathonEnd   = new Date("2025-05-31T23:59:59");
+
       // 사용자당 지원 가능한 지망 개수
       defaultSetting.maxPreferencesPerUser = 3;
 

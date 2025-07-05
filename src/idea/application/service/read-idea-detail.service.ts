@@ -33,7 +33,7 @@ export class ReadIdeaDetailService {
       }
 
       // 아이디어 조회 기간인지 확인
-      if (systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION) {
+      if (systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION || systemSetting.getWhichPeriod() === EPeriod.NONE) {
         throw new CommonException(ErrorCode.NOT_IDEA_VIEWS_PERIOD_ERROR);
       }
 
