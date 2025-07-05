@@ -38,6 +38,16 @@ export class MemberRepository {
     return members.map((member) => MemberMapper.toDomain(member, { skipTeam: true }));
   }
 
+  async findWithTeamByIdeaId(ideaId: number, manager?: EntityManager): Promise<MemberModel[]> {
+    const repo = manager ? manager.getRepository(MemberEntity) : this.dataSource.getRepository(MemberEntity);
+
+    const members = await repo.find({
+      where: { team: { idea: { id: ideaId } } },
+      relations: ['user', 'team', 'team.idea', 'team.idea.provider', 'team.idea.ideaSubject'],
+    });
+    return members.map((member) => MemberMapper.toDomain(member, { skipTeam: false }));
+  }
+
   async save(member: MemberModel, manager? : EntityManager) : Promise<void> {
     const repo = manager ? manager.getRepository(MemberEntity) : this.dataSource.getRepository(MemberEntity);
 
