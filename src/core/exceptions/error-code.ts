@@ -102,6 +102,7 @@ export class ErrorCode {
   static readonly ALREADY_HAVE_LEADER_ERROR = new ErrorCode(40905, HttpStatus.CONFLICT, "이미 팀장이 존재합니다.");
   static readonly FAILURE_CHANGE_PASSWORD_SAME_ERROR = new ErrorCode(40906, HttpStatus.CONFLICT, "새 비밀번호가 현재 비밀번호와 동일합니다.");
   static readonly IDEA_SUBJECT_HAS_IDEAS = new ErrorCode(40907, HttpStatus.CONFLICT, "해당 아이디어 주제에 아이디어가 존재합니다.");
+  static readonly TEAM_ROLE_CAPACITY_CONFLICT = new ErrorCode(40908, HttpStatus.CONFLICT, "특정 파트의 멤버 수 보다 더 적은 수로 파트 정원을 변경할 수 없습니다.");
 
   // Internal Server Error
   static readonly INTERNAL_SERVER_ERROR = new ErrorCode(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
