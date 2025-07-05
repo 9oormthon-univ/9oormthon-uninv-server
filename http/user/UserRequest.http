@@ -97,6 +97,10 @@ Content-Type: application/json
 // @no-log
 DELETE {{host_url}}/api/v1/admins/users/5
 
+### 2.11 어드민 유저 비밀번호 초기화
+// @no-log
+POST {{host_url}}/api/v1/admins/users/4/password/reset
+
 ### 6.1 어드민 유니브 생성
 // @no-log
 POST {{host_url}}/api/v1/admins/univs

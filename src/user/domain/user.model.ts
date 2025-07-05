@@ -165,4 +165,24 @@ export class UserModel {
       throw new CommonException(ErrorCode.ACCESS_DENIED);
     }
   }
+
+  public resetPassword(password: string): UserModel {
+    return new UserModel(
+      this.id,
+      this.serialId,
+      password,
+      this.imgUrl,
+      this.name,
+      this.phoneNumber,
+      this.introduction,
+      this.generations,
+      this.stacks,
+      this.links,
+      null,
+      this.role,
+      this.univ,
+      this.createdAt
+    );
+
+  }
 }

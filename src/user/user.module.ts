@@ -26,6 +26,7 @@ import { AdminUserCommandV1Controller } from './controller/command/admin-user-co
 import { AdminUserQueryV1Controller } from './controller/query/admin-user-query-v1.controller';
 import { CreateUserService } from './application/service/create-user.service';
 import { CreateUserByExcelService } from './application/service/create-user-by-excel.service';
+import { UpdateAdminUserPasswordService } from './application/service/update-admin-user-password-service';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { CreateUserByExcelService } from './application/service/create-user-by-e
     ReadUserBriefService,
     ReadUserOverviewService,
     ReadAdminUserDetailService,
+    UpdateAdminUserPasswordService,
     UnivRepository,
     UserRepository,
     MemberRepository,
