@@ -5,6 +5,7 @@ import { IdeaSubjectRepository } from '../../repository/idea-subject.repository'
 import { DataSource } from 'typeorm';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
+import { IdeaRepository } from '../../repository/idea.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -12,6 +13,7 @@ export class DeleteIdeaSubjectService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly ideaSubjectRepository: IdeaSubjectRepository,
+    private readonly ideaRepository: IdeaRepository,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -30,6 +32,12 @@ export class DeleteIdeaSubjectService {
       const ideaSubject = await this.ideaSubjectRepository.findById(ideaSubjectId, manager);
       if (!ideaSubject) {
         throw new CommonException(ErrorCode.NOT_FOUND_IDEA_SUBJECT);
+      }
+
+      // 아이디어 주제에 속한 아이디어가 있는지 확인
+      const ideas = await this.ideaRepository.findByIdeaSubjectId(ideaSubjectId, manager);
+      if (ideas.length > 0) {
+        throw new CommonException(ErrorCode.IDEA_SUBJECT_HAS_IDEAS);
       }
 
       // 아이디어 주제 삭제
