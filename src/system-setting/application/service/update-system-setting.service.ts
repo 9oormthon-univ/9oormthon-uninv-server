@@ -49,7 +49,9 @@ export class UpdateSystemSettingService {
         requestDto.phase3TeamBuildingStart,
         requestDto.phase3TeamBuildingEnd,
         requestDto.phase3ConfirmationStart,
-        requestDto.phase3ConfirmationEnd
+        requestDto.phase3ConfirmationEnd,
+        requestDto.hackathonStart,
+        requestDto.hackathonEnd
       );
       await this.systemSettingRepository.save(updatedSystemSetting, manager);
     });

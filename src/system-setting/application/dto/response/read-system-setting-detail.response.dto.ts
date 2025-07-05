@@ -15,6 +15,8 @@ export class ReadSystemSettingDetailResponseDto {
   phase3_team_building_end: string;
   phase3_confirmation_start: string;
   phase3_confirmation_end: string;
+  hackathon_start: string;
+  hackathon_end: string;
 
   constructor(
     idea_submission_start: string,
@@ -30,7 +32,9 @@ export class ReadSystemSettingDetailResponseDto {
     phase3_team_building_start: string,
     phase3_team_building_end: string,
     phase3_confirmation_start: string,
-    phase3_confirmation_end: string
+    phase3_confirmation_end: string,
+    hackathon_start: string,
+    hackathon_end: string
   ) {
     this.idea_submission_start = idea_submission_start;
     this.idea_submission_end = idea_submission_end;
@@ -46,6 +50,8 @@ export class ReadSystemSettingDetailResponseDto {
     this.phase3_team_building_end = phase3_team_building_end;
     this.phase3_confirmation_start = phase3_confirmation_start;
     this.phase3_confirmation_end = phase3_confirmation_end;
+    this.hackathon_start = hackathon_start;
+    this.hackathon_end = hackathon_end;
   }
 
   static formatDate(date: Date): string {
@@ -74,7 +80,9 @@ export class ReadSystemSettingDetailResponseDto {
       this.formatDate(systemSetting.phase3TeamBuildingStart),
       this.formatDate(systemSetting.phase3TeamBuildingEnd),
       this.formatDate(systemSetting.phase3ConfirmationStart),
-      this.formatDate(systemSetting.phase3ConfirmationEnd)
+      this.formatDate(systemSetting.phase3ConfirmationEnd),
+      this.formatDate(systemSetting.hackathonStart),
+      this.formatDate(systemSetting.hackathonEnd)
     );
   }
 }

@@ -1,8 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ApplyRepository } from '../../repository/apply.repository';
 import { DataSource, EntityManager } from 'typeorm';
 import { MemberRepository } from '../../../team/repository/member.repository';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
 import { CommonException } from '../../../core/exceptions/common.exception';
 import { ErrorCode } from '../../../core/exceptions/error-code';
@@ -68,10 +67,13 @@ export class HandlePeriodTransitionBySchedulerService {
         case EPeriod.PHASE3_CONFIRMATION:
           this.logger.log(`3차 팀빌딩 확정 기간입니다. ${format(currentSystemSetting.phase3ConfirmationStart)} ~ ${format(currentSystemSetting.phase3ConfirmationEnd)}`);
           break;
-        case EPeriod.NONE:
+        case EPeriod.HACKATHON:
           await this.processConfirmationTransition(Number(process.env.GENERATION), 3, manager);
           this.logger.log('3차 팀빌딩 확정이 완료되었습니다. 로직이 처리되었습니다.');
-          this.logger.log('모든 팀빌딩이 완료되었습니다. 시스템 설정을 초기화하고 3 분 뒤 아이디어 제시 기간이 다시 시작됩니다.');
+          this.logger.log(`해커톤 기간입니다. ${format(currentSystemSetting.hackathonStart)} ~ ${format(currentSystemSetting.hackathonEnd)}`);
+          break;
+        case EPeriod.NONE:
+          this.logger.log('모든 사이클이 완료되었습니다. 시스템 설정을 초기화하고 3 분 뒤 아이디어 제시 기간이 다시 시작됩니다.');
           // 시스템 설정 초기화
           const updatedSetting = currentSystemSetting.updateDatesByTest(
             new Date(now.getTime() + 3 * 60000), // IDEA_SUBMISSION 시작
@@ -87,7 +89,9 @@ export class HandlePeriodTransitionBySchedulerService {
             new Date(now.getTime() + 18 * 60000), // PHASE3_TEAM_BUILDING 시작
             new Date((now.getTime() + 21 * 60000) - 1000), // PHASE3_TEAM_BUILDING 종료
             new Date(now.getTime() + 21 * 60000), // PHASE3_CONFIRMATION 시작
-            new Date((now.getTime() + 24 * 60000) - 1000) // PHASE3_CONFIRMATION 종료
+            new Date((now.getTime() + 24 * 60000) - 1000), // PHASE3_CONFIRMATION 종료
+            new Date(now.getTime() + 24 * 60000), // HACKATHON 시작
+            new Date((now.getTime() + 27 * 60000) - 1000), // HACKATHON 종료
           )
           await this.systemSettingRepository.save(updatedSetting, manager);
       }

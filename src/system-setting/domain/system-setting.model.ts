@@ -20,6 +20,8 @@ export class SystemSettingModel {
     public readonly phase3TeamBuildingEnd: Date,
     public readonly phase3ConfirmationStart: Date,
     public readonly phase3ConfirmationEnd: Date,
+    public readonly hackathonStart: Date,
+    public readonly hackathonEnd: Date,
     public readonly maxPreferencesPerUser: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date
@@ -39,7 +41,9 @@ export class SystemSettingModel {
     phase3TeamBuildingStart: Date,
     phase3TeamBuildingEnd: Date,
     phase3ConfirmationStart: Date,
-    phase3ConfirmationEnd: Date
+    phase3ConfirmationEnd: Date,
+    hackathonStart: Date,
+    hackathonEnd: Date
   ): SystemSettingModel {
     return new SystemSettingModel(
       this.id,
@@ -57,6 +61,8 @@ export class SystemSettingModel {
       phase3TeamBuildingEnd,
       phase3ConfirmationStart,
       phase3ConfirmationEnd,
+      hackathonStart,
+      hackathonEnd,
       this.maxPreferencesPerUser,
       this.createdAt,
       new Date()
@@ -77,7 +83,9 @@ export class SystemSettingModel {
     phase3TeamBuildingStart: Date,
     phase3TeamBuildingEnd: Date,
     phase3ConfirmationStart: Date,
-    phase3ConfirmationEnd: Date
+    phase3ConfirmationEnd: Date,
+    hackathonStart: Date,
+    hackathonEnd: Date
   ): SystemSettingModel {
     // 1. start 날짜는 반드시 00:00:00이어야 함.
     const checkStartTime = (date: Date) => {
@@ -114,7 +122,6 @@ export class SystemSettingModel {
     };
 
     // 각 start, end 필드에 대해 시간 체크
-    Logger.log("ideaSubmissionStart: " + ideaSubmissionStart);
     checkStartTime(ideaSubmissionStart);
     checkEndTime(ideaSubmissionEnd);
 
@@ -136,6 +143,9 @@ export class SystemSettingModel {
     checkStartTime(phase3ConfirmationStart);
     checkEndTime(phase3ConfirmationEnd);
 
+    checkStartTime(hackathonStart);
+    checkEndTime(hackathonEnd);
+
     // 연속성 검사 (각 기간의 end와 다음 기간의 start가 정확히 1초 차이인지)
     checkConsecutive(ideaSubmissionEnd, phase1TeamBuildingStart);
     checkConsecutive(phase1TeamBuildingEnd, phase1ConfirmationStart);
@@ -143,6 +153,7 @@ export class SystemSettingModel {
     checkConsecutive(phase2TeamBuildingEnd, phase2ConfirmationStart);
     checkConsecutive(phase2ConfirmationEnd, phase3TeamBuildingStart);
     checkConsecutive(phase3TeamBuildingEnd, phase3ConfirmationStart);
+    checkConsecutive(phase3ConfirmationEnd, hackathonStart);
 
     // 전체 기간 순서 검사
     const dates = [
@@ -195,6 +206,8 @@ export class SystemSettingModel {
       phase3TeamBuildingEnd,
       phase3ConfirmationStart,
       phase3ConfirmationEnd,
+      hackathonStart,
+      hackathonEnd,
       this.maxPreferencesPerUser,
       this.createdAt,
       new Date()
@@ -217,7 +230,10 @@ export class SystemSettingModel {
       return EPeriod.PHASE3_TEAM_BUILDING;
     } else if (this.phase3ConfirmationStart <= now && now <= this.phase3ConfirmationEnd) {
       return EPeriod.PHASE3_CONFIRMATION;
-    } else {
+    } else if (this.hackathonStart <= now && now <= this.hackathonEnd) {
+      return EPeriod.HACKATHON;
+    }
+      else {
       return EPeriod.NONE;
     }
   }
@@ -231,7 +247,7 @@ export class SystemSettingModel {
     } else if (period === EPeriod.PHASE3_TEAM_BUILDING || period === EPeriod.PHASE3_CONFIRMATION) {
       return 3;
     } else {
-      return 0; // NONE or IDEA_SUBMISSION
+      return 0; // NONE or IDEA_SUBMISSION or HACKATHON
     }
   }
 

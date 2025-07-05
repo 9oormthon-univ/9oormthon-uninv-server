@@ -19,6 +19,8 @@ export class SystemSettingMapper {
       entity.phase3TeamBuildingEnd,
       entity.phase3ConfirmationStart,
       entity.phase3ConfirmationEnd,
+      entity.hackathonStart,
+      entity.hackathonEnd,
       entity.maxPreferencesPerUser,
       entity.createdAt,
       entity.updatedAt
@@ -42,6 +44,8 @@ export class SystemSettingMapper {
     entity.phase3TeamBuildingEnd = domain.phase3TeamBuildingEnd;
     entity.phase3ConfirmationStart = domain.phase3ConfirmationStart;
     entity.phase3ConfirmationEnd = domain.phase3ConfirmationEnd;
+    entity.hackathonStart = domain.hackathonStart;
+    entity.hackathonEnd = domain.hackathonEnd;
     entity.maxPreferencesPerUser = domain.maxPreferencesPerUser;
     entity.createdAt = domain.createdAt;
     entity.updatedAt = domain.updatedAt;

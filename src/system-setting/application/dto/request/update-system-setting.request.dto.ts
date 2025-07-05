@@ -71,4 +71,14 @@ export class UpdateSystemSettingRequestDto {
   @Expose({ name: 'phase3_confirmation_end'})
   @Type(() => Date)
   phase3ConfirmationEnd: Date;
+
+  @IsNotEmpty({ message: '해커톤 시작일을 입력해주세요' })
+  @Expose({ name: 'hackathon_start'})
+  @Type(() => Date)
+  hackathonStart: Date;
+
+  @IsNotEmpty({ message: '해커톤 마감일을 입력해주세요' })
+  @Expose({ name: 'hackathon_end'})
+  @Type(() => Date)
+  hackathonEnd: Date;
 }

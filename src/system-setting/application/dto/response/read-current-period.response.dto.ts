@@ -22,6 +22,7 @@ export class ReadCurrentPeriodResponseDto {
   phase3_period: string;
   phase3_team_building_period: string;
   phase3_confirmation_period: string;
+  hackathon_period: string;
   current_period: EPeriod;
 
   constructor(
@@ -35,6 +36,7 @@ export class ReadCurrentPeriodResponseDto {
     phase3_period: string,
     phase3_team_building_period: string,
     phase3_confirmation_period: string,
+    hackathon_period: string,
     current_period: EPeriod
   ) {
     this.idea_submission_period = idea_submission_period;
@@ -47,6 +49,7 @@ export class ReadCurrentPeriodResponseDto {
     this.phase3_period = phase3_period;
     this.phase3_team_building_period = phase3_team_building_period;
     this.phase3_confirmation_period = phase3_confirmation_period;
+    this.hackathon_period = hackathon_period;
     this.current_period = current_period;
   }
 
@@ -62,6 +65,7 @@ export class ReadCurrentPeriodResponseDto {
       `${formatDate(systemSetting.phase3TeamBuildingStart)} ~ ${formatDate(systemSetting.phase3ConfirmationEnd)}`,
       `${formatDate(systemSetting.phase3TeamBuildingStart)} ~ ${formatDate(systemSetting.phase3TeamBuildingEnd)}`,
       `${formatDate(systemSetting.phase3ConfirmationStart)} ~ ${formatDate(systemSetting.phase3ConfirmationEnd)}`,
+      `${formatDate(systemSetting.hackathonStart)} ~ ${formatDate(systemSetting.hackathonEnd)}`,
       systemSetting.getWhichPeriod()
     );
   }
