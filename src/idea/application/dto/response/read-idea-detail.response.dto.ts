@@ -23,6 +23,9 @@ export class ProviderInfoDto {
   }
 
   static of(model: UserModel, providerRole: ERole, isProvider: boolean): ProviderInfoDto {
+    if (!model) {
+      return new ProviderInfoDto(null, ' - ', ' - ', null, isProvider);
+    }
     return new ProviderInfoDto(model.id, model.name, model.univ.name, providerRole, isProvider);
   }
 }
@@ -169,9 +172,9 @@ export class ReadIdeaDetailResponseDto {
 
   static of(user: UserModel, idea: IdeaModel, team: TeamModel, isActive: boolean, isBookmarked: boolean, applies: ApplyModel[]): ReadIdeaDetailResponseDto {
     return new ReadIdeaDetailResponseDto(
-      ProviderInfoDto.of(idea.provider,
-        team.members.filter((member) => member.user.id === idea.provider.id)[0].role,
-        user.id === idea.provider.id),
+      ProviderInfoDto.of(idea.provider, idea.provider ?
+        team.members.filter((member) => member.user.id === idea.provider.id)[0].role : null,
+        idea.provider ? user.id === idea.provider.id : false),
       IdeaInfoDto.of(idea, isBookmarked, isActive),
       RequirementsDto.of(idea, team, applies)
     );
