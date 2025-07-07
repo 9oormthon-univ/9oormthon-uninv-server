@@ -256,7 +256,7 @@ export class IdeaRepository {
         id: idea.id,
         title: idea.title,
         subject: idea.ideaSubject ? idea.ideaSubject.name : null,
-        provider: idea.provider ? idea.provider.name : null,
+        provider: idea.provider ? idea.provider.name : ' - ',
         team_building: idea.team ? idea.team.status : null,
       };
     });

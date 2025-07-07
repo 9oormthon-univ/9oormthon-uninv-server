@@ -32,6 +32,9 @@ export class ProviderInfoDto {
   }
 
   static of(model: UserModel): ProviderInfoDto {
+    if (!model) {
+      return new ProviderInfoDto(null, ' - ');
+    }
     return new ProviderInfoDto(model.id, model.name + '/' + model.univ.name + '/' + model.phoneNumber);
   }
 }
