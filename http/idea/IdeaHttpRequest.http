@@ -57,11 +57,11 @@ POST {{host_url}}/api/v1/admins/idea-subjects/2/toggle-active
 
 ### 3.4 아이디어 지원
 //@no-log
-POST {{host_url}}/api/v1/users/ideas/2/applies
+POST {{host_url}}/api/v1/users/ideas/4/applies
 Content-Type: application/json
 
 {
-    "phase": 1,
+    "phase": 3,
     "preference": 1,
     "motivation" : "열심히하겠습니다.",
     "role": "PD"
@@ -139,7 +139,7 @@ Content-Type: application/json
 
 ### 3.14 지원 수락
 //@no-log
-PATCH {{host_url}}/api/v1/users/applies/3/accept
+PATCH {{host_url}}/api/v1/users/applies/7/accept
 
 ### 3.15 지원 거절
 //@no-log

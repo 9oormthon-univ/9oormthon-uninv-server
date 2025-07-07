@@ -44,7 +44,7 @@ export class MemberRepository {
 
     const members = await repo.find({
       where: { team: { idea: { id: ideaId } } },
-      relations: ['user', 'team', 'team.idea', 'team.idea.provider', 'team.idea.ideaSubject'],
+      relations: ['user', 'user.univ', 'team', 'team.idea', 'team.idea.provider', 'team.idea.ideaSubject'],
     });
     return members.map((member) => MemberMapper.toDomain(member, { skipTeam: false }));
   }
