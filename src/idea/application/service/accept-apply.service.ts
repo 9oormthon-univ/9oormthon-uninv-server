@@ -61,7 +61,7 @@ export class AcceptApplyService {
       const members = await this.memberRepository.findWithTeamByIdeaId(apply.idea.id, manager);
 
       // 현재 페이즈의 모든 지원 정보 조회
-      const applies = await this.applyRepository.findByIdeaIdAndPhase(userId, apply.idea.generation, manager);
+      const applies = await this.applyRepository.findByIdeaIdAndPhase(idea.id, apply.phase, manager);
 
       // 수락하려는 직군의 인원 수가, 현재 팀의 해당 직군 인원 수 + 이미 수락한 해당 직군의 인원수 + 1 보다 크면 예외 발생
       const roleCount = applies.filter(a => a.role === apply.role && a.status === EApplyStatus.ACCEPTED).length + team.getMemberCountByRole(apply.role) + 1;
