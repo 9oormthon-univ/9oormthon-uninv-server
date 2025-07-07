@@ -117,12 +117,12 @@ export class ApplyRepository {
     return entities.length !== 0 ? ApplyMapper.toDomains(entities) : null;
   }
 
-  async findByUserIdAndIdeaId(userId: number, ideaId: number, manager?: EntityManager): Promise<ApplyModel | null> {
+  async findByUserIdAndIdeaIdAndPhase(userId: number, ideaId: number, phase: number, manager?: EntityManager): Promise<ApplyModel | null> {
     const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
 
     const entity = await repo.findOne(
       {
-        where: { user: { id: userId }, idea: { id: ideaId } },
+        where: { user: { id: userId }, idea: { id: ideaId }, phase },
         relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject']
       }
     );
