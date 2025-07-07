@@ -13,7 +13,7 @@ export class ApplyRepository {
     const entity = await repo.findOne(
       {
         where: { id },
-        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject']
+        relations: ['user', 'user.univ', 'idea', 'idea.provider', 'idea.ideaSubject']
       }
     );
 
@@ -29,7 +29,7 @@ export class ApplyRepository {
       }
     );
 
-    return entities.length !== 0 ? ApplyMapper.toDomains(entities) : null;
+    return entities.length !== 0 ? ApplyMapper.toDomains(entities) : [];
   }
 
   async findByUserIdAndGenerationAndPhase(userId: number, generation: number, phase: number, manager?: EntityManager): Promise<ApplyModel[] | null> {
