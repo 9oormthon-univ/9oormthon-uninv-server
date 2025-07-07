@@ -101,16 +101,18 @@ export class ApplyRepository {
           case 'ROLE':
             qb.addOrderBy('apply.role', sortType);
             break;
-          case 'ID':
+          case 'PREFERENCE':
+            qb.addOrderBy('apply.preference', sortType);
+            break;
           default:
-            qb.addOrderBy('apply.id', sortType);
+            qb.addOrderBy('apply.preference', sortType);
             break;
         }
       } else {
-        qb.orderBy('apply.id', 'ASC'); // 기본 정렬
+        qb.orderBy('apply.preference', 'ASC'); // 기본 정렬
       }
     } else {
-      qb.orderBy('apply.id', 'ASC'); // 기본 정렬
+      qb.orderBy('apply.preference', 'ASC'); // 기본 정렬
     }
 
     const entities = await qb.getMany();
