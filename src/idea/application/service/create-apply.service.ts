@@ -65,8 +65,8 @@ export class CreateApplyService {
         }
       )
 
-      // 사용자가 이미 지원한 아이디어인지 확인
-      const existedApply = await this.applyRepository.findByUserIdAndIdeaId(userId, ideaId, manager);
+      // 사용자가 해당 차수에서 이미 지원한 아이디어인지 확인
+      const existedApply = await this.applyRepository.findByUserIdAndIdeaIdAndPhase(userId, ideaId, requestDto.phase, manager);
       if (existedApply) {
         throw new CommonException(ErrorCode.ALREADY_APPLIED_IDEA_ERROR);
       }
