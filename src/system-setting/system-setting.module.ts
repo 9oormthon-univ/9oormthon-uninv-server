@@ -11,6 +11,7 @@ import { SystemSettingInitializer } from './initializer/system-setting.initializ
 import { UpdateSystemSettingService } from './application/service/update-system-setting.service';
 import { AdminSystemSettingQueryV1Controller } from './controller/query/admin-system-setting-query-v1.controller';
 import { ReadSystemSettingDetailService } from './application/service/read-system-setting-detail.service';
+import { UpdateMaxIdeaNumberService } from './application/service/update-max-idea-number.service';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ReadSystemSettingDetailService } from './application/service/read-syste
     ReadCurrentPeriodService,
     ReadSystemSettingDetailService,
     UpdateSystemSettingService,
+    UpdateMaxIdeaNumberService,
     SystemSettingInitializer
   ],
 

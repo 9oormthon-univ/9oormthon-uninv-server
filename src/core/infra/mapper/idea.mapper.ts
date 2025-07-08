@@ -24,11 +24,11 @@ export class IdeaMapper {
       entity.feRequiredTechStacks,
       entity.beRequirement,
       entity.beRequiredTechStacks,
-      UserMapper.toDomain(entity.provider),
+      entity.provider ? UserMapper.toDomain(entity.provider) : null,
       entity.team ? options?.skipTeam
       ? ({ id: entity.team.id } as TeamModel)
       : TeamMapper.toDomain(entity.team, { skipMembers: true, skipIdea: true }) : null,
-      IdeaSubjectMapper.toDomain(entity.ideaSubject),
+      entity.ideaSubject ? IdeaSubjectMapper.toDomain(entity.ideaSubject) : null,
       entity.createdAt
     );
   }

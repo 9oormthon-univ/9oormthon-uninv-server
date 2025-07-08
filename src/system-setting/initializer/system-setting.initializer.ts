@@ -52,6 +52,9 @@ export class SystemSettingInitializer implements OnModuleInit {
       // 사용자당 지원 가능한 지망 개수
       defaultSetting.maxPreferencesPerUser = 3;
 
+      // 최대 아이디어 개수
+      defaultSetting.maxIdeaNumber = 100;
+
       await repo.save(defaultSetting);
       this.logger.log('Default SystemSetting created.');
     } else {

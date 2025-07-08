@@ -10,10 +10,14 @@ export class IdeaRepository {
   constructor(private readonly dataSource: DataSource) {
   }
 
-  async findAll(manager?: EntityManager): Promise<IdeaModel[]> {
+  async findAllByGeneration(generation: number, manager?: EntityManager): Promise<IdeaModel[]> {
     const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
 
-    const entities = await repo.find();
+    const entities = await repo.find(
+      {
+        where: { generation }
+      }
+    );
 
     return IdeaMapper.toDomains(entities);
   }

@@ -15,11 +15,13 @@ import { MemberModel } from '../../../team/domain/member.model';
 import { ETeamStatus } from '../../../core/enums/team-status.enum';
 import { ProjectRepository } from '../../../team/repository/project.repository';
 import { ProjectModel } from '../../../team/domain/project.model';
+import { SystemSettingRepository } from '../../../system-setting/repository/system-setting.repository';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
 export class CreateIdeaService {
   constructor(
+    private readonly systemSettingRepository: SystemSettingRepository,
     private readonly userRepository: UserRepository,
     private readonly ideaRepository: IdeaRepository,
     private readonly ideaSubjectRepository: IdeaSubjectRepository,
@@ -31,6 +33,21 @@ export class CreateIdeaService {
 
   async execute(userId:number, requestDto: CreateIdeaRequestDto): Promise<void> {
     return this.dataSource.transaction(async (manager) => {
+
+      // 시스템 설정 조회
+      const systemSetting = await this.systemSettingRepository.findFirst(manager);
+      if (!systemSetting) {
+        throw new CommonException(ErrorCode.NOT_FOUND_SYSTEM_SETTING);
+      }
+
+      // 현재 아이디어 제출 가능 기간인지 확인
+      systemSetting.validateIdeaSubmissionPeriod();
+
+      const ideas = await this.ideaRepository.findAllByGeneration(requestDto.ideaInfo.generation, manager);
+      const currentIdeaCount = ideas.length;
+
+      // 최대 아이디어 수 초과 여부 확인
+      systemSetting.validateMaxIdeaNumber(currentIdeaCount);
 
       // 유저 조회
       const user = await this.userRepository.findById(userId, manager);

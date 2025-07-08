@@ -74,6 +74,8 @@ export class ErrorCode {
   static readonly NOT_IDEA_SUBJECT_VIEW_PERIOD_ERROR = new ErrorCode(40043, HttpStatus.BAD_REQUEST, "아이디어 주제 조회 기간이 아닙니다.");
   static readonly APPLY_ROLE_CAPACITY_ERROR = new ErrorCode(40044, HttpStatus.BAD_REQUEST, "해당 직군의 인원 수가 초과되었습니다.");
   static readonly APPLY_UNIV_CAPACITY_ERROR = new ErrorCode(40045, HttpStatus.BAD_REQUEST, "한 팀 당 2 명의 같은 대학까지만 허용됩니다.");
+  static readonly NOT_IDEA_SUBMISSION_PERIOD_ERROR = new ErrorCode(40046, HttpStatus.BAD_REQUEST, "아이디어 제출 기간이 아닙니다.");
+  static readonly MAX_IDEA_NUMBER_ERROR = new ErrorCode(40047, HttpStatus.BAD_REQUEST, "최대 아이디어 수를 초과했습니다.");
 
   // Access Denied Error
   static readonly ACCESS_DENIED = new ErrorCode(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");

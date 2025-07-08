@@ -17,6 +17,8 @@ export class ReadSystemSettingDetailResponseDto {
   phase3_confirmation_end: string;
   hackathon_start: string;
   hackathon_end: string;
+  max_preferences_per_user: number;
+  max_idea_number: number;
 
   constructor(
     idea_submission_start: string,
@@ -34,7 +36,9 @@ export class ReadSystemSettingDetailResponseDto {
     phase3_confirmation_start: string,
     phase3_confirmation_end: string,
     hackathon_start: string,
-    hackathon_end: string
+    hackathon_end: string,
+    max_preferences_per_user: number,
+    max_idea_number: number
   ) {
     this.idea_submission_start = idea_submission_start;
     this.idea_submission_end = idea_submission_end;
@@ -52,6 +56,8 @@ export class ReadSystemSettingDetailResponseDto {
     this.phase3_confirmation_end = phase3_confirmation_end;
     this.hackathon_start = hackathon_start;
     this.hackathon_end = hackathon_end;
+    this.max_preferences_per_user = max_preferences_per_user;
+    this.max_idea_number = max_idea_number;
   }
 
   static formatDate(date: Date): string {
@@ -82,7 +88,9 @@ export class ReadSystemSettingDetailResponseDto {
       this.formatDate(systemSetting.phase3ConfirmationStart),
       this.formatDate(systemSetting.phase3ConfirmationEnd),
       this.formatDate(systemSetting.hackathonStart),
-      this.formatDate(systemSetting.hackathonEnd)
+      this.formatDate(systemSetting.hackathonEnd),
+      systemSetting.maxPreferencesPerUser,
+      systemSetting.maxIdeaNumber
     );
   }
 }
