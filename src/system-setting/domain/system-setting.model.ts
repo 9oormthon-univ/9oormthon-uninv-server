@@ -23,9 +23,36 @@ export class SystemSettingModel {
     public readonly hackathonStart: Date,
     public readonly hackathonEnd: Date,
     public readonly maxPreferencesPerUser: number,
+    public readonly maxIdeaNumber: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date
   ) {}
+
+  public updateMaxIdeaNumber(maxIdeaNumber: number): SystemSettingModel {
+    return new SystemSettingModel(
+      this.id,
+      this.ideaSubmissionStart,
+      this.ideaSubmissionEnd,
+      this.phase1TeamBuildingStart,
+      this.phase1TeamBuildingEnd,
+      this.phase1ConfirmationStart,
+      this.phase1ConfirmationEnd,
+      this.phase2TeamBuildingStart,
+      this.phase2TeamBuildingEnd,
+      this.phase2ConfirmationStart,
+      this.phase2ConfirmationEnd,
+      this.phase3TeamBuildingStart,
+      this.phase3TeamBuildingEnd,
+      this.phase3ConfirmationStart,
+      this.phase3ConfirmationEnd,
+      this.hackathonStart,
+      this.hackathonEnd,
+      this.maxPreferencesPerUser,
+      maxIdeaNumber,
+      this.createdAt,
+      new Date()
+    );
+  }
 
   public updateDatesByTest(
     ideaSubmissionStart: Date,
@@ -64,6 +91,7 @@ export class SystemSettingModel {
       hackathonStart,
       hackathonEnd,
       this.maxPreferencesPerUser,
+      this.maxIdeaNumber,
       this.createdAt,
       new Date()
     );
@@ -209,6 +237,7 @@ export class SystemSettingModel {
       hackathonStart,
       hackathonEnd,
       this.maxPreferencesPerUser,
+      this.maxIdeaNumber,
       this.createdAt,
       new Date()
     );
@@ -251,6 +280,12 @@ export class SystemSettingModel {
     }
   }
 
+  public validateIdeaSubmissionPeriod(): void {
+    if (this.getWhichPeriod() === EPeriod.NONE || this.getWhichPeriod() === EPeriod.HACKATHON) {
+      throw new CommonException(ErrorCode.NOT_IDEA_SUBMISSION_PERIOD_ERROR);
+    }
+  }
+
   public validateIdeaApplyPeriod(phase: number): void {
     if (
       (
@@ -287,6 +322,12 @@ export class SystemSettingModel {
   public validateIdeaSubjectViewPeriod() : void {
     if (this.getWhichPeriod() == EPeriod.NONE) {
       throw new CommonException(ErrorCode.NOT_IDEA_SUBJECT_VIEW_PERIOD_ERROR);
+    }
+  }
+
+  public validateMaxIdeaNumber(currentIdeaCount: number): void {
+    if (currentIdeaCount >= this.maxIdeaNumber) {
+      throw new CommonException(ErrorCode.MAX_IDEA_NUMBER_ERROR);
     }
   }
 }

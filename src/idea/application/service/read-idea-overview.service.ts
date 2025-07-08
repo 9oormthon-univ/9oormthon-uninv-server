@@ -37,7 +37,7 @@ export class ReadIdeaOverviewService {
       }
 
       if (systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION) {
-        return ReadIdeaOverviewResponseDto.of([], PageInfoDto.of(1, 1, 1, 0));
+        return ReadIdeaOverviewResponseDto.of([], PageInfoDto.of(1, 1, 1, 0), systemSetting.maxIdeaNumber, 0);
       }
 
       // 아이디어 조회
@@ -57,7 +57,7 @@ export class ReadIdeaOverviewService {
 
       const pageInfoDto = PageInfoDto.of(page, size, totalPages, totalItems);
 
-      return ReadIdeaOverviewResponseDto.of(ideas,pageInfoDto);
+      return ReadIdeaOverviewResponseDto.of(ideas,pageInfoDto, systemSetting.maxIdeaNumber, totalItems);
     });
   }
 }

@@ -22,6 +22,7 @@ export class SystemSettingMapper {
       entity.hackathonStart,
       entity.hackathonEnd,
       entity.maxPreferencesPerUser,
+      entity.maxIdeaNumber,
       entity.createdAt,
       entity.updatedAt
     );

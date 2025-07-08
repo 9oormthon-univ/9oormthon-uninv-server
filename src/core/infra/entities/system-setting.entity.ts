@@ -62,6 +62,9 @@ export class SystemSettingEntity {
   @Column({ name: 'max_preferences_per_user', type: 'int' })
   maxPreferencesPerUser: number;
 
+  @Column({ name: 'max_idea_number', type: 'int', default: 100 })
+  maxIdeaNumber: number;
+
   /* ----------------------------- */
   /* ---- TimeStamp Column ------- */
   /* ----------------------------- */
