@@ -14,6 +14,7 @@ export class ReadTeamApplyOverviewQueryDto {
   phase: number;
 
   @Optional()
+  @Expose({ name: 'sorting' })
   sorting: string;
 
   @Optional()

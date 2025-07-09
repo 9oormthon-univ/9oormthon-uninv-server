@@ -26,6 +26,7 @@ export class ApplyRepository {
     const entities = await repo.find(
       {
         where: { idea: { id: ideaId }, phase },
+        relations: ['user', 'user.univ', 'idea.provider', 'idea.ideaSubject']
       }
     );
 
@@ -38,7 +39,7 @@ export class ApplyRepository {
     const entities = await repo.find(
       {
         where: { user: { id: userId }, idea: { generation }, phase },
-        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject', 'idea.team']
+        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject', 'idea.team', 'idea.team.members']
       }
     );
 
@@ -152,5 +153,11 @@ export class ApplyRepository {
     const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
 
     await repo.delete(id);
+  }
+
+  async deleteByIdeaId(ideaId: number, manager?: EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
+
+    await repo.delete({ idea: { id: ideaId } });
   }
 }

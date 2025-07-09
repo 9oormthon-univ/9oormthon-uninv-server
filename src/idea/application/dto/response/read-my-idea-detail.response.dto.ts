@@ -98,7 +98,7 @@ export class RoleRequirementDto {
           team.members.filter((member) => member.role === ERole.PM).length,
           team.pmCapacity,
           idea.pmRequiredTechStacks, team.members.filter((member) => member.role === ERole.PM).map((member) => CurrentMemberDto.from(member)),
-          team.pmCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity).toFixed(2).toString() + ':1' : '0:1')
+          team.pmCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity - team.members.filter(member => member.role === ERole.PM).length !== 0 ? (applies.filter((apply) => apply.role === ERole.PM).length / team.pmCapacity - team.members.filter(member => member.role === ERole.PM).length).toFixed(2).toString() + ':1' : '0:1')
         );
       case ERole.PD:
         return new RoleRequirementDto(
@@ -107,7 +107,7 @@ export class RoleRequirementDto {
           team.pdCapacity,
           idea.pdRequiredTechStacks,
           team.members.filter((member) => member.role === ERole.PD).map((member) => CurrentMemberDto.from(member)),
-          team.pdCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity).toFixed(2).toString() + ':1' : '0:1')
+          team.pdCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity - team.members.filter(member => member.role === ERole.PD).length !== 0 ? (applies.filter((apply) => apply.role === ERole.PD).length / team.pdCapacity - team.members.filter(member => member.role === ERole.PD).length).toFixed(2).toString() + ':1' : '0:1')
         );
       case ERole.FE:
         return new RoleRequirementDto(
@@ -116,7 +116,7 @@ export class RoleRequirementDto {
           team.feCapacity,
           idea.feRequiredTechStacks,
           team.members.filter((member) => member.role === ERole.FE).map((member) => CurrentMemberDto.from(member)),
-          team.feCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity).toFixed(2).toString() + ':1' : '0:1')
+          team.feCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity - team.members.filter(member => member.role === ERole.FE).length !== 0 ? (applies.filter((apply) => apply.role === ERole.FE).length / team.feCapacity - team.members.filter(member => member.role === ERole.FE).length).toFixed(2).toString() + ':1' : '0:1')
         );
       case ERole.BE:
         return new RoleRequirementDto(
@@ -125,7 +125,7 @@ export class RoleRequirementDto {
           team.beCapacity,
           idea.beRequiredTechStacks,
           team.members.filter((member) => member.role === ERole.BE).map((member) => CurrentMemberDto.from(member)),
-          team.beCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity !== 0 ? (applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity).toFixed(2).toString() + ':1' : '0:1')
+          team.beCapacity == 0 ? '0:0' : (applies !== null && applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity - team.members.filter(member => member.role === ERole.BE).length !== 0 ? (applies.filter((apply) => apply.role === ERole.BE).length / team.beCapacity - team.members.filter(member => member.role === ERole.BE).length).toFixed(2).toString() + ':1' : '0:1')
         );
       default:
         throw new CommonException(ErrorCode.NOT_FOUND_ENUM);
