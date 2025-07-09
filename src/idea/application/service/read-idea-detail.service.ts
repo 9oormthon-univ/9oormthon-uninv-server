@@ -55,7 +55,7 @@ export class ReadIdeaDetailService {
         throw new CommonException(ErrorCode.NOT_FOUND_TEAM);
       }
 
-      // 팀빌딩 기간이라면 지원기간 표시
+      // 팀빌딩 기간이라면 지원정보 표시
       if (!(systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION || systemSetting.getWhichPeriod() === EPeriod.NONE)) {
         const apply = await this.applyRepository.findByTeamIdAndGenerationAndPhase(team.id, team.generation, EPeriod.fromPeriod(systemSetting.getWhichPeriod()), manager);
 

@@ -38,7 +38,7 @@ export class ApplyRepository {
     const entities = await repo.find(
       {
         where: { user: { id: userId }, idea: { generation }, phase },
-        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject', 'idea.team']
+        relations: ['user', 'idea', 'idea.provider', 'idea.ideaSubject', 'idea.team', 'idea.team.members']
       }
     );
 

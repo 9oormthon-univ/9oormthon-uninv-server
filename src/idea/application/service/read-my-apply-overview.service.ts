@@ -19,13 +19,13 @@ export class ReadMyApplyOverviewService {
       const applyDtoList = applies.map(async (apply) => {
         switch (apply.role) {
           case ERole.PM:
-            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.PM, manager) / apply.idea.team.pmCapacity).toFixed(2).toString());
+            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.PM, manager) / apply.idea.team.pmCapacity - apply.idea.team.members.filter(member => member.role === ERole.PM).length).toFixed(2).toString() + ':1');
           case ERole.PD:
-            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.PD, manager) / apply.idea.team.pdCapacity).toFixed(2).toString());
+            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.PD, manager) / apply.idea.team.pdCapacity - apply.idea.team.members.filter(member => member.role === ERole.PD).length).toFixed(2).toString() + ':1');
           case ERole.FE:
-            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.FE, manager) / apply.idea.team.feCapacity).toFixed(2).toString());
+            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.FE, manager) / apply.idea.team.feCapacity - apply.idea.team.members.filter(member => member.role === ERole.FE).length).toFixed(2).toString() + ':1');
           case ERole.BE:
-            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.BE, manager) / apply.idea.team.beCapacity).toFixed(2).toString());
+            return ApplyOverviewDto.of(apply, (await this.applyRepository.countByIdeaIdAndRole(apply.idea.id, ERole.BE, manager) / apply.idea.team.beCapacity - apply.idea.team.members.filter(member => member.role === ERole.BE).length).toFixed(2).toString() + ':1');
         }
       });
       const result = await Promise.all(applyDtoList);
