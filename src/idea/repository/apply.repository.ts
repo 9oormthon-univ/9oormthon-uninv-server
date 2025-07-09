@@ -153,4 +153,10 @@ export class ApplyRepository {
 
     await repo.delete(id);
   }
+
+  async deleteByIdeaId(ideaId: number, manager?: EntityManager): Promise<void> {
+    const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
+
+    await repo.delete({ idea: { id: ideaId } });
+  }
 }

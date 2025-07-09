@@ -1,7 +1,10 @@
 import {
   Body,
-  Controller, Delete, Param,
-  Post, Put,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Put,
   Req,
   UseFilters,
   UseGuards,
@@ -17,7 +20,7 @@ import { ResponseDto } from '../../../core/dto/response.dto';
 import { UpdateIdeaSubjectService } from '../../application/service/update-idea-subject.service';
 import { DeleteIdeaSubjectService } from '../../application/service/delete-idea-subject.service';
 import { UpdateIdeaSubjectRequestDto } from '../../application/dto/request/update-idea-subject.request.dto';
-import { DeleteIdeaService } from '../../application/service/delete-idea.service';
+import { DeleteAdminIdeaService } from '../../application/service/delete-admin-idea.service';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -27,7 +30,7 @@ export class AdminIdeaCommandV1Controller {
     private readonly createIdeaSubjectUseCase: CreateIdeaSubjectService,
     private readonly updateIdeaSubjectUseCase: UpdateIdeaSubjectService,
     private readonly deleteIdeaSubjectUseCase: DeleteIdeaSubjectService,
-    private readonly deleteIdeaUseCase: DeleteIdeaService
+    private readonly deleteAdminIdeaUseCase: DeleteAdminIdeaService,
   ) {}
 
   /**
@@ -80,7 +83,7 @@ export class AdminIdeaCommandV1Controller {
     @Req() req,
     @Param('ideaId') ideaId: number
   ): Promise<ResponseDto<any>> {
-    await this.deleteIdeaUseCase.execute(req.user.id, ideaId);
+    await this.deleteAdminIdeaUseCase.execute(req.user.id, ideaId);
     return ResponseDto.ok(null);
   }
 }
