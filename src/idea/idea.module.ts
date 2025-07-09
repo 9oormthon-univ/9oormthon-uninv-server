@@ -41,6 +41,7 @@ import { UpdateIdeaSubjectService } from './application/service/update-idea-subj
 import { DeleteIdeaSubjectService } from './application/service/delete-idea-subject.service';
 import { ReadAdminIdeaOverviewService } from './application/service/read-admin-idea-overview.service';
 import { ReadAdminIdeaDetailService } from './application/service/read-admin-idea-detail.service';
+import { DeleteAdminIdeaService } from './application/service/delete-admin-idea.service';
 
 @Module({
   imports: [
@@ -86,6 +87,7 @@ import { ReadAdminIdeaDetailService } from './application/service/read-admin-ide
     UpdateIdeaSubjectService,
     DeleteIdeaSubjectService,
     DeleteIdeaService,
+    DeleteAdminIdeaService,
     ReadAdminIdeaOverviewService,
     ReadAdminIdeaDetailService,
     IdeaRepository,
