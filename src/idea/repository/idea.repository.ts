@@ -35,6 +35,19 @@ export class IdeaRepository {
     return entity ? IdeaMapper.toDomain(entity) : null;
   }
 
+  async findByTeamId(teamId: number, manager?: EntityManager): Promise<IdeaModel | null> {
+    const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
+
+    const entity = await repo.findOne(
+      {
+        where: { team: { id: teamId } },
+        relations: ['provider', 'ideaSubject']
+      }
+    );
+
+    return entity ? IdeaMapper.toDomain(entity) : null;
+  }
+
   async findByUserIdAndGeneration(userId: number, generation: number, manager?: EntityManager): Promise<IdeaModel | null> {
     const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
 

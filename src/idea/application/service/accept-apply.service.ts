@@ -71,7 +71,7 @@ export class AcceptApplyService {
 
       // 수락하려는 지원자의 유니브가, 현재 팀의 멤버의 유니브와 이미 수락한 지원자의 유니브 수를 전부 더했을 때 2개를 초과하면 예외 발생
       const applierUniv = apply.user.univ;
-      if (members.filter(member => member.user.univ.id === applierUniv.id).length + applies.filter(a => a.status === EApplyStatus.ACCEPTED && a.user.univ.id === applierUniv.id).length >= 2) {
+      if (members.filter(member => member.user.univ.id === applierUniv.id).length + applies.filter(a => a.status === EApplyStatus.ACCEPTED && a.user.univ.id === applierUniv.id).length + 1 > 2) {
         throw new CommonException(ErrorCode.APPLY_UNIV_CAPACITY_ERROR);
       }
 
