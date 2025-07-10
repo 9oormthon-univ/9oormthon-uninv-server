@@ -36,7 +36,7 @@ export class ReadIdeaOverviewService {
         throw new CommonException(ErrorCode.NOT_FOUND_SYSTEM_SETTING);
       }
 
-      if (systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION) {
+      if (systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION || EPeriod.NONE) {
         return ReadIdeaOverviewResponseDto.of([], PageInfoDto.of(1, 1, 1, 0), systemSetting.maxIdeaNumber, 0);
       }
 
@@ -57,7 +57,9 @@ export class ReadIdeaOverviewService {
 
       const pageInfoDto = PageInfoDto.of(page, size, totalPages, totalItems);
 
-      return ReadIdeaOverviewResponseDto.of(ideas,pageInfoDto, systemSetting.maxIdeaNumber, totalItems);
+      const allIdeasCount = await this.ideaRepository.countAllIdeasByGeneration(generation, manager);
+
+      return ReadIdeaOverviewResponseDto.of(ideas,pageInfoDto, systemSetting.maxIdeaNumber, allIdeasCount);
     });
   }
 }

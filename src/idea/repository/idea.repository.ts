@@ -10,6 +10,12 @@ export class IdeaRepository {
   constructor(private readonly dataSource: DataSource) {
   }
 
+  async countAllIdeasByGeneration(generation: number, manager?: EntityManager): Promise<number> {
+    const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
+
+    return repo.count({ where: { generation } });
+  }
+
   async findAllByGeneration(generation: number, manager?: EntityManager): Promise<IdeaModel[]> {
     const repo = manager ? manager.getRepository(IdeaEntity) : this.dataSource.getRepository(IdeaEntity);
 
