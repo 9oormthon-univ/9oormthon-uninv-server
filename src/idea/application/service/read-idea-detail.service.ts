@@ -56,7 +56,7 @@ export class ReadIdeaDetailService {
       }
 
       // 팀빌딩 기간이라면 지원정보 표시
-      if (!(systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION || systemSetting.getWhichPeriod() === EPeriod.NONE)) {
+      if (!(systemSetting.getWhichPeriod() === EPeriod.IDEA_SUBMISSION || systemSetting.getWhichPeriod() === EPeriod.NONE || systemSetting.getWhichPeriod() === EPeriod.HACKATHON)) {
         const apply = await this.applyRepository.findByTeamIdAndGenerationAndPhase(team.id, team.generation, EPeriod.fromPeriod(systemSetting.getWhichPeriod()), manager);
 
         return ReadIdeaDetailResponseDto.of(user, idea, team, isActive, isBookmarked, apply);
