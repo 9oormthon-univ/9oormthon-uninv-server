@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
+import * as multer from 'multer';
 import { ResponseInterceptor } from '../../../core/interceptors/response.interceptor';
 import { HttpExceptionFilter } from '../../../core/filters/http-exception.filter';
 import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
@@ -62,7 +63,7 @@ export class AdminUserCommandV1Controller {
    * 2.2 어드민 유저 엑셀로 생성
    */
   @Post('/users/excel')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', { storage: multer.memoryStorage() }))
   @UseGuards(JwtAuthGuard)
   async signUp(
     @Req() req: Request,
