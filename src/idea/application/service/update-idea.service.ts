@@ -76,7 +76,7 @@ export class UpdateIdeaService {
       }
 
       // 팀의 멤버 조회
-      const members = await this.memberRepository.findByIdeaId(requestDto.ideaInfo.ideaSubjectId, manager);
+      const members = await this.memberRepository.findByIdeaId(ideaId, manager);
 
       // 해당 아이디어에 대한 지원 정보 조회
       const applies = await this.applyRepository.findByIdeaIdAndPhase(ideaId, currentPhase, manager);
