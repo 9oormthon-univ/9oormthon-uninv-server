@@ -23,7 +23,7 @@ export class TeamRepository {
       where: { id },
       relations: ['members', 'members.team', 'members.user', 'members.user.univ', 'project', 'idea']
     });
-    return entity ? TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: false }) : undefined;
+    return entity ? TeamMapper.toDomain(entity, { skipIdea: false, skipMembers: false }) : undefined;
   }
 
   async findWithMembersById(id: number, manager?: EntityManager): Promise<TeamModel | undefined> {
