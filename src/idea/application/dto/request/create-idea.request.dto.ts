@@ -6,7 +6,7 @@ import {
   IsEnum,
   IsOptional,
   IsArray,
-  ValidateNested,
+  ValidateNested, Min, Max, Length,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
@@ -24,6 +24,11 @@ export class IdeaInfoDto {
   @IsNumber({}, { message: '아이디어 주제 ID는 숫자여야 합니다.' })
   @Type(() => Number)
   @Expose({ name: 'idea_subject_id' })
+  @IsInt({ message: '아이디어 주제 ID는 정수여야 합니다.' })
+  @Min(1, { message: '아이디어 주제 ID는 1 이상이어야 합니다.' })
+  @Max(Number.MAX_SAFE_INTEGER, {
+    message: `아이디어 주제 ID는 ${Number.MAX_SAFE_INTEGER} 이하여야 합니다.`,
+  })
   ideaSubjectId: number;
 
   @ApiProperty({
@@ -33,6 +38,7 @@ export class IdeaInfoDto {
   @IsNotEmpty({ message: '제목을 입력해주세요.' })
   @IsString()
   @Expose({ name: 'title' })
+  @Length(1, 255, { message: '제목은 1~255자 이하여야 합니다.' })
   title: string;
 
   @ApiProperty({
@@ -42,6 +48,7 @@ export class IdeaInfoDto {
   @IsNotEmpty({ message: '요약을 입력해주세요.' })
   @IsString()
   @Expose({ name: 'summary' })
+  @Length(1, 500, { message: '요약은 1~500자 이하여야 합니다.' })
   summary: string;
 
   @ApiProperty({
@@ -61,6 +68,8 @@ export class IdeaInfoDto {
   @IsInt({ message: '현 기수는 정수여야 합니다.' })
   @Type(() => Number)
   @Expose({ name: 'generation' })
+  @Min(1, { message: '현 기수는 1 이상이어야 합니다.' })
+  @Max(100, { message: '현 기수는 100 이하여야 합니다.' })
   generation: number;
 
   @ApiProperty({
@@ -84,6 +93,7 @@ export class RoleRequirementDto {
   })
   @IsString()
   @Expose({ name: 'requirement' })
+  @Length(0, 255, { message: '요구 사항은 0~255자 이하여야 합니다.' })
   requirement: string;
 
   @ApiProperty({
@@ -94,6 +104,8 @@ export class RoleRequirementDto {
   @IsInt({ message: '수용 인원은 정수여야 합니다.' })
   @Type(() => Number)
   @Expose({ name: 'capacity' })
+  @Min(0, { message: '수용 인원은 0 이상이어야 합니다.' })
+  @Max(100, { message: '수용 인원은 100 이하여야 합니다.' })
   capacity: number;
 
   @ApiProperty({
