@@ -35,5 +35,6 @@ export class SignUpAdminRequestDto {
   @IsNotEmpty({ message: '관리자 인증 코드를 입력해주세요.' })
   @IsString()
   @Expose({ name: 'admin_auth_code' })
+  @Length(5, 30, { message: '관리자 인증 코드는 5~30자리로 입력해주세요.' })
   adminAuthCode: string;
 }

@@ -1,5 +1,5 @@
 import { ELinkType } from '../../../../core/enums/link-type.enum';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, Length } from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export class LinkDto {
@@ -9,6 +9,7 @@ export class LinkDto {
 
   @IsNotEmpty({ message: 'url은 필수 값입니다.' })
   @Expose({ name: 'url' })
+  @Length(0, 500)
   url: string;
 }
 
@@ -16,6 +17,7 @@ export class LinkDto {
 export class UpdateUserRequestDto {
   @IsNotEmpty({ message: 'img_url은 필수 값입니다.' })
   @Expose({ name: 'img_url' })
+  @Length(0, 500)
   imgUrl: string;
 
   @IsNotEmpty({ message: 'introduction은 필수 값입니다.' })

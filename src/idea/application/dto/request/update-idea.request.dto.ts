@@ -1,4 +1,14 @@
-import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString, Length, Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { ERole } from '../../../../core/enums/role.enum';
@@ -15,6 +25,8 @@ export class IdeaInfoDto {
   @IsNumber({}, { message: '아이디어 주제 ID는 숫자여야 합니다.' })
   @Type(() => Number)
   @Expose({ name: 'idea_subject_id' })
+  @Min(1)
+  @Max(Number.MAX_SAFE_INTEGER)
   ideaSubjectId: number;
 
   @ApiProperty({
@@ -24,6 +36,7 @@ export class IdeaInfoDto {
   @IsNotEmpty({ message: '제목을 입력해주세요.' })
   @IsString()
   @Expose({ name: 'title' })
+  @Length(1, 255)
   title: string;
 
   @ApiProperty({
@@ -33,6 +46,7 @@ export class IdeaInfoDto {
   @IsNotEmpty({ message: '요약을 입력해주세요.' })
   @IsString()
   @Expose({ name: 'summary' })
+  @Length(1, 500)
   summary: string;
 
   @ApiProperty({
@@ -65,6 +79,7 @@ export class RoleRequirementDto {
   })
   @IsString()
   @Expose({ name: 'requirement' })
+  @Length(0, 255)
   requirement: string;
 
   @ApiProperty({
@@ -75,6 +90,8 @@ export class RoleRequirementDto {
   @IsInt({ message: '수용 인원은 정수여야 합니다.' })
   @Type(() => Number)
   @Expose({ name: 'capacity' })
+  @Min(0)
+  @Max(Number.MAX_SAFE_INTEGER)
   capacity: number;
 
   @ApiProperty({

@@ -1,20 +1,26 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsBoolean, Min, Max, Length } from 'class-validator';
 import { Expose, Type, Transform } from 'class-transformer';
 
 export class ReadIdeaOverviewQueryDto {
   @IsNotEmpty({ message: 'page는 필수 값입니다.' })
   @Type(() => Number)
   @IsNumber({}, { message: 'page는 숫자여야 합니다.' })
+  @Min(1)
+  @Max(Number.MAX_SAFE_INTEGER)
   page: number;
 
   @IsNotEmpty({ message: 'size는 필수 값입니다.' })
   @Type(() => Number)
   @IsNumber({}, { message: 'size는 숫자여야 합니다.' })
+  @Min(1)
+  @Max(Number.MAX_SAFE_INTEGER)
   size: number;
 
   @IsNotEmpty({ message: 'generation은 필수 값입니다.' })
   @Type(() => Number)
   @IsNumber({}, { message: 'generation은 숫자여야 합니다.' })
+  @Min(1)
+  @Max(Number.MAX_SAFE_INTEGER)
   generation: number;
 
   // subjectId는 선택사항 (필요 시 해당 주제 필터 적용)
@@ -22,6 +28,8 @@ export class ReadIdeaOverviewQueryDto {
   @Type(() => Number)
   @IsNumber({}, { message: 'subject-id는 숫자여야 합니다.' })
   @Expose({ name: 'subject-id' })
+  @Min(1)
+  @Max(Number.MAX_SAFE_INTEGER)
   subjectId?: number;
 
   // isActive는 선택사항 (모집중/완료 필터)
@@ -49,5 +57,6 @@ export class ReadIdeaOverviewQueryDto {
   // search는 선택사항 (아이디어 제목 검색)
   @IsOptional()
   @Expose({ name: 'search' })
+  @Length(0, 100)
   search: string;
 }
