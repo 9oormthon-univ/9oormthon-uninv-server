@@ -4,6 +4,7 @@ import {
   Param, Patch,
   Post, Put, Query,
   Req,
+  Res,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -26,6 +27,8 @@ import { RandomizeTeamNumberService } from '../../application/service/randomize-
 import { RandomizeTeamNumberQueryDto } from '../../application/dto/request/randomize-team-number.query.dto';
 import { UpdateMemberRoleService } from '../../application/service/update-member-role.service';
 import { UpdateMemberRoleRequestDto } from '../../application/dto/request/update-member-role.request.dto';
+import { ExtractTeamExcelService } from '../../application/service/extract-team-excel.service';
+import { Response } from 'express';
 
 @Controller('/api/v1/admins')
 @UseInterceptors(ResponseInterceptor)
@@ -40,6 +43,7 @@ export class AdminTeamCommandV1Controller {
     private readonly deleteMemberUseCase: DeleteMemberService,
     private readonly randomizeTeamNumberUseCase: RandomizeTeamNumberService,
     private readonly updateMemberRoleUseCase: UpdateMemberRoleService,
+    private readonly extractTeamExcelUseCase: ExtractTeamExcelService,
   ) {
   }
 
@@ -149,5 +153,25 @@ export class AdminTeamCommandV1Controller {
   ): Promise<ResponseDto<any>> {
     await this.updateMemberRoleUseCase.execute(req.user.id, memberId, requestDto);
     return ResponseDto.ok(null);
+  }
+
+  /**
+   * 4.15 어드민 팀 정보 엑셀 추출
+   */
+  @Post('/teams/excel')
+  @UseGuards(JwtAuthGuard)
+  async extractTeamExcel(
+    @Req() req,
+    @Query('generation', new ValidationPipe({ transform: true })) generation: number,
+    @Res() res: Response,
+  ) {
+    const excelBuffer = await this.extractTeamExcelUseCase.execute(req.user.id, generation);
+
+    res.set({
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': `attachment; filename="team-info-generation-${generation}.xlsx"`
+    });
+
+    res.end(excelBuffer);
   }
 }
