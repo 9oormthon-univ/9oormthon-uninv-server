@@ -29,7 +29,5 @@ export class CreateUserRequestDto {
 
   @IsNotEmpty({ message: 'generations은 필수 값입니다.' })
   @Expose({ name: 'generations' })
-  @Min(0)
-  @Max(Number.MAX_SAFE_INTEGER)
   generations: number[];
 }
