@@ -41,7 +41,7 @@ GET {{host_url}}/api/v1/users/teams/details?generation=4
 
 ### 4.7 어드민 팀 정보 수정
 // @no-log
-PUT {{host_url}}/api/v1/admins/teams/2
+PUT {{host_url}}/api/v1/admins/teams/9
 Content-Type: application/json
 
 {
@@ -99,3 +99,10 @@ Content-Type: application/json
 {
   "role": "PM"
 }
+
+### 4.15 어드민 팀 정보 엑셀 추출
+// @no-log
+POST {{host_url}}/api/v1/admins/teams/excel?generation=4
+Accept: */*
+
+> ./team-info-gen4.xlsx

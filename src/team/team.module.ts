@@ -28,6 +28,7 @@ import { UpdateTeamStatusService } from './application/service/update-team-statu
 import { UpdateAdminTeamService } from './application/service/update-admin-team.service';
 import { RandomizeTeamNumberService } from './application/service/randomize-team-number.service';
 import { UpdateMemberRoleService } from './application/service/update-member-role.service';
+import { ExtractTeamExcelService } from './application/service/extract-team-excel.service';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { UpdateMemberRoleService } from './application/service/update-member-rol
     RandomizeTeamNumberService,
     UpdateTeamStatusService,
     UpdateMemberRoleService,
+    ExtractTeamExcelService,
   ],
   exports: [TeamRepository, MemberRepository, ProjectRepository]
 })

@@ -11,6 +11,22 @@ export class UserRepository {
   constructor(private readonly dataSource: DataSource) {
   }
 
+  async findAllWithUnivAndMembersByGeneration(
+    generation: number,
+    manager?: EntityManager,
+  ): Promise<UserModel[]> {
+    const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
+
+    const qb = repo.createQueryBuilder('user')
+      .leftJoinAndSelect('user.univ', 'univ')
+
+    qb.andWhere('FIND_IN_SET(:generation, user.generations)', { generation: generation.toString() });
+    qb.andWhere('user.role = :role', { role: ESecurityRole.USER });
+
+    const entities = await qb.getMany();
+    return entities.map((entity) => UserMapper.toDomain(entity));
+  }
+
   async findById(id: number, manager?: EntityManager): Promise<UserModel | null> {
     const repo = manager ? manager.getRepository(UserEntity) : this.dataSource.getRepository(UserEntity);
     const entity = await repo.findOne({

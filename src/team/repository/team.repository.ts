@@ -156,6 +156,17 @@ export class TeamRepository {
     return entities.map(entity => TeamMapper.toDomain(entity, { skipIdea: true, skipMembers: true }));
   }
 
+  async findAllWithMembersAndIdeaByGeneration(generation: number, manager?: EntityManager): Promise<TeamModel[]> {
+    const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
+
+    const entities = await repo.find({
+      where: { generation },
+      relations: ['members', 'members.user', 'members.user.univ', 'idea', 'idea.provider', 'idea.ideaSubject'],
+    });
+
+    return entities.map(entity => TeamMapper.toDomain(entity, { skipIdea: false, skipMembers: false }));
+  }
+
   async saveAndReturn(team: TeamModel, manager?: EntityManager): Promise<TeamModel> {
     const repo = manager ? manager.getRepository(TeamEntity) : this.dataSource.getRepository(TeamEntity);
 
