@@ -1,6 +1,5 @@
-import { IsNotEmpty, IsNumber, Length, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, Length, Max, Min } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
-import { Optional } from '@nestjs/common';
 
 export class ReadTeamApplyOverviewQueryDto {
   @IsNotEmpty({ message: 'generation은 필수 값입니다.' })
@@ -17,12 +16,12 @@ export class ReadTeamApplyOverviewQueryDto {
   @Max(Number.MAX_SAFE_INTEGER)
   phase: number;
 
-  @Optional()
+  @IsOptional()
   @Expose({ name: 'sorting' })
   @Length(0, 100)
   sorting: string;
 
-  @Optional()
+  @IsOptional()
   @Expose({name: 'sort-type'})
   @Length(0, 20)
   sortType: string;
