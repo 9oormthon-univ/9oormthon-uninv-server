@@ -133,12 +133,12 @@ export class ApplyRepository {
     return entity ? ApplyMapper.toDomain(entity) : null;
   }
 
-  async countByIdeaIdAndRole(ideaId: number, role: ERole, manager?: EntityManager): Promise<number> {
+  async countByIdeaIdAndRoleAndPhase(ideaId: number, role: ERole, phase: number, manager?: EntityManager): Promise<number> {
     const repo = manager ? manager.getRepository(ApplyEntity) : this.dataSource.getRepository(ApplyEntity);
 
     return repo.count(
       {
-        where: { idea: { id: ideaId }, role }
+        where: { idea: { id: ideaId }, role, phase }
       }
     );
   }
