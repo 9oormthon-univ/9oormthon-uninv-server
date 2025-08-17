@@ -13,9 +13,9 @@ export class CookieUtil {
       path: '/',
       domain: process.env.CLIENT_URL,
       maxAge: 60 * 60 * 24 * 30 * 1000, // 30 일
-      httpOnly: false,
+      httpOnly: true,
       sameSite: 'lax',
-      secure: false,
+      secure: true,
     });
   }
 
@@ -29,9 +29,9 @@ export class CookieUtil {
       path: '/',
       domain: process.env.CLIENT_URL,
       maxAge: maxAge * 1000,
-      httpOnly: false,
+      httpOnly: true,
       sameSite: 'lax',
-      secure: false,
+      secure: true,
     });
   }
 
@@ -46,9 +46,9 @@ export class CookieUtil {
       path: '/',
       domain: process.env.CLIENT_URL,
       maxAge: 0,
-      httpOnly: false,
+      httpOnly: true,
       sameSite: 'lax',
-      secure: false,
+      secure: true,
     });
   }
 
