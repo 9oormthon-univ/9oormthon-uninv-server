@@ -29,7 +29,7 @@ export class LogoutService {
         throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
       }
 
-      const { userId, role } = payload;
+      const { userId, role, tokenType } = payload;
 
       // 유저 조회
       const user = await this.userRepository.findByRefreshTokenAndId(refreshToken, userId, manager);

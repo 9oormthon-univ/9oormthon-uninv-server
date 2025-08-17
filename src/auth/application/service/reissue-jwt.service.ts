@@ -7,6 +7,7 @@ import { ErrorCode } from '../../../core/exceptions/error-code';
 import { DataSource } from 'typeorm';
 import { ESecurityRole } from '../../../core/enums/security-role.enum';
 import { UserRepository } from '../../../user/repository/user.repository';
+import { JwtConstant } from '../../../core/constants/jwt-constant';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -23,9 +24,13 @@ export class ReissueJwtService {
 
       try {
         // 리프레시 토큰 검증
-        const { userId, role } = this.jwtService.verify(refreshToken, {
+        const { userId, role, tokenType } = this.jwtService.verify(refreshToken, {
           secret: process.env.JWT_SECRET,
         });
+
+        if (tokenType !== JwtConstant.REFRESH_TOKEN) {
+          throw new CommonException(ErrorCode.TOKEN_TYPE_ERROR);
+        }
 
         // 유저 조회
         const user = await this.userRepository.findByIdAndRefreshTokenAndRole(userId, refreshToken, role, manager);
@@ -41,15 +46,20 @@ export class ReissueJwtService {
         return tokens;
 
       } catch (error) {
+        if (error instanceof CommonException) {
+          throw error;
+        }
         throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
       }
     });
   }
 
   private generateTokens(userId: number, role: ESecurityRole): JwtTokenResponseDto {
-    const payload = { userId, role };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
+    const accessTokenType = JwtConstant.ACCESS_TOKEN;
+    const refreshTokenType = JwtConstant.REFRESH_TOKEN;
+
+    const accessToken = this.jwtService.sign({ userId, role, tokenType: accessTokenType }, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
+    const refreshToken = this.jwtService.sign({ userId, role, tokenType: refreshTokenType }, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
 
     return { accessToken, refreshToken };
   }

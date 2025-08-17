@@ -9,6 +9,7 @@ import { DataSource } from 'typeorm';
 import { ESecurityRole } from '../../../core/enums/security-role.enum';
 import { LoginRequestDto } from '../dto/request/login.request.dto';
 import { UserRepository } from '../../../user/repository/user.repository';
+import { JwtConstant } from '../../../core/constants/jwt-constant';
 
 @Injectable()
 @UseFilters(HttpExceptionFilter)
@@ -51,9 +52,11 @@ export class LoginService {
   }
 
   private generateTokens(userId: number, role: ESecurityRole): JwtTokenResponseDto {
-    const payload = { userId, role };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
+    const accessTokenType = JwtConstant.ACCESS_TOKEN;
+    const refreshTokenType = JwtConstant.REFRESH_TOKEN;
+
+    const accessToken = this.jwtService.sign({ userId, role, tokenType: accessTokenType }, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN });
+    const refreshToken = this.jwtService.sign({ userId, role, tokenType: refreshTokenType }, { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN });
 
     return { accessToken, refreshToken };
   }
