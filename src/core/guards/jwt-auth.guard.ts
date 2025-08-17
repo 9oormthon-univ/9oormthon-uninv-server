@@ -21,6 +21,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const res = context.switchToHttp().getResponse<Response>();
 
     if (err || !user) {
+      
       CookieUtil.deleteCookie(req, res, 'access_token');
 
       throw err || new UnauthorizedException('유효하지 않은 토큰입니다.');
