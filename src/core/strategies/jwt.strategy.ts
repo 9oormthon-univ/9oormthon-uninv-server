@@ -29,14 +29,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!payload) {
       const res = (req as any).res as Response | undefined;
       CookieUtil.deleteCookie(req, res, 'access_token');
-      CookieUtil.deleteCookie(req, res, 'refresh_token');
       throw new UnauthorizedException('Invalid token');
     }
 
     if (payload.tokenType !== JwtConstant.ACCESS_TOKEN) {
       const res = (req as any).res as Response | undefined;
       CookieUtil.deleteCookie(req, res, 'access_token');
-      CookieUtil.deleteCookie(req, res, 'refresh_token');
       throw new CommonException(ErrorCode.TOKEN_TYPE_ERROR);
     }
     return { id: payload.userId, role: payload.role, tokenType: payload.tokenType };
