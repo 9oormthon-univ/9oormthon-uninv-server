@@ -4,6 +4,7 @@ import { TeamEntity } from '../../core/infra/entities/team.entity';
 import { TeamMapper } from '../../core/infra/mapper/team.mapper';
 import { IdeaModel } from '../../idea/domain/idea.model';
 import { TeamOverviewDto } from '../application/dto/response/read-team-overview.response.dto';
+import { ETeamStatus } from '../../core/enums/team-status.enum';
 
 export class TeamRepository {
   constructor(private readonly dataSource: DataSource) {
@@ -139,7 +140,7 @@ export class TeamRepository {
         name: team.name ? team.name : '',
         service_name: team.project ? team.project.name : '',
         member_count: rawRow.member_count ? parseInt(rawRow.member_count, 10) : 0,
-        team_building: team.status,
+        team_building: team.status == ETeamStatus.END || (rawRow.member_count && parseInt(rawRow.member_count, 10) == 6) ? ETeamStatus.END : ETeamStatus.RECRUITING,
       };
     });
 
