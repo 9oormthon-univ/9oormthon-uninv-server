@@ -108,10 +108,13 @@ export class TeamRepository {
           case 'TEAM_BUILDING':
             qb.addSelect(subQuery => {
               return subQuery
-                .select('COUNT(1)')
+                .select('CASE WHEN team.status = :status OR ' +
+                  '(SELECT COUNT(1) FROM members m WHERE m.team_id = team.id) = 6 ' +
+                  'THEN 1 ELSE 0 END')
                 .from('teams', 't')
-                .where('team.status = :status', { status: 'END' });
+                .where('t.id = team.id');
             }, 'team_building_count')
+              .setParameter('status', 'END')
               .orderBy('team_building_count', sortType);
             break;
           default:
